@@ -1,0 +1,99 @@
+.one-post{
+    margin-top: 5px;
+    width: 70%;
+}
+
+.one-post .card{
+    margin-bottom: 2rem;
+    border-radius: 0;
+
+}
+
+.one-post form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.one-post .user-image{
+    width:50px;
+    height: 50px;
+
+}
+
+.one-post.header{
+    display: flex
+}
+
+.list-group-comment div, .card-footer{
+    background-color: white
+}
+
+/* .card-header{
+    background-color: rgb(225, 227, 232);
+} */
+
+.list-group-comment div{
+    margin-bottom: 0px;
+    padding: 0px;
+}
+.comment-user-image{
+    height: 30px;
+}
+
+.comment-header, .user-header{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.user-header div{
+    padding-right: 5px ;
+}
+
+.comment-by-user{
+    margin-top: -5px
+}
+
+.card-header{
+    position:relative;
+}
+
+.user-edit{
+    position:absolute;
+    right: 0;
+    top: 0;
+}
+
+.card-body{
+    position:relative;
+    margin: 0;
+    padding:0
+}
+
+.like-dislike{
+    position:relative;
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    margin:0;
+    padding:0
+    
+}
+
+.like-dislike div{
+    flex: 1; 
+    margin: 0;
+    padding:0;
+    border: 2px grey solid;
+    text-align: center;
+    cursor: pointer; 
+}
+
+.card-content{
+    padding:1rem
+
+}
+

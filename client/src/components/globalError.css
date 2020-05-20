@@ -1,0 +1,9 @@
+.error-msg{
+    background-color: rgb(250, 207, 222);
+    border: rgb(224, 16, 85) solid 1px;
+    color: rgb(176, 21, 75);
+    margin-bottom: 5px;
+    padding: 5px;
+    margin-top: 0px
+}
+

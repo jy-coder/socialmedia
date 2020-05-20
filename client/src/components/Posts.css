@@ -1,0 +1,59 @@
+.my-feed{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.create-post{
+    width:70%;
+    margin-bottom:1rem;
+    display:flex;
+}
+.create-post form{
+   width: 100%
+}
+.customize-post{
+  display:flex;
+  justify-content: flex-end;
+}
+
+.customize-post div{
+   margin-right: 2px
+  }
+
+/* .custom-file-label {
+    width: 3px
+}
+
+#custom-file{
+    width:0
+}
+
+.custom-file-label::after{
+    padding-left: 2px
+} */
+
+.click-icon{
+    display:grid;
+}
+
+.input-file input{
+    position:relative;
+    opacity: 0; 
+    
+    
+    z-index: 100; 
+}
+
+.click-icon{
+    width: 5%;
+}
+
+.input-file, .file-icon{
+    grid-column: 1;
+    grid-row: 1;
+}
+
