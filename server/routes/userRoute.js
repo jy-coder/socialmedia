@@ -13,6 +13,6 @@ router.use(authController.auth);
 
 router.route('/unfollow').put(userController.unfollowUser,userController.removeFollowing);
 router.route('/follow').put(userController.followUser , userController.addFollowing);
-
+router.route('/getUser').get(authController.getUser)
 
 module.exports = router;

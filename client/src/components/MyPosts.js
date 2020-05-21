@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react'
-import './Posts.css'
-import Post from './Post'
+import './MyPosts.css'
+import Post from './MyPost'
 import {connect} from 'react-redux'
 import {getItems,addItem} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
-import {Form, Button} from 'react-bootstrap'
-import {FiUpload} from 'react-icons/fi'
 import {CustomModal } from './CustomModal'
 
-function Posts({posts_data,getItems,error_data,clearErrors}) {
+function MyPosts({posts_data,getItems,error_data,clearErrors}) {
      //post is object containing posts obj -> contains status and array of data and loading
    
     useEffect(() => {
@@ -19,7 +17,7 @@ function Posts({posts_data,getItems,error_data,clearErrors}) {
 
        //get status and array of data
         const {posts} = posts_data
-        console.log(posts);
+        // console.log(posts);
 
     return (
         <div className="my-feed">
@@ -38,4 +36,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getItems,clearErrors,addItem})(Posts)
+export default connect(mapStateToProps, {getItems,clearErrors,addItem})(MyPosts)

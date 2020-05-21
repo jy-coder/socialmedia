@@ -1,7 +1,9 @@
-import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,UPDATE_ITEM,GET_ONE_ITEM,ITEMS_LOADING,LIKE_POST,UNLIKE_POST} from '../actions/types'
+import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,UPDATE_ITEM,
+    GET_ONE_ITEM,ITEMS_LOADING,UPDATE_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO } from '../actions/types'
 const initialState={
     posts: [],
     post: {},
+    userInfo:{},
     loading:false
 }
 
@@ -50,18 +52,49 @@ export default function(state=initialState,action){
                 ...state,
                 loading:true
             }
-
-
-        case LIKE_POST:
-            console.log(action.payloadres)
+        
+        case UPDATE_POST:
             return {
                 ...state,
                 posts: state.posts.map(p =>
                 p._id === action.payloadid
-                  ? { ...p, ...action.payloadres }
-                  : p
-              )
+                    ? { ...p, ...action.payloadres }
+                    : p
+                )
             }
+
+        case SHOW_COMMENT:
+            return {
+                ...state,
+                posts: state.posts.map(p =>
+                p._id === action.payload
+                    ? { ...p, show:true}
+                    : p
+                )
+            }
+
+
+            case UNSHOW_COMMENT:
+                return {
+                    ...state,
+                    posts: state.posts.map(p =>
+                    p._id === action.payload
+                        ? { ...p, show:false}
+                        : p
+                    )
+                }
+            
+        case GET_USER_INFO:
+            console.log('get user info triggered')
+            console.log(action.payload)
+            return{
+                ...state,
+                userInfo: action.payload
+                
+            };
+
+        
+        case ITEMS_LOADING:
             return{
                 ...state,
                 loading:true

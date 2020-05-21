@@ -35,12 +35,15 @@
     background-color: rgb(225, 227, 232);
 } */
 
+
+.list-group-comment--hide{
+    display:none;
+}
+
+
 .list-group-comment div{
     margin-bottom: 0px;
     padding: 0px;
-}
-.comment-user-image{
-    height: 30px;
 }
 
 .comment-header, .user-header{
@@ -96,4 +99,6 @@
     padding:1rem
 
 }
+
+
 

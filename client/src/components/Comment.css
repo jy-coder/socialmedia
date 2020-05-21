@@ -1,0 +1,39 @@
+.comment-header {
+    font-size: 15px;
+    position: relative
+}
+
+.comment-image{ 
+    border: pink 2px solid;
+    
+}
+
+.comment-image img{
+    height: 30px;
+    padding: 1px 0;
+}
+
+.remove-comment{
+    position:absolute;
+    top: 0;
+    right:0
+}
+
+
+.comment-header:hover p{
+    position:absolute;
+    top: 0;
+    right:0;
+    background-color: yellow;
+    display:block;
+    cursor: pointer;
+}
+
+
+.comment-header p{
+    display:none
+}
+
+
+
+

@@ -99,7 +99,7 @@ if(error)
 
   const posts = await Post.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-  }).populate('creator')
+  }).populate('creator','name')
 
   if(!posts)
      return next(new AppError('No document found with that ID', 404));
@@ -120,7 +120,10 @@ exports.deletePost = catchAsync(async (req,res,next) =>{
 
 exports.likePost = catchAsync(async (req,res,next)=> {
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$addToSet: {likes: req.user._id}}, {new: true})
-      .populate('creator').populate("likes")
+      .populate('creator','name')
+      .populate('comments.postedBy', '_id name')
+      .populate('postedBy', '_id name')
+      .populate('likes')
 
       if(!posts)
       return next(new AppError('No document found with that ID', 404));
@@ -131,7 +134,12 @@ exports.likePost = catchAsync(async (req,res,next)=> {
 
 
 exports.unlikePost = catchAsync(async (req,res,next)=> {
-    let posts = await Post.findByIdAndUpdate(req.body.postId, {$pull: {likes: req.user._id}}, {new: true})
+    let posts = await Post.findByIdAndUpdate(req.body.postId, 
+                {$pull: {likes: req.user._id}}, {new: true})
+                .populate('creator','name')
+                .populate('comments.postedBy', '_id name')
+                .populate('postedBy', '_id name')
+                .populate('likes')
 
     if(!posts)
     return next(new AppError('No document found with that ID', 404));
@@ -140,12 +148,12 @@ exports.unlikePost = catchAsync(async (req,res,next)=> {
 })
   
 
-
 exports.commentPost = catchAsync(async (req,res,next)=> {
     let comment = req.body.comment
     comment.postedBy = req.user._id
  
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$push: {comments: comment}}, {new: true})
+                              .populate('creator','name')
                               .populate('comments.postedBy', '_id name')
                               .populate('postedBy', '_id name')
 
@@ -165,12 +173,15 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
     comment.postedBy = req.user._id
  
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$pull: {comments: {_id: comment._id}}}, {new: true})
+      .populate('creator','name')
+      .populate('comments.postedBy', '_id name')
+      .populate('postedBy', '_id name')
 
     
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
     
-            res.status(200).json();
+        res.status(200).json(posts);
                               
     
 
@@ -178,25 +189,31 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.myPost = catchAsync(async (req,res,next)=> {
-
-    const posts = await Post.find({creator: req.user._id });  
-    
+    // console.log(req.params.id)
+    // const posts = await Post.find({creator: req.user._id });  
+       const posts = await Post.find({creator: req.params.id });  
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
     
         res.status(200).json(posts);
   })
 
+  exports.accessToAll = catchAsync(async (req,res,next)=> {
+    const posts = await Post.find().populate('creator')
+    .populate('comments.postedBy', '_id name').populate('likes', '_id name')
+
+    if(!posts)
+    return next(new AppError('No document found with that ID', 404))
+    .populate('postedBy', '_id name');
+
+    
+      res.status(200).json(posts);
+  })
+
 
   exports.getFeed = catchAsync(async (req,res,next)=> {
-      let posts;
-
-
-    if(req.user)
-    posts = await Post.find().populate('creator')
+    const posts = await Post.find({creator: req.user.following }).populate('creator')
     .populate('comments.postedBy', '_id name').populate('likes', '_id name')
-    // posts = await Post.find({creator: req.user.following }).populate('creator')
-    // .populate('comments.postedBy', '_id name').populate('likes', '_id name')
     // posts = await Post.find().populate('creator','name').populate('comments.postedBy', '_id name').populate('likes', '_id name')
     
 

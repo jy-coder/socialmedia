@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Form,Button} from 'react-bootstrap';
 import './Login.css'
-import {login} from '../../flux/actions/authActions'
+import {register} from '../../flux/actions/authActions'
 import {connect} from 'react-redux'
 
 
-const Login = ({login,error_data, auth}) =>{
-    const [state, setState]= useState({email:'',password:''})
+export const Register = ({register,error_data}) =>{
+    const [state, setState]= useState({email:'',name:'',password:'',confirmPassword:''})
 
   
     const inputChangeHandler  = e  => {
@@ -20,10 +20,8 @@ const Login = ({login,error_data, auth}) =>{
   
     const submitHandler = (e) =>{
       e.preventDefault();
-      login(state)
-      
-    
-    
+      console.log(state)
+      register(state)
     }
   
     return (
@@ -37,10 +35,26 @@ const Login = ({login,error_data, auth}) =>{
       </Form.Text>
     </Form.Group>
 
+    <Form.Group controlId="name">
+      <Form.Label>Name</Form.Label>
+      <Form.Control type="text" placeholder="Enter name" onChange={inputChangeHandler} />
+      <Form.Text className="text-muted">
+      </Form.Text>
+    </Form.Group>
+
   <Form.Group controlId="password">
     <Form.Label>Password</Form.Label>
     <Form.Control type="password" placeholder="Password" onChange={inputChangeHandler} />
   </Form.Group>
+
+
+  <Form.Group controlId="confirmPassword">
+      <Form.Label>Confirm Password</Form.Label>
+      <Form.Control type="password" placeholder="Confirm password" onChange={inputChangeHandler} />
+      <Form.Text className="text-muted">
+      </Form.Text>
+    </Form.Group>
+
   <Button variant="primary" type="submit">
     Submit
   </Button>
@@ -52,9 +66,8 @@ const Login = ({login,error_data, auth}) =>{
 
   const mapStateToProps = (state) =>({
     posts_data:state.posts_data,
-    error_data: state.error_data,
-    auth: state.auth
+    error_data: state.error_data
   
   })
 
-export default connect(mapStateToProps,{login})(Login)
+export default connect(mapStateToProps,{register})(Register)
