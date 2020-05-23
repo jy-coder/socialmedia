@@ -2,9 +2,14 @@ import axios from 'axios'
 import { 
   GET_ITEMS,GET_ONE_ITEM,ADD_ITEM,
   DELETE_ITEM,UPDATE_ITEM,
-  ITEMS_LOADING,UPDATE_POST, 
+  ITEMS_LOADING,LIKE_POST,
+  UNLIKE_POST,
+  COMMENT_POST,
+  UNCOMMENT_POST, 
   SHOW_COMMENT,UNSHOW_COMMENT,
-GET_USER_INFO} from './types'
+GET_USER_INFO,GET_USER_POST, GET_FEED,
+GET_MY_POST} from './types'
+
 import { returnErrors} from './errorActions'
 import history from './../../utils/history'
 
@@ -18,10 +23,26 @@ export const getItems = () => dispatch => {
           type: GET_ITEMS,
           payload: res.data
         })
-      }).catch(err =>
-        dispatch(returnErrors(err.response.data, err.response.status)),
-        
-      )
+      }).catch(err =>{
+        if(err.response)
+          dispatch(returnErrors(err.response.data, err.response.status))
+      })
+  };
+
+
+  export const getFeed = () => dispatch => {
+    dispatch(setItemsLoading());
+    axios
+      .get('http://127.0.0.1:1337/api/post/feed')
+      .then((res) =>{
+        dispatch({
+          type: GET_FEED,
+          payload: res.data
+        })
+      }).catch(err =>{
+        if(err.response)
+          dispatch(returnErrors(err.response.data, err.response.status))
+      })
   };
 
 
@@ -103,7 +124,7 @@ export const getItems = () => dispatch => {
       export const getMyFeed = () => dispatch => {
   
         axios
-          .get('http://127.0.0.1:1337/api/post/my-post')
+          .get('http://127.0.0.1:1337/api/post/user-post')
           .then((res) =>{
             dispatch({
               type: GET_ITEMS,
@@ -122,7 +143,7 @@ export const getItems = () => dispatch => {
           .put('http://127.0.0.1:1337/api/post/like',{postId})
           .then(res =>{
             dispatch({
-              type: UPDATE_POST,
+              type: LIKE_POST,
               payloadres: res.data,
               payloadid: postId
             })
@@ -140,7 +161,7 @@ export const getItems = () => dispatch => {
           .put('http://127.0.0.1:1337/api/post/unlike',{postId})
           .then(res =>{
             dispatch({
-              type: UPDATE_POST,
+              type: UNLIKE_POST,
               payloadres: res.data,
               payloadid: postId
             })
@@ -158,7 +179,7 @@ export const getItems = () => dispatch => {
             .put('http://127.0.0.1:1337/api/post/comment',{ postId: postId, comment: {text:text} })
             .then(res =>{
               dispatch({
-                type: UPDATE_POST,
+                type: COMMENT_POST,
                 payloadres: res.data,
                 payloadid: postId
               })
@@ -175,7 +196,7 @@ export const getItems = () => dispatch => {
               .put('http://127.0.0.1:1337/api/post/uncomment',{ postId: postId, comment: {_id : commentId} })
               .then(res =>{
                 dispatch({
-                  type: UPDATE_POST,
+                  type: UNCOMMENT_POST,
                   payloadres: res.data,
                   payloadid: postId
                 })
@@ -203,14 +224,12 @@ export const getItems = () => dispatch => {
             }
 
 
-            export const getuserInfo = (userId) => dispatch => {
-              console.log(userId)
+            export const getuserPost = (userId) => dispatch => {
               axios
-                .get(`http://127.0.0.1:1337/api/post/my-post/${userId}`)
+                .get(`http://127.0.0.1:1337/api/post/user-post/${userId}`)
                 .then((res) =>{
-                  console.log(res)
                   dispatch({
-                    type: GET_USER_INFO,
+                    type: GET_USER_POST,
                     payload: res.data
                   })
                 }).catch(err =>{
@@ -219,6 +238,39 @@ export const getItems = () => dispatch => {
                   }
             })
           };
+
+
+          export const getotheruserInfo = (userId) => dispatch => {
+            axios
+              .get(`http://127.0.0.1:1337/api/user/otheruser/${userId}`)
+              .then((res) =>{
+                dispatch({
+                  type: GET_USER_INFO,
+                  payload: res.data
+                })
+              }).catch(err =>{
+                if(err.response){
+                dispatch(returnErrors(err.response.data, err.response.status))
+                }
+          })
+        };
+
+
+
+        export const getMyPost = () => dispatch => {
+          axios
+            .get(`http://127.0.0.1:1337/api/post/mypost/`)
+            .then((res) =>{
+              dispatch({
+                type: GET_MY_POST,
+                payload: res.data
+              })
+            }).catch(err =>{
+              if(err.response){
+              dispatch(returnErrors(err.response.data, err.response.status))
+              }
+        })
+      };
       
 
 

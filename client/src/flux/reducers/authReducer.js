@@ -6,7 +6,8 @@ import{
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    UPDATE_MY_PROFILE
 }from '../actions/types';
 
 
@@ -25,7 +26,8 @@ export default function(state = initialState,action){
                 ...state,
                 isLoading:true
               }
-              case USER_LOADED:
+            case USER_LOADED:
+            case UPDATE_MY_PROFILE:
                 return{
                     ...state,
                     isAuthenticated:true,
@@ -33,7 +35,6 @@ export default function(state = initialState,action){
                     user: action.payload
                   }
             case LOGIN_SUCCESS:
-                console.log(action.payload)
                 return{
                     ...state,
                     isAuthenticated:true,
@@ -59,6 +60,7 @@ export default function(state = initialState,action){
                 isAuthenticated:false,
                 isLoading: false
             }
+   
             default:
                 return state
     }

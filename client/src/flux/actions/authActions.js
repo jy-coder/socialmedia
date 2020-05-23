@@ -9,7 +9,8 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  UPDATE_MY_PROFILE
 } from './types';
 
 
@@ -27,10 +28,12 @@ export const loadUser = () => (dispatch, getState) => {
       })
     )
     .catch(err => {
+      if(err.response){
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: AUTH_ERROR
       });
+    }
     });
 };
 
@@ -38,13 +41,6 @@ export const loadUser = () => (dispatch, getState) => {
 export const register = ({ name, email, password, confirmPassword }) => (
   dispatch
 ) => {
-  // Headers
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
   // Request body
   axios
     .post('http://127.0.0.1:1337/api/user/signup', { name, email, password, confirmPassword})
@@ -55,12 +51,13 @@ export const register = ({ name, email, password, confirmPassword }) => (
       })
     )
     .catch(err => {
+      if(err.response){
       dispatch(
         returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
       );
       dispatch({
         type: REGISTER_FAIL
-      });
+      })};
     });
 };
 
@@ -78,15 +75,38 @@ export const login = ({ email, password }) => (dispatch) => {
 
     })
     .catch(err => {
+      if(err.response){
       dispatch(
         returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
       );
       dispatch({
         type: LOGIN_FAIL
       });
-    })
+    }})
 };
 
+
+export const updateMe = (form) => (dispatch) => {
+  axios
+  .patch('http://127.0.0.1:1337/api/user/updateMe', form)
+  .then(res =>{
+    dispatch({
+      type: UPDATE_MY_PROFILE,
+      payload: res.data.user
+    })
+    
+
+  })
+  .catch(err => {
+    if(err.response)
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
+    );
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  })
+};
 // Logout User
 export const logout = () => {
   return {

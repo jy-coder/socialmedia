@@ -5,11 +5,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Router } from 'react-router-dom';
 import history from "./utils/history"
+import store from './flux/store'
+import { Provider } from 'react-redux';
 
 ReactDOM.render(
+  <Provider store={store}>
   <Router history={history}>
     <App />
-  </Router>,
+  </Router>
+  </Provider>,
   document.getElementById('root')
 );
 

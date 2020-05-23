@@ -1,18 +1,19 @@
 import React, {useEffect} from 'react'
-import './MyPosts.css'
-import Post from './MyPost'
+import './Posts.css'
+import Post from './Post'
 import {connect} from 'react-redux'
-import {getItems,addItem} from '../flux/actions/postActions'
+import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './CustomModal'
 
-function MyPosts({posts_data,getItems,error_data,clearErrors}) {
+function Posts({posts_data,getItems,error_data,clearErrors,auth,getFeed}) {
      //post is object containing posts obj -> contains status and array of data and loading
    
-    useEffect(() => {
-        getItems()
-       
-      }, [getItems])
+      useEffect(() => {
+        if(!auth.isAuthenticated)
+            getItems()         
+            }, [auth,getItems])
+      
 
 
        //get status and array of data
@@ -22,7 +23,7 @@ function MyPosts({posts_data,getItems,error_data,clearErrors}) {
     return (
         <div className="my-feed">
         <div className="create-post">
-        <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>
+        {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
         </div>
             {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
         </div>
@@ -32,8 +33,9 @@ function MyPosts({posts_data,getItems,error_data,clearErrors}) {
 
 const mapStateToProps = (state) =>({
     posts_data:state.posts_data,
-    error_data: state.error_data
+    error_data: state.error_data,
+    auth: state.auth
 
 })
 
-export default connect(mapStateToProps, {getItems,clearErrors,addItem})(MyPosts)
+export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed})(Posts)

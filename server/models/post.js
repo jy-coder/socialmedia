@@ -21,9 +21,18 @@ const postSchema = new mongoose.Schema({
     text: String,
     created: { type: Date, default: Date.now },
     postedBy: { type: mongoose.Schema.ObjectId, ref: 'User'}
-  }],
-  postedBy: {type: mongoose.Schema.ObjectId, ref: 'User'},
+  }]
 
 },{ timestamps: true })
+
+
+
+postSchema.pre(/^find/, function(next) {
+    this.populate('creator', 'name photo')
+    .populate('comments.postedBy', '_id name photo')
+    .populate('likes')
+  
+    next();
+  });
 
 module.exports = mongoose.model('Post', postSchema);

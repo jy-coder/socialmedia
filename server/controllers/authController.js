@@ -49,7 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   if(!existingUser){
-  const data = await User.create({
+  const user = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
@@ -57,7 +57,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 }
   
-  res.status(200).json({ status: 'success' });
+  res.status(200).json({msg: 'You have successfully signed up. You can log in to your account now'});
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -149,6 +149,20 @@ exports.getUser = catchAsync(async (req,res,next) =>{
   res.status(200).json(user);
 
 })
+
+
+exports.updateMe = catchAsync(async (req,res,next) =>{
+  if(req.file)
+    req.body.photo= req.file.filename
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  res.status(200).json({user:updatedUser});
+})
+
+
 
 
 

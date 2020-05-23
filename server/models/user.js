@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema({
     }
   },
   photo: {
-    type: String
+    type: String,
+    default:'default.jpg'
   },
   following: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
   followers: [{type: mongoose.Schema.ObjectId, ref: 'User'}]

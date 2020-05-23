@@ -4,7 +4,6 @@ const AppError = require('../utils/AppError')
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
-const validator = require('validator')
 
 
 const multerStorage = multer.memoryStorage();
@@ -48,8 +47,6 @@ let error;
 req.body.creator = req.user._id
 if(req.file)
   req.body.photo = req.file.filename
-else
-  req.body.photo = "default.jpg"
 
 if(!req.body.content)
   error = "Content must not be empty"
@@ -120,10 +117,7 @@ exports.deletePost = catchAsync(async (req,res,next) =>{
 
 exports.likePost = catchAsync(async (req,res,next)=> {
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$addToSet: {likes: req.user._id}}, {new: true})
-      .populate('creator','name')
-      .populate('comments.postedBy', '_id name')
-      .populate('postedBy', '_id name')
-      .populate('likes')
+
 
       if(!posts)
       return next(new AppError('No document found with that ID', 404));
@@ -136,10 +130,6 @@ exports.likePost = catchAsync(async (req,res,next)=> {
 exports.unlikePost = catchAsync(async (req,res,next)=> {
     let posts = await Post.findByIdAndUpdate(req.body.postId, 
                 {$pull: {likes: req.user._id}}, {new: true})
-                .populate('creator','name')
-                .populate('comments.postedBy', '_id name')
-                .populate('postedBy', '_id name')
-                .populate('likes')
 
     if(!posts)
     return next(new AppError('No document found with that ID', 404));
@@ -153,10 +143,6 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
     comment.postedBy = req.user._id
  
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$push: {comments: comment}}, {new: true})
-                              .populate('creator','name')
-                              .populate('comments.postedBy', '_id name')
-                              .populate('postedBy', '_id name')
-
     
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
@@ -173,9 +159,7 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
     comment.postedBy = req.user._id
  
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$pull: {comments: {_id: comment._id}}}, {new: true})
-      .populate('creator','name')
-      .populate('comments.postedBy', '_id name')
-      .populate('postedBy', '_id name')
+
 
     
         if(!posts)
@@ -188,23 +172,36 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
   })
 
 
+
   exports.myPost = catchAsync(async (req,res,next)=> {
-    // console.log(req.params.id)
-    // const posts = await Post.find({creator: req.user._id });  
-       const posts = await Post.find({creator: req.params.id });  
+    // console.log(req.user)
+    const posts = await Post.find({creator: req.user._id})
+
+     if(!posts)
+         return next(new AppError('No document found with that ID', 404));
+ 
+     res.status(200).json(posts);
+})
+
+
+
+  exports.otherUserPost = catchAsync(async (req,res,next)=> {
+       const posts = await Post.find({creator: req.params.id })
+
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
     
         res.status(200).json(posts);
   })
 
+  
+
   exports.accessToAll = catchAsync(async (req,res,next)=> {
-    const posts = await Post.find().populate('creator')
-    .populate('comments.postedBy', '_id name').populate('likes', '_id name')
+    const posts = await Post.find()
 
     if(!posts)
     return next(new AppError('No document found with that ID', 404))
-    .populate('postedBy', '_id name');
+   
 
     
       res.status(200).json(posts);
@@ -212,14 +209,13 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.getFeed = catchAsync(async (req,res,next)=> {
-    const posts = await Post.find({creator: req.user.following }).populate('creator')
-    .populate('comments.postedBy', '_id name').populate('likes', '_id name')
+    const posts = await Post.find({creator: req.user.following })
     // posts = await Post.find().populate('creator','name').populate('comments.postedBy', '_id name').populate('likes', '_id name')
     
 
     if(!posts)
     return next(new AppError('No document found with that ID', 404))
-    .populate('postedBy', '_id name');
+   
 
     
         res.status(200).json(posts);
