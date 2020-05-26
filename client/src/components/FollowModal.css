@@ -1,0 +1,8 @@
+.user-follow-modal-list{
+    list-style: none;
+}
+
+
+.user-follow-modal-list li img{
+    width: 25px
+}

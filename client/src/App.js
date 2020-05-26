@@ -11,7 +11,7 @@ import Login from './pages/Auth/Login'
 import Profile from './pages/Auth/Profile'
 import Register from './pages/Auth/Register'
 import { connect } from 'react-redux';
-import { loadUser } from './flux/actions/authActions';
+import { loadUser, noUser } from './flux/actions/authActions';
 import store from './flux/store'
 import axios from 'axios';
 
@@ -26,24 +26,30 @@ function App({auth}) {
     axios.defaults.headers.common['Authorization'] = auth.token;
     store.dispatch(loadUser());
   }
+  else
+    store.dispatch(noUser())
   }, []);
 
+  // console.log(!auth.isAuthenticated)
 
   return (
     <div className="App">
     <NavBar/>
     <Switch>
-      <Route path="/" exact render={props => (<Feed/>)}/>
-      <Route path="/user/:id" exact render={props => (<UserInfo {...props}/>)}/>
-      <Route path="/profile" exact render={props => (<Profile/>)}/>
-      <Route path="/wall" exact render={props => (<Wall/>)}/>
-      {!auth.isAuthenticated?
-      <>
-      <Route path="/" exact render={props => (<Posts/>)}/>
-      <Route path="/login" exact render={props => (<Login/>)}/>
-      <Route path="/register" exact render={props => (<Register/>)}/>
-      </>:
-      null}
+    {auth.isAuthenticated?
+    <>
+      <Route exact path="/"  render={props => (<Feed/>)}/>
+      <Route exact path="/user/:id"  render={props => (<UserInfo {...props}/>)}/>
+      <Route exact path="/profile"  render={props => (<Profile/>)}/>
+      <Route exact path="/wall"  render={props => (<Wall/>)}/>
+      </>
+        :
+        <>
+      <Route exact path="/"  render={props => (<Posts/>)}/>
+      <Route exact path="/login"  render={props => (<Login/>)}/>
+      <Route exact path="/register"  render={props => (<Register/>)}/>
+      </>
+    }
     </Switch>
   
     </div>

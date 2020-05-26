@@ -5,7 +5,7 @@ import {login} from '../../flux/actions/authActions'
 import {connect} from 'react-redux'
 
 
-const Login = ({login,error_data, auth}) =>{
+const Login = ({login,error_data}) =>{
     const [state, setState]= useState({email:'',password:''})
 
   
@@ -21,8 +21,7 @@ const Login = ({login,error_data, auth}) =>{
     const submitHandler = (e) =>{
       e.preventDefault();
       login(state)
-      
-    
+
     
     }
   

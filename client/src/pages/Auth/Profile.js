@@ -2,12 +2,14 @@ import React, {useEffect,useState} from 'react'
 import {updateMe} from '../../flux/actions/authActions'
 import { connect } from 'react-redux';
 import history from './../../utils/history'
+import { withRouter } from 'react-router-dom';
 
 export function Profile({auth,error_data,updateMe}) {
 
     const [image, setImage] = useState("")
     const [name, setName]= useState("")
     const [preview, setPreview] = useState("")
+    const [defaultPhoto, setDefault] = useState("")
 
     let myName, myPhoto
 
@@ -16,24 +18,32 @@ export function Profile({auth,error_data,updateMe}) {
         myPhoto = auth.user.photo
     }
 
+    // useEffect (() => {},[])
+
 
   
     const submitHandler = (e) =>{
       e.preventDefault();
-        console.log(name,image)
     const form = new FormData();
     if(name)
         form.append('name', name)
     if(image)
         form.append('photo', image)
-    if(name || image)
+    if(defaultPhoto)
+        form.append('photo', 'default.jpg') //as string
+    if(name || image || defaultPhoto){
         updateMe(form)
+    }
+    
+    
+       
     }
 
     
 
   
     const imageHandler = e =>{
+      setDefault("")
       if(e.target.files[0]){
       let file = e.target.files[0]
       setImage(file);
@@ -50,17 +60,19 @@ export function Profile({auth,error_data,updateMe}) {
 
    
       return (
-          <div>
+      <section className="auth-form">
       <section className="modal-body">
       {error_data.msg.error? <div className="error-msg"><small>{error_data.msg.error}</small></div> : null}
         <form onSubmit={(e) => submitHandler(e)}>
         <div className="form-group">
           <label htmlFor="photo">Image:</label>
           <input type="file" accept='photo/*' name="photo" id="photo" className="form-control-file" onChange={imageHandler}  />
-          {preview ? <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>:
-          <img src={myPhoto} id="create-post-image" alt="" style={{width: "100px"}}/>}
+          {preview  ? <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>: null}
+          {!preview && !defaultPhoto ? <img src={"/" + myPhoto} id="create-post-image" alt="" style={{width: "100px"}}/> : null}
+          {!preview && defaultPhoto ? <img src={"/" + defaultPhoto} id="create-post-image" alt="" style={{width: "100px"}}/> : null}
         </div>
-        <button onClick={() => {setImage("");setPreview("")}}>Reset</button>
+        <button type="button" onClick={() => {setImage("");setPreview("");setDefault("")}}>Reset</button>
+        <button type="button" onClick={() => {setImage("");setPreview(""); setDefault("default.jpg")}}>Remove</button>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
           <input id="name" name="name" label="Your name" type="name" className="form-control" onChange={inputChangeHandler} defaultValue={myName} />
@@ -70,7 +82,7 @@ export function Profile({auth,error_data,updateMe}) {
         </div>
           </form>
           </section>
-          </div>
+          </section>
       )
   
   }

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { returnErrors } from './errorActions';
 import history from './../../utils/history'
+
+
 import {
   USER_LOADED,
   USER_LOADING,
@@ -10,12 +12,16 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-  UPDATE_MY_PROFILE
+  UPDATE_MY_PROFILE,
+  NO_USER,
+  CLEAR_ERRORS,
+  SET_SUCCESS_MSG,
+  CLEAR_SUCCESS_MSG
 } from './types';
 
 
 // Check token & load user
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = () => (dispatch) => {
   // User loading
   dispatch({ type: USER_LOADING });
 
@@ -61,6 +67,13 @@ export const register = ({ name, email, password, confirmPassword }) => (
     });
 };
 
+
+export const noUser = () =>(dispatch) =>{
+  dispatch({
+    type: NO_USER
+  })
+}
+
 // Login User
 export const login = ({ email, password }) => (dispatch) => {
     axios
@@ -71,7 +84,10 @@ export const login = ({ email, password }) => (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data.user
       })
-    //   history.push('/');
+      dispatch({ type: CLEAR_ERRORS });
+      
+      history.push('/')
+      
 
     })
     .catch(err => {
@@ -88,25 +104,23 @@ export const login = ({ email, password }) => (dispatch) => {
 
 export const updateMe = (form) => (dispatch) => {
   axios
-  .patch('http://127.0.0.1:1337/api/user/updateMe', form)
-  .then(res =>{
-    dispatch({
-      type: UPDATE_MY_PROFILE,
-      payload: res.data.user
-    })
+  ({method: 'patch',url:'http://127.0.0.1:1337/api/user/updateMe', data:form,headers: {'Content-Type': 'multipart/form-data' }})
+  .then(res => {	
+     dispatch({
+      type:SET_SUCCESS_MSG,
+      payload: "You have successfully updated your profile!"
+     })
     
+  })
 
-  })
-  .catch(err => {
+  .catch((err) => {
     if(err.response)
-      dispatch(
-        returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
-    );
-    dispatch({
-      type: LOGIN_FAIL
-    });
+      console.log(err)
+  
   })
-};
+}
+
+
 // Logout User
 export const logout = () => {
   return {

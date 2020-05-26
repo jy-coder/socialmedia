@@ -35,3 +35,24 @@
    
 }
 
+
+.profile-image img {
+    width: 75px
+  }
+
+
+
+@media only screen and (max-width: 600px) {
+body{
+    font-size: 16px
+}
+
+  .profile-image img {
+    width: 35px
+  }
+  .profile{
+    grid-template-columns: 1fr
+  }
+}
+
+

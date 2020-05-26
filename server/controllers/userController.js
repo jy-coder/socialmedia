@@ -41,9 +41,9 @@ exports.resizePostPhoto = catchAsync(async (req, res, next) => {
 
 
 exports.followUser = catchAsync(async (req,res,next)=> {
-    let data = await User.findByIdAndUpdate(req.body.userId, {$addToSet: {followers: req.user._id}}, {new: true})
+    let user = await User.findByIdAndUpdate(req.body.userId, {$addToSet: {followers: req.user._id}}, {new: true})
 
-    if(!data)
+    if(!user)
     return next(new AppError('No document found with that ID', 404));
 
   
@@ -52,9 +52,9 @@ exports.followUser = catchAsync(async (req,res,next)=> {
 
 
 exports.unfollowUser = catchAsync(async (req,res,next)=> {
-  let data = await User.findByIdAndUpdate(req.body.userId, {$pull: {followers: req.user._id}}, {new: true})
+  let user = await User.findByIdAndUpdate(req.body.userId, {$pull: {followers: req.user._id}}, {new: true})
 
-  if(!data)
+  if(!user)
   return next(new AppError('No document found with that ID', 404));
 
     next()
@@ -62,33 +62,29 @@ exports.unfollowUser = catchAsync(async (req,res,next)=> {
 
 
 exports.addFollowing= catchAsync(async (req,res,next)=> {
-    let data = await User.findByIdAndUpdate(req.user._id, {$addToSet: {following: req.body.userId}}, {new: true})
+    let user = await User.findByIdAndUpdate(req.user._id, {$addToSet: {following: req.body.userId}}, {new: true})
 
-    if(!data)
+    if(!user)
     return next(new AppError('No document found with that ID', 404));
 
   
-    res.status(200).json({
-      status: `success`
-      })
+    res.status(200).json(user)
 })
 
 
 exports.removeFollowing= catchAsync(async (req,res,next)=> {
-    let data = await User.findByIdAndUpdate(req.user._id, {$pull: {following: req.body.userId}}, {new: true})
+    let user = await User.findByIdAndUpdate(req.user._id, {$pull: {following: req.body.userId}}, {new: true})
 
-    if(!data)
+    if(!user)
     return next(new AppError('No document found with that ID', 404));
 
   
-    res.status(200).json({
-      status: `success`
-      })
+    res.status(200).json(user)
 })
 
 
 exports.otherUser= catchAsync(async (req,res,next)=> {
-  let user = await User.find({_id: req.params.id}).populate('following','name')
+  let user = await User.find({_id: req.params.id}).populate('following').populate('followers')
   if(!user)
     return next(new AppError('No document found with that ID', 404));
 

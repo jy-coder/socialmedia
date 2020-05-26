@@ -2,7 +2,7 @@ import React, {useEffect,useState} from 'react'
 import {getOneItem, updateItem} from '../flux/actions/postActions'
 import { connect } from 'react-redux';
 
-function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data}) {
+function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClose}) {
 
     const [image, setImage] = useState("")
     const [content, setContent]= useState("")
@@ -18,6 +18,8 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data}) {
         form.append('photo', image)
 
       updateItem(_id,form)
+
+      handleClose()
       
     
       

@@ -2,13 +2,14 @@ import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,UPDATE_ITEM,
     GET_ONE_ITEM,ITEMS_LOADING,LIKE_POST,
     UNLIKE_POST,
     COMMENT_POST,
-    UNCOMMENT_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO,GET_FEED,GET_USER_POST,GET_MY_POST} from '../actions/types'
+    UNCOMMENT_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO,GET_FEED,GET_USER_POST,GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER} from '../actions/types'
 const initialState={
     posts: [],
     post: {},
     userPost:[],
-    userInfo:{},
-    loading:false
+    userInfo: null,
+    loading:false,
+
 }
 
 export default function(state=initialState,action){
@@ -33,7 +34,8 @@ export default function(state=initialState,action){
         case ADD_ITEM:
             return {
                 ...state,
-                posts: [action.payload, ...state.posts]
+                posts: [action.payload, ...state.posts],
+           
                
             };
 
@@ -45,13 +47,6 @@ export default function(state=initialState,action){
             };
 
 
-        case UPDATE_ITEM:
-            let oldPost = state.posts.filter((post) => post._id !== action.payloadid)
-            return {
-                ...state,
-                posts: [action.payloadres,...oldPost]
-            };
-
 
         case ITEMS_LOADING:
             return{
@@ -59,6 +54,15 @@ export default function(state=initialState,action){
                 loading:true
             }
         
+            case UPDATE_ITEM:
+                return {
+                    ...state,
+                    posts: state.posts.map(p =>
+                    p._id === action.payloadid
+                        ? { ...p, ...action.payloadres}
+                        : p
+                    )
+                }
             case LIKE_POST:
             case UNLIKE_POST:
             case COMMENT_POST:
@@ -83,15 +87,15 @@ export default function(state=initialState,action){
             }
 
 
-            case UNSHOW_COMMENT:
-                return {
-                    ...state,
-                    posts: state.posts.map(p =>
-                    p._id === action.payload
-                        ? { ...p, show:false}
-                        : p
-                    )
-                }
+    case UNSHOW_COMMENT:
+        return {
+            ...state,
+            posts: state.posts.map(p =>
+            p._id === action.payload
+                ? { ...p, show:false}
+                : p
+            )
+        }
             
         case GET_USER_POST:
             return{
@@ -101,11 +105,23 @@ export default function(state=initialState,action){
             };
 
         case GET_USER_INFO:
+            // console.log(action.payload)
             return{
                 ...state,
                 userInfo: action.payload
                 
             };
+
+        case FOLLOW_USER:
+            return{
+                ...state,
+                userInfo : {...state.userInfo, followers:[...state.userInfo.followers, action.payload]}
+            }
+        case UNFOLLOW_USER:        
+            return{
+                ...state,
+                userInfo : {...state.userInfo, followers: state.userInfo.followers.filter(p => p._id !== action.payload._id )}
+            }
 
         
         case ITEMS_LOADING:

@@ -9,11 +9,11 @@ import store from './flux/store'
 import { Provider } from 'react-redux';
 
 ReactDOM.render(
-  <Provider store={store}>
   <Router history={history}>
+  <Provider store={store}>
     <App />
-  </Router>
-  </Provider>,
+  </Provider>
+  </Router>,
   document.getElementById('root')
 );
 

@@ -22,11 +22,11 @@ export function CustomModal({clearErrors, error_data, status,_id}) {
         const Obj = (status) =>{
           switch (status) {
             case 'add':
-              return  {btn: <Button variant="primary"  onClick={handleShow}>Add Post</Button>, title:<Modal.Title>Add Post</Modal.Title>, component: <AddPost />}
+              return  {btn: <Button variant="primary"  onClick={handleShow}>Add Post</Button>, title:<Modal.Title>Add Post</Modal.Title>, component: <AddPost handleClose={handleClose} />}
             case 'update':
-              return {btn: <FaEdit style={{cursor: 'pointer'}} onClick={handleShow}/>,title: <Modal.Title>Update Post </Modal.Title>, component: <UpdatePost _id={_id}/>}
+              return {btn: <FaEdit style={{cursor: 'pointer'}} onClick={handleShow}/>,title: <Modal.Title>Update Post </Modal.Title>, component: <UpdatePost _id={_id} handleClose={handleClose}/>}
             case 'delete':
-              return {btn: <MdDelete style={{cursor: 'pointer'}} onClick={handleShow}/>, component: <DeletePost _id={_id}/>}
+              return {btn: <MdDelete style={{cursor: 'pointer'}} onClick={handleShow}/>, component: <DeletePost _id={_id} handleClose={handleClose}/>}
             default:
               return null;
         }

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { addItem } from '../flux/actions/postActions';
 import { clearErrors } from '../flux/actions/errorActions';
 
-export function AddPost({addItem, error_data, handleClose}) {
+export function AddPost({addItem, error_data, posts_data,handleClose}) {
+  console.log(posts_data)
   const [image, setImage] = useState("")
   const [content, setContent]= useState("")
   const [preview, setPreview] = useState("")
@@ -18,6 +19,8 @@ export function AddPost({addItem, error_data, handleClose}) {
     form.append('photo', image)
     
     addItem(form);
+
+    handleClose();
 
     
   }

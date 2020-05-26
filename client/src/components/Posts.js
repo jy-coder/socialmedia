@@ -6,7 +6,7 @@ import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './CustomModal'
 
-function Posts({posts_data,getItems,error_data,clearErrors,auth,getFeed}) {
+function Posts({posts_data,getItems,error_data,clearErrors,auth}) {
      //post is object containing posts obj -> contains status and array of data and loading
    
       useEffect(() => {

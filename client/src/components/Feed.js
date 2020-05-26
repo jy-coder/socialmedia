@@ -2,18 +2,17 @@ import React, {useEffect} from 'react'
 import Post from './Post'
 import {connect} from 'react-redux'
 import {getItems,addItem,getFeed} from '../flux/actions/postActions'
+import {updateMe} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './CustomModal'
 
-function Feed({posts_data,getItems,error_data,clearErrors,auth,getFeed}) {
+function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
      //post is object containing posts obj -> contains status and array of data and loading
-   
-
 
       useEffect(() => {
         if(auth.isAuthenticated)
             getFeed()         
-            }, [auth,getFeed])
+            }, [auth.isAuthenticated,getFeed,updateMe])
       
 
 
@@ -39,4 +38,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed})(Feed)
+export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed,updateMe})(Feed)

@@ -8,7 +8,7 @@ import {
   UNCOMMENT_POST, 
   SHOW_COMMENT,UNSHOW_COMMENT,
 GET_USER_INFO,GET_USER_POST, GET_FEED,
-GET_MY_POST} from './types'
+GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER} from './types'
 
 import { returnErrors} from './errorActions'
 import history from './../../utils/history'
@@ -70,9 +70,6 @@ export const getItems = () => dispatch => {
           type: ADD_ITEM,
           payload: res.data
         })
-
-        if(res.status === 200)
-          history.go(0)
 
       }).catch((err)=>{
         if(err.response){
@@ -224,6 +221,41 @@ export const getItems = () => dispatch => {
             }
 
 
+            export const followUser = (userId, authUser)=> dispatch => {
+              axios
+              .put('http://127.0.0.1:1337/api/user/follow',{userId})
+              .then(res =>{
+                dispatch({
+                  type: FOLLOW_USER,
+                  payload: authUser
+    
+                })
+              }).catch((err)=>{
+                if(err.response){
+                  dispatch(returnErrors(err.response.data, err.response.status))
+                }
+              })
+            };
+
+
+
+            export const unfollowUser = (userId, authUser)=> dispatch => {
+              axios
+              .put('http://127.0.0.1:1337/api/user/unfollow',{userId})
+              .then(res =>{
+                dispatch({
+                  type: UNFOLLOW_USER,
+                  payload: authUser
+    
+                })
+              }).catch((err)=>{
+                if(err.response){
+                  dispatch(returnErrors(err.response.data, err.response.status))
+                }
+              })
+            };
+
+
             export const getuserPost = (userId) => dispatch => {
               axios
                 .get(`http://127.0.0.1:1337/api/post/user-post/${userId}`)
@@ -246,7 +278,7 @@ export const getItems = () => dispatch => {
               .then((res) =>{
                 dispatch({
                   type: GET_USER_INFO,
-                  payload: res.data
+                  payload: res.data[0]
                 })
               }).catch(err =>{
                 if(err.response){

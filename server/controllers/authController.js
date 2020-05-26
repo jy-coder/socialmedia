@@ -113,7 +113,7 @@ exports.auth = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   // 3) Check if user still exists
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id).populate('following' , 'name photo').populate('followers', 'name photo');
   if (!currentUser) {
     return next(
       new AppError(
@@ -154,6 +154,7 @@ exports.getUser = catchAsync(async (req,res,next) =>{
 exports.updateMe = catchAsync(async (req,res,next) =>{
   if(req.file)
     req.body.photo= req.file.filename
+
   const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
     new: true,
     runValidators: true

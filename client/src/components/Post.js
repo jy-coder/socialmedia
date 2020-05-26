@@ -65,8 +65,8 @@ function Post(props) {
         </div>
           
           <div className="like-dislike">
-             {liked?<div onClick={()=>props.unlikePost(props._id)}>Liked</div>: <div onClick={()=>props.likePost(props._id)}>Like</div>}
-          <div>Comment ({commentsCount}) 
+             {liked?<div className="like" onClick={()=>props.unlikePost(props._id)}>Liked</div>: <div className="like" onClick={()=>props.likePost(props._id)}>Like</div>}
+          <div className="comment">Comment ({commentsCount}) 
           {!props.show ? <FaChevronDown onClick ={() =>props.showComment(props._id)}/> :
           <FaChevronUp onClick ={() =>props.unshowComment(props._id)}/>}
           </div>

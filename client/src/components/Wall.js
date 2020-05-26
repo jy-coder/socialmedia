@@ -4,27 +4,32 @@ import {connect} from 'react-redux'
 import {getMyPost} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import { Image } from 'react-bootstrap'
+import FollowModal from './FollowModal'
 
 
 function Wall({auth,getMyPost, posts_data}) {
+    let listOfFollowing = []
+    let listOfFollowers = []
     let noOfFollowers
     let noOfFollowing
     let noOfPosts
     let username
     let userphoto;
     if(auth.user){
-        noOfFollowers = auth.user.following.length
+        noOfFollowers = auth.user.followers.length
         noOfFollowing  = auth.user.following.length
-        noOfPosts = posts_data.posts.length;
-        username = auth.user.name;
-        userphoto = auth.user.photo 
+        noOfPosts = posts_data.posts.length
+        username = auth.user.name
+        userphoto = auth.user.photo
+        listOfFollowing = auth.user.following
+        listOfFollowers = auth.user.followers
     }
 
 
 useEffect(() => {
     if(auth.isAuthenticated)
         getMyPost()         
-        }, [auth,getMyPost])
+        }, [auth.isAuthenticated,getMyPost])
 
 
         const {posts} = posts_data
@@ -35,18 +40,17 @@ useEffect(() => {
 
         <div className = "profile">
         <div className="profile-image">
-            <Image src={'/' + userphoto}  roundedCircle  style={{width: '100px'}}/>
+            <Image src={'/' + userphoto}  roundedCircle />
         </div>
       
         <div className="profile-name-follow">
           <div className="username-follow">
             <div><b> {username} </b></div>
-            <div><button>Follow</button></div>
           </div>
             <div className="profile-stats">
               <div className="profile-stat-count">{noOfPosts} posts</div>
-              <div className="profile-stat-count">{noOfFollowers} followers </div>
-              <div className="profile-stat-count">{noOfFollowing} following</div>
+              <div className="profile-stat-count"><FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></div>
+              <div className="profile-stat-count"><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></div>
           </div>
         </div>
         </div>

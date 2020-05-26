@@ -7,7 +7,8 @@ import{
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    UPDATE_MY_PROFILE
+    UPDATE_MY_PROFILE,
+    NO_USER
 }from '../actions/types';
 
 
@@ -26,8 +27,14 @@ export default function(state = initialState,action){
                 ...state,
                 isLoading:true
               }
-            case USER_LOADED:
             case UPDATE_MY_PROFILE:
+                return{
+                    ...state,
+                    isAuthenticated:true,
+                    isLoading:false,
+                    user: action.payload
+                  }
+            case USER_LOADED:
                 return{
                     ...state,
                     isAuthenticated:true,
@@ -45,10 +52,11 @@ export default function(state = initialState,action){
                 return{
                     ...state,
                     ...action.payload,
-                    isAuthenticated:true,
+                    isAuthenticated:false,
                     isLoading:false,
                     
                   }
+            case NO_USER:
             case AUTH_ERROR:
             case LOGIN_FAIL:
             case LOGOUT_SUCCESS:
@@ -60,6 +68,9 @@ export default function(state = initialState,action){
                 isAuthenticated:false,
                 isLoading: false
             }
+
+            
+
    
             default:
                 return state

@@ -1,25 +1,41 @@
 import React,{useEffect} from 'react'
-import {getuserPost,getotheruserInfo} from '../flux/actions/postActions'
+import {getuserPost,getotheruserInfo, followUser, unfollowUser} from '../flux/actions/postActions'
 import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
 import {Image} from 'react-bootstrap'
+import FollowModal from './FollowModal'
 
-export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo}) {
-
+export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser}) {
+  // console.log(posts_data.userInfo)
+  let listOfFollowing;
+  let listOfFollowers;
   let noOfFollowers;
   let noOfFollowing;
   let noOfPosts;
   let username;
   let userphoto;
+  let followed;
+  let userId;
 
 
-  if(posts_data.userInfo[0]){
-   noOfFollowers=posts_data.userInfo[0].followers.length
-   noOfFollowing = posts_data.userInfo[0].following.length
-   username = posts_data.userInfo[0].name
-   userphoto = posts_data.userInfo[0].photo
+
+  if(posts_data.userInfo){
+   noOfFollowers=posts_data.userInfo.followers.length
+   noOfFollowing = posts_data.userInfo.following.length
+   username = posts_data.userInfo.name
+   userphoto = posts_data.userInfo.photo
+   listOfFollowing = posts_data.userInfo.following
+   listOfFollowers = posts_data.userInfo.followers
+   userId = posts_data.userInfo._id
+   if(listOfFollowers.find(x => x._id === auth.user._id)){
+    followed = true;
+
+   }
   }
+
+ 
+
 
   if(posts_data.userPost){
     noOfPosts = posts_data.posts.length
@@ -34,29 +50,29 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo}) 
 
       }
        
-      }, [getuserPost,auth,getotheruserInfo])
+      }, [getuserPost,auth.isAuthenticated,getotheruserInfo])
 
 
 
 
 
-
+      
     return (
       <>
       <div className = "profile">
         <div className="profile-image">
-            <Image src={'/' + userphoto}  roundedCircle  style={{width: '100px'}}/>
+            <Image src={'/' + userphoto}  roundedCircle />
         </div>
       
         <div className="profile-name-follow">
           <div className="username-follow">
             <div><b> {username} </b></div>
-            <div><button>Follow</button></div>
+          <div>{followed ? <button onClick={() => unfollowUser(userId, auth.user)}>Followed</button> : <button onClick={() =>followUser(userId, auth.user)}> Follow</button>}</div>
           </div>
             <div className="profile-stats">
               <div className="profile-stat-count">{noOfPosts} posts</div>
-              <div className="profile-stat-count">{noOfFollowers} followers </div>
-              <div className="profile-stat-count">{noOfFollowing} following</div>
+              <div className="profile-stat-count"><FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></div>
+              <div className="profile-stat-count"><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></div>
           </div>
         </div>
         </div>
@@ -77,4 +93,4 @@ const mapStateToProps = (state) =>({
   
   })
   
-  export default connect(mapStateToProps,{getuserPost,getotheruserInfo})(UserInfo)
+  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser})(UserInfo)

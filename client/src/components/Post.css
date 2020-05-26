@@ -84,18 +84,26 @@
     display:flex;
     flex-direction: row;
     width: 100%;
-    margin:0;
-    padding:0
+    margin:2px;
+    padding:2px
     
 }
 
 .like-dislike div{
-    flex: 1; 
-    margin: 0;
-    padding:0;
+    /* flex: 1;  */
     text-align: center;
     cursor: pointer; 
     border-top: 1px solid grey
+}
+
+.like-dislike .like{
+    width: 30%;
+    border-right: 1px solid grey
+}
+
+
+.like-dislike .comment{
+    width: 70%
 }
 
 
