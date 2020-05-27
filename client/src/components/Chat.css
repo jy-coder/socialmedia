@@ -1,0 +1,72 @@
+.chat-app{
+    /* display:flex; */
+    /* border: black 2px solid; */
+    height: 50%;
+    width: 30%;
+    text-align: center;
+    position:fixed;
+    bottom: 0;
+    right:0;
+    /* padding: 5px 5px 0px 5px; */
+    z-index:10
+    
+}
+
+.list-follow{
+    width: 30%;
+    display:flex;
+    align-items: flex-end;
+    align-content:flex-end
+}
+
+.list-follow img{
+    width: 25px;
+    
+    
+}
+
+
+.list-follow li{
+    list-style-type: none;
+    border-bottom: solid 1px grey;
+    cursor: pointer;
+    padding:0
+    
+}
+
+.list-follow ul{
+    width:100%
+}
+
+
+.follow-chat-wrapper{
+    display:flex;
+    flex-direction: row;
+    height: 100%
+
+    
+    
+}
+
+
+.follow-chatroom{
+  
+    width:70%;
+    border: black 2px solid;
+    background:rgb(247, 241, 225);
+    position:relative;
+    
+    
+}
+
+
+.chatroom-input{
+    display:flex;
+    width:100%;
+    position: absolute;
+    bottom:0
+}
+
+.chatroom-input-btn{
+    width:25%
+}

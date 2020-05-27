@@ -7,9 +7,12 @@ const dotenv = require('dotenv');
 
 const postRoute = require('./routes/postRoute')
 const userRoute = require('./routes/userRoute')
+const chatRoute = require('./routes/chatRoute')
 // const likeRoute = require('./routes/likeRoute')
 const globalErrorHandler = require('./controllers/errorController')
 const cookieParser = require('cookie-parser');
+
+
 
 global.__basedir = __dirname;
 
@@ -25,6 +28,8 @@ process.on('uncaughtException', err => {
 dotenv.config({ path: './config.env' });
 
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 
 // SETTING UP DB
 const DB = process.env.DATABASE.replace(
@@ -71,6 +76,8 @@ const port = process.env.PORT || 1337;
 
 app.use('/api/post', postRoute)
 app.use('/api/user', userRoute)
+app.use('/api/chat', chatRoute)
+
 
 
 

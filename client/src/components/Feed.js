@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import Post from './Post'
+import Chat from './Chat'
 import {connect} from 'react-redux'
 import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {updateMe} from '../flux/actions/authActions'
@@ -21,7 +22,9 @@ function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
         // console.log(posts);
 
     return (
+        
         <div className="my-feed">
+            <Chat/>
         <div className="create-post">
             {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
         </div>
