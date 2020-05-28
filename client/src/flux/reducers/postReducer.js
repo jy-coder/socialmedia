@@ -2,13 +2,19 @@ import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,UPDATE_ITEM,
     GET_ONE_ITEM,ITEMS_LOADING,LIKE_POST,
     UNLIKE_POST,
     COMMENT_POST,
-    UNCOMMENT_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO,GET_FEED,GET_USER_POST,GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER} from '../actions/types'
+    UNCOMMENT_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO,
+    GET_FEED,GET_USER_POST,GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER,
+    GET_CHAT, CLOSE_CHAT,ADD_CHAT, OPEN_CHAT, CHAT_WITH,S_ADD_CHAT} from '../actions/types'
 const initialState={
     posts: [],
     post: {},
     userPost:[],
     userInfo: null,
     loading:false,
+    chat: [],
+    chatId: "",
+    openChat: false,
+    chatWithId:""
 
 }
 
@@ -121,6 +127,33 @@ export default function(state=initialState,action){
             return{
                 ...state,
                 userInfo : {...state.userInfo, followers: state.userInfo.followers.filter(p => p._id !== action.payload._id )}
+            }
+        case GET_CHAT:
+            return{
+                ...state,
+                chat: action.payload,
+                chatId: action.payloadchatId
+            }
+
+        case OPEN_CHAT:
+            return{
+                ...state,
+                openChat: true
+            }
+        
+        case CHAT_WITH:
+            return{
+                ...state,
+                chatWithId: action.payload
+
+            }
+        
+      
+        case S_ADD_CHAT:
+            return{
+                ...state,
+                chat: action.payload
+               
             }
 
         

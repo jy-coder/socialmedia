@@ -1,13 +1,14 @@
 const Chat = require('../models/Chat')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/AppError')
+const io = require('../socket')
 
 
 //when clicked on user
 exports.createChat = catchAsync(async (req,res,next) =>{
         let chat;
         chat = await Chat.findOne(
-        { user: { $all: [req.user._id, req.body.user] }}) 
+        { user: { $all: [req.user._id, req.body.user] }}).populate('chat.postedBy','name') 
     
         if(!chat)
             chat = await Chat.create({
@@ -32,9 +33,11 @@ exports.createChat = catchAsync(async (req,res,next) =>{
 
 
     exports.addToChat = catchAsync(async (req,res,next)=> {
-        const chat =await Chat.findByIdAndUpdate(req.body.chatId, {$push: {chat: req.body.chat}}).populate('chat.postedBy','name')
+        const chat =await Chat.findByIdAndUpdate(req.body.chatId, {$push: {chat: req.body.chat}},{ new: true }).populate('chat.postedBy','name')
         if(!chat)
             return next(new AppError('No document found with that ID', 404));
+
+        io.getIO().emit('chat', {action:'add', chat:chat})
   
       
         res.status(200).json(chat);

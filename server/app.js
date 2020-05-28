@@ -28,14 +28,17 @@ process.on('uncaughtException', err => {
 dotenv.config({ path: './config.env' });
 
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+
 
 // SETTING UP DB
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
+
+
+
+const port = process.env.PORT || 1337;
 
 mongoose
   .connect(DB, {
@@ -44,8 +47,14 @@ mongoose
     useFindAndModify: false,
     useUnifiedTopology: true
   })
-  .then(() => console.log('DB connection successful'));
-
+  .then(()=> {
+    const server = app.listen(port);
+    const io = require('./socket').init(server);
+    io.on('connection', socket => {
+      console.log('Client connected');
+    });
+  })
+  .catch(err => console.log(err));
 process.on('unhandledRejection', err => {
   console.log(err);
   console.log('UNHANDLER REJECTION!@ SHUTTING DOWN...');
@@ -67,13 +76,6 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser());
-
-
-const port = process.env.PORT || 1337;
-
-
-
-
 app.use('/api/post', postRoute)
 app.use('/api/user', userRoute)
 app.use('/api/chat', chatRoute)
@@ -87,7 +89,7 @@ app.use(globalErrorHandler)
 
 
 
-app.listen(port, 'localhost',() =>{
-    console.log(`App running on port ${port}`);
+// app.listen(port, 'localhost',() =>{
+//     console.log(`App running on port ${port}`);
 
-})
+// })

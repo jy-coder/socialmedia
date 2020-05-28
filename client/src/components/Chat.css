@@ -2,7 +2,7 @@
     /* display:flex; */
     /* border: black 2px solid; */
     height: 50%;
-    width: 30%;
+    width: 50%;
     text-align: center;
     position:fixed;
     bottom: 0;
@@ -15,8 +15,8 @@
 .list-follow{
     width: 30%;
     display:flex;
-    align-items: flex-end;
-    align-content:flex-end
+    margin-left: auto;
+    margin-top:auto
 }
 
 .list-follow img{
@@ -51,10 +51,13 @@
 
 .follow-chatroom{
   
-    width:70%;
+    width:100%;
     border: black 2px solid;
     background:rgb(247, 241, 225);
     position:relative;
+    overflow: scroll;
+    height:90%;
+    
     
     
 }
@@ -63,10 +66,42 @@
 .chatroom-input{
     display:flex;
     width:100%;
-    position: absolute;
-    bottom:0
+    position: relative;
+    bottom:0;
+    height: 13%;
+   
+
+}
+
+
+.chatroom-input div{
+    flex : 1
 }
 
 .chatroom-input-btn{
     width:25%
 }
+.chat-one-message--right{
+    position: relative;
+    top: 6px;
+    text-align: right;
+    padding: 5px
+}
+
+.chat-one-message--left{
+    text-align: left;
+    padding: 5px
+}
+
+.chat-one-message--left small, .chat-one-message--right small {
+    position: relative;
+    top: 8px;
+}
+
+
+.chatroom-input-follow-wrapper{
+    width:100%;
+    
+}
+
+
