@@ -6,10 +6,20 @@ import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {updateMe} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './CustomModal'
+import {makeStyles,Grid } from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) => ({
+  
+    content:{
+      marginTop:'5px',
+      width: '100%'
+    }
+  }));
 
 function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
      //post is object containing posts obj -> contains status and array of data and loading
-
+     const classes = useStyles();
       useEffect(() => {
         if(auth.isAuthenticated)
             getFeed()         
@@ -22,14 +32,13 @@ function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
         // console.log(posts);
 
     return (
-        
-        <div className="my-feed">
-            <Chat/>
-        <div className="create-post">
-            {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
-        </div>
-        {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
-        </div>
+        <>
+        <Grid className="feed" >
+        {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
+            {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
+        </Grid>
+        <Chat/>
+        </>
     )
 }
 

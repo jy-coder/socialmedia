@@ -1,9 +1,30 @@
 import React, {useEffect,useState} from 'react'
 import {getOneItem, updateItem} from '../flux/actions/postActions'
 import { connect } from 'react-redux';
+import {makeStyles, TextField,DialogContent,DialogActions, Button, Box} from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '100%',
+      height: '30ch',
+      display: 'block'
+    },
+  },
+
+  content:{
+    marginTop:'5px',
+    width: '100%'
+  }
+}));
+
+
+
 
 function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClose}) {
-
+    const classes = useStyles();
     const [image, setImage] = useState("")
     const [content, setContent]= useState("")
     const [preview, setPreview] = useState("")
@@ -51,26 +72,23 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClos
 
     if(post[0])
       return (
-          <div>
-      <section className="modal-body">
+      <Box flexDirection="column" p={1}>
       {error_data.msg.error? <div className="error-msg"><small>{error_data.msg.error}</small></div> : null}
-        <form onSubmit={(e) => submitHandler(e)}>
-        <div className="form-group">
-          <label htmlFor="name">Image:</label>
+        <form onSubmit={(e) => submitHandler(e)} className={classes.root}>
+        <Box>
           <input type="file" accept='photo/*' name="photo" id="photo" className="form-control-file" onChange={imageHandler}  />
+        </Box>
+        <Box>
           {preview ? <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>:
           <img src={post[0].photo} id="create-post-image" alt="" style={{width: "100px"}}/>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="content">Content:</label>
+        </Box>
+        <Box>
           <textarea id="content" name="content" label="Your content" type="content" className="form-control" onChange={inputChangeHandler} rows={5} defaultValue={post[0].content}  />
-        </div>
-        <div className="modal-footer">
+        </Box>
         <button type="submit" className="btn btn-primary">Post</button>
-        </div>
+      
           </form>
-          </section>
-          </div>
+    </Box>
       )
       else
       return (null);

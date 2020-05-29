@@ -1,13 +1,46 @@
 import React, { useEffect } from 'react'
 import Post from './Post'
+import './Wall.css'
 import {connect} from 'react-redux'
 import {getMyPost} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import { Image } from 'react-bootstrap'
 import FollowModal from './FollowModal'
+import {makeStyles,Grid, Paper,Typography,ButtonBase } from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        margin: theme.spacing(1),
+        // width: '50%',
+        margin: '0 auto',
+     
+      
+    },
+  
+    content:{
+      marginTop:'5px',
+      width: '100%',
+      
+    },
+
+    root2: {
+        flexGrow: 1,
+        // minWidth: '768px'
+      },
+      paper: {
+        padding: theme.spacing(2),
+        // width: '50%',
+        margin: '0 auto',
+      
+      }
+  }));
+
+
 
 
 function Wall({auth,getMyPost, posts_data}) {
+    const classes = useStyles();
     let listOfFollowing = []
     let listOfFollowers = []
     let noOfFollowers
@@ -33,32 +66,45 @@ useEffect(() => {
 
 
         const {posts} = posts_data
+    
+
 
 
     return (
-        <>
+        <div className="feed">
 
-        <div className = "profile">
-        <div className="profile-image">
-            <Image src={'/' + userphoto}  roundedCircle />
-        </div>
-      
-        <div className="profile-name-follow">
-          <div className="username-follow">
-            <div><b> {username} </b></div>
-          </div>
-            <div className="profile-stats">
-              <div className="profile-stat-count">{noOfPosts} posts</div>
-              <div className="profile-stat-count"><FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></div>
-              <div className="profile-stat-count"><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></div>
-          </div>
-        </div>
-        </div>
+<div className={classes.root2}>
+      <Paper className={classes.paper} elevation={0}>
+        <Grid container spacing={2}>
+          <Grid item xs={4} sm={4} md={4} lg={4}>
+            <ButtonBase>
+              <img  alt="complex" src={'/' + userphoto} className="profile-img" />
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={8} sm container>
+            <Grid item xs container  spacing={2}>
+              <Grid item xs={12}>
+                <Typography gutterBottom variant="h4">
+                {username}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm container direction="row"  >
+                <Grid item xs={12} sm={4} md={4} lg={4} >{noOfPosts} posts</Grid>
+                <Grid item xs={12} sm= {4} md={4} lg={4} > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
+                <Grid item xs={12}  sm={4} md={4} lg={4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
+               
+           
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
         
-        <div className ="my-feed">
+        <Grid className={classes.root} >
             {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
+        </Grid>
         </div>
-        </>
     )
 }
 

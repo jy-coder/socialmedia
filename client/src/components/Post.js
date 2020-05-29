@@ -1,14 +1,60 @@
 import React, {useState,useEffect} from 'react'
-import {Card, Button,Form, Image, ListGroup, Col, Row} from 'react-bootstrap';
-import './Post.css'
+
+// import './Post.css'
 import {connect} from 'react-redux'
 import Moment from 'react-moment';
-import  CustomModal  from './CustomModal'
+import { CustomModal}  from './CustomModal'
 import {likePost,unlikePost,commentPost, showComment,unshowComment} from '../flux/actions/postActions'
 import Comment  from './Comment'
-import {FaChevronDown,FaChevronUp} from 'react-icons/fa'
+
+import { red } from '@material-ui/core/colors';
+import clsx from 'clsx';
+import { makeStyles, Card,CardHeader, CardMedia,CardContent,CardActions, 
+  Collapse, Avatar, IconButton, Typography, FormControl, Input, Button,Box} from '@material-ui/core';
+import {Favorite, Share,ExpandMore, MoreVert} from '@material-ui/icons';
+
+
+
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    maxWidth: '100%',
+    maxHeight: '50%',
+    width: '100%',
+    marginTop: '1rem'
+
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+  comment:{
+    display: 'inline-flex',
+    width: '100%',
+    justifyContent: 'center'
+  }
+
+}));
+
+
 
 function Post(props) {
+
+  const [comment,setComment]= useState('')
   let liked;
   let belongToCurrentUser;
   let commentsCount;
@@ -23,7 +69,13 @@ function Post(props) {
       belongToCurrentUser = true
   }
 
-    const [comment,setComment]= useState('')
+    
+
+    const classes = useStyles();
+    const [expanded, setExpanded] = React.useState(false);
+    const handleExpandClick = () => {
+      setExpanded(!expanded);
+    };
 
 
 
@@ -32,68 +84,77 @@ function Post(props) {
       setComment(e.target.value);
     }
     
-    return (
-      
-        <div className="one-post">
-        <Card>
-        <Card.Header className="card-header">
-        {belongToCurrentUser?
-        <div className="user-edit">
-        <CustomModal status={"delete"} _id={props._id}/>
-        <CustomModal status={"update"} _id={props._id}/>
-        </div>:null}
-        
-        <div className="user-header">
-        <div>
-          <Image className="user-image" src={'/' +props.creator.photo} rounded />
-        </div>
-        <div>
-         {!belongToCurrentUser  ? <a href={`/user/${props.creator._id}`}>{props.creator.name}</a> :
-         <a>{props.creator.name}</a>}
-          <br/>
-          <small className="text-muted"><Moment format="DD-MM-YYYY HH:mm">{props.createdAt}</Moment></small>
-        </div>
-        </div>
-        
-        </Card.Header>
-        <Card.Body className="card-body">
-        <div className="post-photo-content">
-        {props.photo? <div className="post-photo"><img src={'/' +props.photo}  width="200" height="200"></img></div> : null}
-          <div className="card-content">
-            {props.content}
-          </div>
-        </div>
-          
-          <div className="like-dislike">
-             {liked?<div className="like" onClick={()=>props.unlikePost(props._id)}>Liked</div>: <div className="like" onClick={()=>props.likePost(props._id)}>Like</div>}
-          <div className="comment">Comment ({commentsCount}) 
-          {!props.show ? <FaChevronDown onClick ={() =>props.showComment(props._id)}/> :
-          <FaChevronUp onClick ={() =>props.unshowComment(props._id)}/>}
-          </div>
+  
+    
+      return (
+        <Card className={classes.root}>
+          <CardHeader
+            avatar={
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                R
+              </Avatar>
+            }
+            action={
+              <IconButton aria-label="settings">
+                <MoreVert />
+              </IconButton>
+            }
+            title={props.creator.name}
+            subheader={<Moment format="DD/MM/YYYY HH:mm">{props.createdAt}</Moment>}
+          />
+          <CardMedia
+            className={classes.media}
+            image={'/' +props.photo}
 
-          </div>
-        </Card.Body>
-      
-        <ListGroup variant="flush" className={!props.show ?"list-group-comment--hide":"list-group-comment" }>
-       
-        {props.comments? props.comments.map((comment, i)=>(<Comment key={i} postId={props._id}  comment={comment}/>)) : null}
-          
-        <Form>
-          <Form.Control type="text" placeholder="Enter comment" onChange={inputChangeHandler} />
-          <Button variant="primary" onClick={()=>props.commentPost(props._id,comment)}>Comment</Button>
-        </Form>
-        
-        </ListGroup>
-       
-      
-        
-        
-     
+          />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+            {props.content}
+            </Typography>
+          </CardContent>
+          <CardActions disableSpacing>
+            <IconButton aria-label="add to favorites">
+              <Favorite />
+            </IconButton>
+            <IconButton aria-label="share">
+              <Share />
+            </IconButton>
+            {belongToCurrentUser?
+            <>
+            <IconButton aria-label="delete">
+            <CustomModal status={"delete"} _id={props._id}/>
+            </IconButton>
+            <IconButton aria-label="update">
+            <CustomModal status={"update"} _id={props._id}/>
+            </IconButton>
+            </>:null}
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMore />
+            </IconButton>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography paragraph>
+              {props.comments? props.comments.map((comment, i)=>(<Comment key={i} postId={props._id}  comment={comment}/>)) : null}
+              </Typography>
+           
+              <Box flexDirection="row" className={classes.comment} > 
+              <Box width="75%"><Input  placeholder="Enter comment"  onChange={inputChangeHandler} fullWidth/></Box>
+              <Box ><Button variant="contained" color="primary" onClick={()=>props.commentPost(props._id,comment)}  >Comment</Button></Box>
+              </Box>
    
-      </Card>
-      </div>
-    )
-}
+            </CardContent>
+          </Collapse>
+        </Card>
+      );
+    }
 
 
 const mapStateToProps = (state) =>({

@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import './components/globalError.css'
 import NavBar from './components/NavBar'
 import Posts from './components/Posts'

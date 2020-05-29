@@ -3,12 +3,39 @@ import './AddPost.css'
 import { connect } from 'react-redux';
 import { addItem } from '../flux/actions/postActions';
 import { clearErrors } from '../flux/actions/errorActions';
+import {makeStyles, TextField,DialogContent,DialogActions, Button, Box} from '@material-ui/core';
+
+
+
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '100%',
+      height: '30ch',
+      display: 'block'
+    },
+  },
+
+  content:{
+    marginTop:'5px',
+    width: '100%'
+  }
+}));
+
 
 export function AddPost({addItem, error_data, posts_data,handleClose}) {
-  console.log(posts_data)
+  const classes = useStyles();
+
+  // console.log(posts_data)
   const [image, setImage] = useState("")
   const [content, setContent]= useState("")
   const [preview, setPreview] = useState("")
+
+
+
 
   const submitHandler = (e) =>{
     e.preventDefault();
@@ -46,22 +73,36 @@ const inputChangeHandler  = e  => {
 
 
     return (
-      <section className="modal-body">
+      <section>
       {error_data.msg.error? <div className="error-msg"><small>{error_data.msg.error}</small></div> : null}
-      <form onSubmit={(e) => submitHandler(e)}>
-      <div className="form-group">
-        <label htmlFor="name">Image:</label>
-        <input type="file" accept='photo/*' name="photo" className="form-control-file" onChange={imageHandler} />
+      <form onSubmit={(e) => submitHandler(e)} className={classes.root} >
+      <DialogContent>
+      <Box flexDirection="column" p={1}>
+        <Box>
+          <input type="file" accept='photo/*' name="photo" onChange={imageHandler}/>
+        </Box>
+      <Box>
         <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>
-      </div>
-      <div className="form-group">
-        <label htmlFor="content">Content:</label>
-        <textarea id="content" name="content" label="Your content" type="content" className="form-control" onChange={inputChangeHandler} rows={5} />
-      </div>
-      <div className="modal-footer">
-      <button type="submit" className="btn btn-primary">Post</button>
-      </div>
-        </form>
+      </Box>
+      <Box>
+      <TextField 
+          id="content"
+          label="Enter Content"
+          rows={10}
+          placeholder="Enter Content"
+          multiline
+          fullWidth
+          onChange={inputChangeHandler}
+        />
+      </Box>
+      </Box>
+      </DialogContent>
+      <DialogActions>
+          <Button autoFocus type="submit" color="primary" >
+            Save changes
+          </Button>
+        </DialogActions>
+      </form>
         </section>
     )
 }

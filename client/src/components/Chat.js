@@ -35,31 +35,9 @@ function Chat({auth, posts_data,getChat, addChat,setOpenChat,chatWith}) {
 
 
     useEffect(() => {    
-        // if(auth.isAuthenticated)
-        //     getChat()
+  
             }, [setOpenChat])
     
-
-
-    // console.log(listOfFollowing)
-
-    // const chatMessage = () => {
-    //     if(chatHistory){
-    //         const content = chatHistory.map((chat, i ) => (
-    //         <div  className={chat.postedBy._id === auth.user._id? "chat-one-message--left": "chat-one-message--right"}>
-    //         <span>{chat.text}</span>
-    //         <small className="text-muted"><Moment format="HH:mm">{chat.postedBy.created}</Moment></small>
-    //         </div>
-
-
-            
-    //         ))
-
-    //         return content
-    //     }
-    //     else
-    //         return null
-    // }
 
 
     return (

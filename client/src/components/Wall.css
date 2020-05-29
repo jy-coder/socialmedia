@@ -1,0 +1,54 @@
+.feed{
+    margin-top: 5px;
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 1200px) {
+    .profile-img{
+        width: 125px;
+        height: 125px
+      }
+      .feed{
+          width:50%;
+          margin: 10px auto
+      }
+
+
+}
+
+
+
+/* Portrait tablets and small desktops
+@media (min-width: 768px) and (max-width: 991px) {
+    .profile-img{
+        width: 125px;
+        height: 125px
+      }
+
+} */
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+    .profile-img{
+        width: 100px;
+        height: 100px
+      }
+      body,.feed{
+        width: 100%
+    }
+
+
+}
+
+/* Portrait phones and smaller
+@media (max-width: 480px) {
+    .profile-img{
+        width: 100px;
+        height: 100px
+      }
+      body{
+        width: 50%
+    }
+
+} */
+  

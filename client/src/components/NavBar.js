@@ -1,26 +1,54 @@
 import React from 'react'
-import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
-import { connect } from 'react-redux';
-function NavBar({auth}) {
-    return (
-        <Navbar>
-        <Navbar.Brand href="/">Logo</Navbar.Brand>
-        <Navbar.Toggle />
-        {!auth.isAuthenticated ?
-        <Navbar.Collapse className="justify-content-end">
-        <Nav.Link href="/register">Register</Nav.Link>
-        <Nav.Link eventKey={2} href="/login">Login</Nav.Link>
-        </Navbar.Collapse>
-        : 
-        <Navbar.Collapse className="justify-content-end">
-        <Nav.Link href="/wall">My Wall</Nav.Link>
-        <Nav.Link href="/profile">Change profile picture</Nav.Link>
-        </Navbar.Collapse>}
+import { makeStyles, AppBar,Toolbar, Typography, Button, IconButton} from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
-        
-        </Navbar>
-    )
-}
+import { connect } from 'react-redux';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }));
+  
+
+
+function NavBar({auth}) {
+
+    const classes = useStyles();
+    return (
+        <div className={classes.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+             
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>
+              <Button color="inherit" component={Link} to="/" >Home </Button>
+              </Typography>
+              {!auth.isAuthenticated ?
+              <> 
+              <Button color="inherit" component={Link} to="/register">Register</Button>
+              <Button color="inherit" component={Link} to="/login">Login</Button>
+              </>
+              : 
+              <>
+              <Button color="inherit" component={Link} to="/wall" >My Wall</Button>
+              <Button color="inherit" component={Link} to="/profile">Other settings</Button>
+              </>
+              
+              
+              }
+            </Toolbar>
+          </AppBar>
+        </div>
+      );
+    }
 
 
 const mapStateToProps = (state) =>({

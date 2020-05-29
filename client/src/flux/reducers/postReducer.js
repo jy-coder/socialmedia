@@ -29,23 +29,23 @@ export default function(state=initialState,action){
                 posts: action.payload,
                 loading:false
             };
-        case GET_ONE_ITEM:
-            return{
-                ...state,
-                post: state.posts.filter((post) => post._id === action.payload)
+        // case GET_ONE_ITEM:
+        //     return{
+        //         ...state,
+        //         post: state.posts.filter((post) => post._id === action.payload)
                 
-            };
+        //     };
 
         
-        case ADD_ITEM:
-            return {
-                ...state,
-                posts: [action.payload, ...state.posts],
+        // case ADD_ITEM:
+        //     return {
+        //         ...state,
+        //         posts: [action.payload, ...state.posts],
            
                
-            };
+        //     };
 
-
+        // only can delete on my wall
         case DELETE_ITEM:
             return {
                 ...state,

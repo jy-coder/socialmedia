@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react'
-import './Posts.css'
+// import './Posts.css'
 import Post from './Post'
 import {connect} from 'react-redux'
 import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './CustomModal'
+import { Grid } from '@material-ui/core';
 
 function Posts({posts_data,getItems,error_data,clearErrors,auth}) {
      //post is object containing posts obj -> contains status and array of data and loading
@@ -21,12 +22,10 @@ function Posts({posts_data,getItems,error_data,clearErrors,auth}) {
         // console.log(posts);
 
     return (
-        <div className="my-feed">
-        <div className="create-post">
+        <Grid className="feed">
         {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
-        </div>
             {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
-        </div>
+        </Grid>
     )
 }
 
