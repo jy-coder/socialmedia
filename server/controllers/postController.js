@@ -4,6 +4,7 @@ const AppError = require('../utils/AppError')
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
+const io = require('../socket')
 
 
 const multerStorage = multer.memoryStorage();
@@ -51,6 +52,9 @@ if(req.file)
 if(!req.body.content)
   error = "Content must not be empty"
 
+
+  
+
 if(error)
   return res.status(400).json({
     error
@@ -65,8 +69,19 @@ const posts = await Post.create({
 
     if(!posts)
         return next(new AppError('No document found with that ID', 404));
-
-        res.status(200).json(posts);
+  
+  let followersList = req.user.followers
+  let followerPosts
+        
+  //add to followers' feed & user own wall
+  followersList.forEach(async (follower) => {
+      followerPosts = await Post.find({creator: follower.following })
+      if(followerPosts)
+      io.getIO().emit({action:`add${follower._id}`, posts:followerPosts}) //listen in client
+  });
+        
+  
+  res.status(200).json(posts); //the req.user who published
 })
 
 
@@ -209,15 +224,21 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.getFeed = catchAsync(async (req,res,next)=> {
-    const posts = await Post.find({creator: req.user.following })
-    // posts = await Post.find().populate('creator','name').populate('comments.postedBy', '_id name').populate('likes', '_id name')
-    
+    // console.log(req.user.followers)
 
-    if(!posts)
-    return next(new AppError('No document found with that ID', 404))
+    const posts = await Post.find({creator: req.user.following })
    
 
+    if(!posts)
+      return next(new AppError('No document found with that ID', 404))
+   
+
+
+  
+
+      // res.status(200).json(followerPosts);
+      // io.getIO().emit({action:'add', chat:chat})
     
-        res.status(200).json(posts);
+      res.status(200).json();
   })
 

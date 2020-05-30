@@ -3,7 +3,6 @@ import {getuserPost,getotheruserInfo, followUser, unfollowUser} from '../flux/ac
 import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
-import {Image} from 'react-bootstrap'
 import FollowModal from './FollowModal'
 
 export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser}) {
@@ -61,7 +60,7 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
       <>
       <div className = "profile">
         <div className="profile-image">
-            <Image src={'/' + userphoto}  roundedCircle />
+            <img src={'/' + userphoto}  roundedCircle />
         </div>
       
         <div className="profile-name-follow">

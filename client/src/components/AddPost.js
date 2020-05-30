@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import './AddPost.css'
-import { connect } from 'react-redux';
 import { addItem } from '../flux/actions/postActions';
-import { clearErrors } from '../flux/actions/errorActions';
 import {makeStyles, TextField,DialogContent,DialogActions, Button, Box} from '@material-ui/core';
-
+import {useDispatch} from 'react-redux'
 
 
 
@@ -26,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export function AddPost({addItem, error_data, posts_data,handleClose}) {
+export function AddPost({handleClose}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
 
   // console.log(posts_data)
   const [image, setImage] = useState("")
@@ -45,7 +45,7 @@ export function AddPost({addItem, error_data, posts_data,handleClose}) {
     form.append('content', content);
     form.append('photo', image)
     
-    addItem(form);
+    dispatch(addItem(form));
 
     handleClose();
 
@@ -74,7 +74,6 @@ const inputChangeHandler  = e  => {
 
     return (
       <section>
-      {error_data.msg.error? <div className="error-msg"><small>{error_data.msg.error}</small></div> : null}
       <form onSubmit={(e) => submitHandler(e)} className={classes.root} >
       <DialogContent>
       <Box flexDirection="column" p={1}>
@@ -107,10 +106,5 @@ const inputChangeHandler  = e  => {
     )
 }
 
-const mapStateToProps = (state) =>({
-  posts_data:state.posts_data,
-  error_data: state.error_data
 
-})
-
-export default connect(mapStateToProps, {addItem, clearErrors})(AddPost)
+export default AddPost

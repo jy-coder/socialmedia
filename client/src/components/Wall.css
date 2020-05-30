@@ -34,21 +34,21 @@
         height: 100px
       }
       body,.feed{
-        width: 100%
+        width: 75%
     }
 
 
 }
 
-/* Portrait phones and smaller
+/* Portrait phones and smaller*/
 @media (max-width: 480px) {
     .profile-img{
         width: 100px;
         height: 100px
       }
-      body{
-        width: 50%
+      body,.feed{
+        width: 100%
     }
 
-} */
+} 
   

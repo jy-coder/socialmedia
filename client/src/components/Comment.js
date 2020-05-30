@@ -1,5 +1,4 @@
 import React from 'react'
-import {Card, Button,Form, Image, ListGroup, Col, Row} from 'react-bootstrap';
 import Moment from 'react-moment';
 import {uncommentPost} from '../flux/actions/postActions'
 import {connect} from 'react-redux'
@@ -40,23 +39,23 @@ export function Comment({comment, postId, uncommentPost,auth}) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
-          <Grid item>
+          <Grid item xs={4}>
             <ButtonBase className={classes.image}>
               <img className={classes.img} alt="complex" src={'/' +comment.postedBy.photo} />
             </ButtonBase>
           </Grid>
-          <Grid item xs={12} sm container>
+          <Grid item xs={8} sm container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs container direction="row">
                 <Grid item xs>
-                    <Typography variant="body2" gutterBottom>
+                    <Typography variant="body2"  gutterBottom>
                     {comment.postedBy.name} <Moment format="DD/MM/YYYY HH:mm">{comment.created}</Moment> 
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant="body2"  color="textSecondary">
                     {comment.text}
                     </Typography>
                 </Grid>
-                <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                <Typography variant="body2"  style={{ cursor: 'pointer' }}>
                   Remove
                 </Typography>
               </Grid>

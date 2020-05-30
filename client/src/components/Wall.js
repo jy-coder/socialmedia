@@ -4,9 +4,8 @@ import './Wall.css'
 import {connect} from 'react-redux'
 import {getMyPost} from '../flux/actions/postActions'
 import {clearErrors} from '../flux/actions/errorActions'
-import { Image } from 'react-bootstrap'
 import FollowModal from './FollowModal'
-import {makeStyles,Grid, Paper,Typography,ButtonBase } from '@material-ui/core';
+import {makeStyles,Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -89,7 +88,7 @@ useEffect(() => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm container direction="row"  >
-                <Grid item xs={12} sm={4} md={4} lg={4} >{noOfPosts} posts</Grid>
+                <Grid item xs={12} sm={4} md={4} lg={4} ><Button disabled>{noOfPosts} posts</Button></Grid>
                 <Grid item xs={12} sm= {4} md={4} lg={4} > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
                 <Grid item xs={12}  sm={4} md={4} lg={4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
                

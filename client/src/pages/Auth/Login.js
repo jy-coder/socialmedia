@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Form,Button} from 'react-bootstrap';
 import './Login.css'
 import {login} from '../../flux/actions/authActions'
 import {connect} from 'react-redux'
+import {Button, Box} from '@material-ui/core';
 
 
 const Login = ({login,error_data}) =>{
@@ -28,22 +28,20 @@ const Login = ({login,error_data}) =>{
     return (
     <section className="auth-form">
     {error_data.msg? <div className="error-msg"><small>{error_data.msg.message}</small></div> : null}
-    <Form onSubmit ={(e) => submitHandler(e)}>
-    <Form.Group controlId="email">
-      <Form.Label>Email address</Form.Label>
-      <Form.Control type="email" placeholder="Enter email" onChange={inputChangeHandler} />
-      <Form.Text className="text-muted">
-      </Form.Text>
-    </Form.Group>
+    <form onSubmit ={(e) => submitHandler(e)}>
+      <Box flexDirection="column" p={1}>
+    <Box>
+      <input type="email" placeholder="Enter email" onChange={inputChangeHandler} />
+    </Box>
 
-  <Form.Group controlId="password">
-    <Form.Label>Password</Form.Label>
-    <Form.Control type="password" placeholder="Password" onChange={inputChangeHandler} />
-  </Form.Group>
+  <Box controlId="password">
+    <input type="password" placeholder="Password" onChange={inputChangeHandler} />
+  </Box>
   <Button variant="primary" type="submit">
     Submit
   </Button>
-</Form>
+  </Box>
+</form>
     </section>
       
     );

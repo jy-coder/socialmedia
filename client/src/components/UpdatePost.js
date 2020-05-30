@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
       width: '100%',
-      height: '30ch',
+      height: '100%',
       display: 'block'
     },
   },
@@ -28,6 +28,22 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClos
     const [image, setImage] = useState("")
     const [content, setContent]= useState("")
     const [preview, setPreview] = useState("")
+    useEffect(() => {
+      getOneItem(_id)
+     
+    }, [getOneItem])
+
+    let postName
+    let postPhoto
+
+    if(posts_data.post[0]){
+      postName = posts_data.post[0].name
+      postPhoto = posts_data.post[0].photo
+
+    }
+
+
+
 
   
     const submitHandler = (e) =>{
@@ -46,12 +62,7 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClos
       
     }
 
-    const {post} = posts_data
 
-    useEffect(() => {
-        getOneItem(_id)
-       
-      }, [getOneItem])
       
     
   
@@ -70,28 +81,29 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClos
       setContent(e.target.value);
     }
 
-    if(post[0])
+
       return (
-      <Box flexDirection="column" p={1}>
-      {error_data.msg.error? <div className="error-msg"><small>{error_data.msg.error}</small></div> : null}
+        <DialogContent>
+          <Box flexDirection="column" >
         <form onSubmit={(e) => submitHandler(e)} className={classes.root}>
         <Box>
           <input type="file" accept='photo/*' name="photo" id="photo" className="form-control-file" onChange={imageHandler}  />
         </Box>
         <Box>
           {preview ? <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>:
-          <img src={post[0].photo} id="create-post-image" alt="" style={{width: "100px"}}/>}
+          <img src={postPhoto} id="create-post-image" alt="" style={{width: "100px"}}/>}
         </Box>
         <Box>
-          <textarea id="content" name="content" label="Your content" type="content" className="form-control" onChange={inputChangeHandler} rows={5} defaultValue={post[0].content}  />
+          <textarea id="content" name="content" label="Your content" type="content" className="form-control" onChange={inputChangeHandler} rows={5} defaultValue={postName}  />
         </Box>
-        <button type="submit" className="btn btn-primary">Post</button>
-      
+        <button type="submit">Post</button>
           </form>
-    </Box>
+          </Box>
+          </DialogContent>
+        
+   
       )
-      else
-      return (null);
+
   }
 
 

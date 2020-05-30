@@ -113,8 +113,8 @@ function Post(props) {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <Favorite />
+            <IconButton aria-label="add to favorites" onClick={()=>{liked ? props.unlikePost(props._id): props.likePost(props._id) }}>
+             <Favorite  style={{color: liked ? "red" : "grey"}} />
             </IconButton>
             <IconButton aria-label="share">
               <Share />
@@ -141,7 +141,7 @@ function Post(props) {
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography paragraph>
+              <Typography component={'div'}>
               {props.comments? props.comments.map((comment, i)=>(<Comment key={i} postId={props._id}  comment={comment}/>)) : null}
               </Typography>
            

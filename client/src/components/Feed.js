@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import Post from './Post'
 import Chat from './Chat'
-import {connect} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {getItems,addItem,getFeed} from '../flux/actions/postActions'
 import {updateMe} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
@@ -17,7 +17,10 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
+function Feed() {
+
+  let posts_data = useSelector(state => state.posts_data)
+  let auth= useSelector(state => state.auth)
      //post is object containing posts obj -> contains status and array of data and loading
      const classes = useStyles();
       useEffect(() => {
@@ -34,20 +37,15 @@ function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe}) {
     return (
         <>
         <Grid className="feed" >
-        {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
+        {auth.isAuthenticated? <CustomModal status={"add"}/>:null}
             {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
         </Grid>
-        <Chat/>
+        {/* <Chat/> */}
         </>
     )
 }
 
 
-const mapStateToProps = (state) =>({
-    posts_data:state.posts_data,
-    error_data: state.error_data,
-    auth: state.auth
 
-})
 
-export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed,updateMe})(Feed)
+export default Feed

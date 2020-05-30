@@ -90,9 +90,8 @@ export  function CustomModal({clearErrors, error_data, status,_id}){
         {objFinal.title}
         </DialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>
           {objFinal.component}
-          </Typography>
+         
         </DialogContent>
        
       </Dialog>
