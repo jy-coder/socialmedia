@@ -4,7 +4,7 @@ import {GET_ITEMS,ADD_ITEM,DELETE_ITEM,UPDATE_ITEM,
     COMMENT_POST,
     UNCOMMENT_POST, SHOW_COMMENT, UNSHOW_COMMENT,GET_USER_INFO,
     GET_FEED,GET_USER_POST,GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER,
-    GET_CHAT, CLOSE_CHAT,ADD_CHAT, OPEN_CHAT, CHAT_WITH,S_ADD_CHAT} from '../actions/types'
+    GET_CHAT, CLOSE_CHAT,ADD_CHAT, OPEN_CHAT, CHAT_WITH,S_ADD_CHAT,S_NEW_POST,S_DELETE_POST,UPDATE_POST_COMMENT} from '../actions/types'
 const initialState={
     posts: [],
     post: {},
@@ -37,15 +37,16 @@ export default function(state=initialState,action){
         //     };
 
         
-        // case ADD_ITEM:
-        //     return {
-        //         ...state,
-        //         posts: [action.payload, ...state.posts],
+        case ADD_ITEM:
+            return {
+                ...state,
+                posts: [action.payload, ...state.posts],
            
                
-        //     };
+            };
 
         // only can delete on my wall
+        case S_DELETE_POST:
         case DELETE_ITEM:
             return {
                 ...state,
@@ -156,12 +157,31 @@ export default function(state=initialState,action){
                
             }
 
+        case S_NEW_POST:
+            return{
+                ...state,
+                posts: action.payload
+                
+            }
+        
         
         case ITEMS_LOADING:
             return{
                 ...state,
                 loading:true
             }
+
+        case UPDATE_POST_COMMENT:
+            return {
+            ...state,
+            posts: state.posts.map(p =>
+            p._id === action.id
+                ? { ...p, comments:action.comments}
+                : p
+            )
+        }
+            
+
         default:
             return state
     }

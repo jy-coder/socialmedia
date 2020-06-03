@@ -16,7 +16,10 @@ import {
   NO_USER,
   CLEAR_ERRORS,
   SET_SUCCESS_MSG,
-  CLEAR_SUCCESS_MSG
+  CLEAR_SUCCESS_MSG,
+  REMOVE_MY_FOLLOWING,
+  ADD_MY_FOLLOWING,
+  UPDATE_FOLLOWER
 } from './types';
 
 
@@ -120,6 +123,28 @@ export const updateMe = (form) => (dispatch) => {
   })
 }
 
+
+export const removeMyFollowing = (id) => (dispatch) => {
+
+  dispatch({
+    type: REMOVE_MY_FOLLOWING,
+    payload: id
+  });
+}
+
+export const addMyFollowing = (user) => (dispatch) => {
+  dispatch({
+    type: ADD_MY_FOLLOWING,
+    payload: user
+  });
+}
+
+export const updateFollower = (followers) => (dispatch) => {
+  dispatch({
+    type: UPDATE_FOLLOWER,
+    payload: followers
+  });
+}
 
 // Logout User
 export const logout = () => {

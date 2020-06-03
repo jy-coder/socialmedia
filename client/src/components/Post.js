@@ -4,7 +4,7 @@ import React, {useState,useEffect} from 'react'
 import {connect} from 'react-redux'
 import Moment from 'react-moment';
 import { CustomModal}  from './CustomModal'
-import {likePost,unlikePost,commentPost, showComment,unshowComment} from '../flux/actions/postActions'
+import {likePost,unlikePost,commentPost, showComment,unshowComment,updatePostComment } from '../flux/actions/postActions'
 import Comment  from './Comment'
 
 import { red } from '@material-ui/core/colors';
@@ -12,7 +12,8 @@ import clsx from 'clsx';
 import { makeStyles, Card,CardHeader, CardMedia,CardContent,CardActions, 
   Collapse, Avatar, IconButton, Typography, FormControl, Input, Button,Box} from '@material-ui/core';
 import {Favorite, Share,ExpandMore, MoreVert} from '@material-ui/icons';
-
+import { Link } from 'react-router-dom';
+import openSocket from 'socket.io-client'
 
 
 
@@ -78,7 +79,6 @@ function Post(props) {
     };
 
 
-
     
     const inputChangeHandler  = e  => {
       setComment(e.target.value);
@@ -99,7 +99,7 @@ function Post(props) {
                 <MoreVert />
               </IconButton>
             }
-            title={props.creator.name}
+            title={<a href={!belongToCurrentUser ? `/user/${props.creator._id}`:null}>{props.creator.name}</a>}
             subheader={<Moment format="DD/MM/YYYY HH:mm">{props.createdAt}</Moment>}
           />
           <CardMedia
@@ -164,7 +164,7 @@ const mapStateToProps = (state) =>({
   
   })
   
-  export default connect(mapStateToProps,{likePost,unlikePost,commentPost, showComment,unshowComment})(Post)
+  export default connect(mapStateToProps,{likePost,unlikePost,commentPost, showComment,unshowComment,updatePostComment })(Post)
 
 
 

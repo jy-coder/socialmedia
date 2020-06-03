@@ -41,18 +41,8 @@ function Chat({auth, posts_data,getChat, addChat,setOpenChat,chatWith}) {
 
 
     return (
-        <div className="chat-app">
-            <div className="follow-chat-wrapper">
-            {posts_data.openChat ? <ChatRoom/>: null}
-            
-            <div className="list-follow">
-            <ul class="list-group">
-            {listOfFollowing ? listOfFollowing.map((follower, i)=> <li className="list-group-item"><img src = {'/' + follower.photo} /> <span onClick={() => {chatWith(follower._id); setOpenChat()}}> {follower.name} </span></li> ) : null}
-            Chat
-            </ul>
-            </div>
-            </div>
-
+        <div>
+           
         </div>
     )
 }

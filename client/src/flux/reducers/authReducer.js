@@ -8,7 +8,8 @@ import{
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     UPDATE_MY_PROFILE,
-    NO_USER
+    NO_USER,REMOVE_MY_FOLLOWING,
+    ADD_MY_FOLLOWING,UPDATE_FOLLOWER
 }from '../actions/types';
 
 
@@ -68,6 +69,23 @@ export default function(state = initialState,action){
                 isAuthenticated:false,
                 isLoading: false
             }
+            case REMOVE_MY_FOLLOWING:
+                return{
+                    ...state,
+                    user : {...state.user, following: state.user.following.filter(p => p._id !== action.payload )}
+                }
+            case ADD_MY_FOLLOWING:
+                return{
+                    ...state,
+                    user : {...state.user, following: [...state.user.following,action.payload]}
+                }
+
+
+            case UPDATE_FOLLOWER:
+                return{
+                    ...state,
+                    user : {...state.user, followers: action.payload}
+                }
 
             
 

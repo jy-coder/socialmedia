@@ -1,12 +1,41 @@
 import React,{useEffect} from 'react'
 import {getuserPost,getotheruserInfo, followUser, unfollowUser} from '../flux/actions/postActions'
+import {removeMyFollowing,addMyFollowing} from '../flux/actions/authActions'
 import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
 import FollowModal from './FollowModal'
+import {makeStyles,Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
 
-export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser}) {
+const useStyles = makeStyles((theme) => ({
+  root: {
+      margin: theme.spacing(1),
+      margin: '0 auto',
+   
+    
+  },
+
+  content:{
+    marginTop:'5px',
+    width: '100%',
+    
+  },
+
+  root2: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      margin: '0 auto',
+    
+    }
+}));
+
+
+
+export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing}) {
   // console.log(posts_data.userInfo)
+  const classes = useStyles();
   let listOfFollowing;
   let listOfFollowers;
   let noOfFollowers;
@@ -16,6 +45,7 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
   let userphoto;
   let followed;
   let userId;
+  
 
 
 
@@ -31,9 +61,10 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
     followed = true;
 
    }
+   
   }
 
- 
+  const {posts} = posts_data
 
 
   if(posts_data.userPost){
@@ -42,46 +73,65 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
   }  
 
     useEffect(() => {
-      if(auth.isAuthenticated){
+  
       getuserPost(match.params.id)
       getotheruserInfo(match.params.id)
+
     
-
-      }
        
-      }, [getuserPost,auth.isAuthenticated,getotheruserInfo])
+      }, [getuserPost,getotheruserInfo])
 
+
+      const handleunFollow = (userId,auth_user) =>{
+        unfollowUser(userId, auth_user);
+        removeMyFollowing(userId)
+      }
+
+
+      const handleFollow = (userId,auth_user,user) =>{
+        followUser(userId, auth_user);
+        addMyFollowing(user)
+      }
 
 
 
 
       
     return (
-      <>
-      <div className = "profile">
-        <div className="profile-image">
-            <img src={'/' + userphoto}  roundedCircle />
+        <div className="feed">
+
+<div className={classes.root2}>
+      <Paper className={classes.paper} elevation={0}>
+        <Grid container spacing={2}>
+          <Grid item xs={4} sm={4} md={4} lg={4}>
+            <ButtonBase>
+              <img  alt="complex" src={'/' + userphoto} className="profile-img" />
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={8} sm container>
+            <Grid item xs container  spacing={2}>
+              <Grid item xs={12}>
+                <Typography gutterBottom variant="h4">
+                {username} <Button onClick={() => {followed ? handleunFollow(userId,auth.user):handleFollow(userId, auth.user,posts_data.userInfo)}}>{followed ? "UNFOLLOW": "FOLLOW"}</Button>
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm container direction="row"  >
+                <Grid item xs={12} sm={4} md={4} lg={4} ><Button disabled>{noOfPosts} posts</Button></Grid>
+                <Grid item xs={12} sm= {4} md={4} lg={4} > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
+                <Grid item xs={12}  sm={4} md={4} lg={4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
+               
+           
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
+        
+        <Grid className={classes.root} >
+            {posts.map((props, i)=>(<Post key={i} {...props}/>))}
+        </Grid>
         </div>
-      
-        <div className="profile-name-follow">
-          <div className="username-follow">
-            <div><b> {username} </b></div>
-          <div>{followed ? <button onClick={() => unfollowUser(userId, auth.user)}>Followed</button> : <button onClick={() =>followUser(userId, auth.user)}> Follow</button>}</div>
-          </div>
-            <div className="profile-stats">
-              <div className="profile-stat-count">{noOfPosts} posts</div>
-              <div className="profile-stat-count"><FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></div>
-              <div className="profile-stat-count"><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></div>
-          </div>
-        </div>
-        </div>
-    
-      <div className="my-feed">
-          {posts_data.posts ? posts_data.posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
-      </div>
-   
-  
-    </>
     )
 }
 
@@ -92,4 +142,4 @@ const mapStateToProps = (state) =>({
   
   })
   
-  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser})(UserInfo)
+  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser,removeMyFollowing,addMyFollowing})(UserInfo)

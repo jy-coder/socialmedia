@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles, AppBar,Toolbar, Typography, Button, IconButton} from '@material-ui/core';
+import {Message} from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
@@ -38,6 +39,7 @@ function NavBar({auth}) {
               </>
               : 
               <>
+              <Message/>
               <Button color="inherit" component={Link} to="/wall" >My Wall</Button>
               <Button color="inherit" component={Link} to="/profile">Other settings</Button>
               </>

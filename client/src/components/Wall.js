@@ -3,10 +3,11 @@ import Post from './Post'
 import './Wall.css'
 import {connect} from 'react-redux'
 import {getMyPost} from '../flux/actions/postActions'
+import {updateFollower} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import FollowModal from './FollowModal'
 import {makeStyles,Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
-
+import openSocket from 'socket.io-client'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Wall({auth,getMyPost, posts_data}) {
+function Wall({auth,getMyPost, posts_data,updateFollower}) {
+
     const classes = useStyles();
     let listOfFollowing = []
     let listOfFollowers = []
@@ -47,21 +49,27 @@ function Wall({auth,getMyPost, posts_data}) {
     let noOfPosts
     let username
     let userphoto;
-    if(auth.user){
-        noOfFollowers = auth.user.followers.length
-        noOfFollowing  = auth.user.following.length
-        noOfPosts = posts_data.posts.length
-        username = auth.user.name
-        userphoto = auth.user.photo
-        listOfFollowing = auth.user.following
-        listOfFollowers = auth.user.followers
-    }
-
+   
+      noOfFollowers = auth.user.followers.length
+      noOfFollowing  = auth.user.following.length
+      noOfPosts = posts_data.posts.length
+      username = auth.user.name
+      userphoto = auth.user.photo
+      listOfFollowing = auth.user.following
+      listOfFollowers = auth.user.followers
+    
 
 useEffect(() => {
-    if(auth.isAuthenticated)
-        getMyPost()         
-        }, [auth.isAuthenticated,getMyPost])
+        getMyPost()
+        const socket = openSocket('http://localhost:1337');
+        socket.on(`${auth.user._id}`, data => {
+          if(data.action === "updatefollower")
+            // console.log(data.user.followers)
+            updateFollower(data.user.followers)
+
+           
+     })          
+        }, [getMyPost])
 
 
         const {posts} = posts_data
@@ -101,7 +109,7 @@ useEffect(() => {
     </div>
         
         <Grid className={classes.root} >
-            {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
+            {posts.map((props, i)=>(<Post key={i} {...props}/>))}
         </Grid>
         </div>
     )
@@ -114,4 +122,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getMyPost})(Wall)
+export default connect(mapStateToProps, {getMyPost,updateFollower})(Wall)

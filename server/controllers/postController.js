@@ -77,7 +77,7 @@ const posts = await Post.create({
   followersList.forEach(async (follower) => {
       followerPosts = await Post.find({creator: follower.following })
       if(followerPosts)
-      io.getIO().emit({action:`add${follower._id}`, posts:followerPosts}) //listen in client
+      io.getIO().emit(`${follower._id}`,{action:`add`, posts:followerPosts}) //listen in client
   });
         
   
@@ -126,6 +126,18 @@ exports.deletePost = catchAsync(async (req,res,next) =>{
      if(!posts)
         return next(new AppError('No document found with that ID', 404));
 
+        let followersList = req.user.followers
+        let followerPosts
+              
+        //add to followers' feed & user own wall
+        followersList.forEach(async (follower) => {
+            followerPosts = await Post.find({creator: follower.following })
+            if(followerPosts)
+            io.getIO().emit(`${follower._id}`,{action:`delete`, postId: posts._id}) //listen in client
+        });
+              
+
+
         res.status(200).json(posts);
 })
 
@@ -159,8 +171,12 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
  
       let posts = await Post.findByIdAndUpdate(req.body.postId, {$push: {comments: comment}}, {new: true})
     
+
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
+
+
+            io.getIO().emit(`${req.body.postId}`,{action:`updatepostcomment`, posts: posts}) //listen in client
     
             res.status(200).json(posts);
                               
@@ -179,7 +195,8 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
     
         if(!posts)
             return next(new AppError('No document found with that ID', 404));
-    
+
+        io.getIO().emit(`${req.body.postId}`,{action:`updatepostcomment`, posts: posts})
         res.status(200).json(posts);
                               
     
@@ -224,9 +241,9 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.getFeed = catchAsync(async (req,res,next)=> {
-    // console.log(req.user.followers)
+    console.log(req.user.followers)
 
-    const posts = await Post.find({creator: req.user.following })
+    const posts = await Post.find({creator: req.user.following})
    
 
     if(!posts)
@@ -239,6 +256,6 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
       // res.status(200).json(followerPosts);
       // io.getIO().emit({action:'add', chat:chat})
     
-      res.status(200).json();
+      res.status(200).json(posts);
   })
 

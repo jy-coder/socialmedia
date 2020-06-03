@@ -4,6 +4,7 @@ import NavBar from './components/NavBar'
 import Posts from './components/Posts'
 import Feed from './components/Feed'
 import Wall from './components/Wall'
+import Chat from './components/Chat'
 import UserInfo from './components/UserInfo'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import Login from './pages/Auth/Login'
@@ -41,6 +42,7 @@ function App({auth}) {
       <Route exact path="/user/:id"  render={props => (<UserInfo {...props}/>)}/>
       <Route exact path="/profile"  render={props => (<Profile/>)}/>
       <Route exact path="/wall"  render={props => (<Wall/>)}/>
+      <Route exact path="/chat"  render={props => (<Chat/>)}/>
       </>
         :
         <>

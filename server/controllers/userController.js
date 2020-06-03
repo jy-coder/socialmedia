@@ -4,6 +4,7 @@ const AppError = require('../utils/AppError')
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
+const io = require('../socket')
 
 
 const multerStorage = multer.memoryStorage();
@@ -46,6 +47,8 @@ exports.followUser = catchAsync(async (req,res,next)=> {
     if(!user)
     return next(new AppError('No document found with that ID', 404));
 
+    io.getIO().emit(`${req.body.userId}`,{action:`updatefollower`, user})
+
   
     next()
 })
@@ -56,6 +59,9 @@ exports.unfollowUser = catchAsync(async (req,res,next)=> {
 
   if(!user)
   return next(new AppError('No document found with that ID', 404));
+
+
+  io.getIO().emit(`${req.body.userId}`,{action:`updatefollower`, user})
 
     next()
 })

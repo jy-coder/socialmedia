@@ -1,12 +1,17 @@
 import React,{useState} from 'react'
 import './FollowModal.css'
 import { connect } from 'react-redux';
-import {Button, IconButton,Typography, Dialog,DialogTitle,DialogContent,DialogActions} from '@material-ui/core';
+import {makeStyles,Box, Button, IconButton,Typography, Avatar,Dialog,DialogTitle,DialogContent,DialogActions} from '@material-ui/core';
  import MuiDialogTitle from '@material-ui/core/DialogTitle';
  import {Close, Delete,Edit} from '@material-ui/icons';
 
 
+
+
+
+
 function FollowModal({status, list,len,title,auth}) {
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -29,7 +34,7 @@ function FollowModal({status, list,len,title,auth}) {
       <DialogTitle>{title.toUpperCase()}</DialogTitle>
       <DialogContent dividers>
 
-      <ul>{list ? list.map((follower, i)=> <li key={i}> <img src = {'/' + follower.photo} /> <a href ={`/user/${follower._id}`} > {follower.name} </a></li> ) : null}</ul>
+      {list ? list.map((follower, i)=> <Box  display="flex" flexDirection="row"  key={i}> <Avatar src = {'/' + follower.photo}/><a href ={`/user/${follower._id}`} > {follower.name} </a></Box> ) : null}
       </DialogContent>
       </Dialog>
     </>

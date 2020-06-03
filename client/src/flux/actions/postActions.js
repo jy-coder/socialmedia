@@ -8,7 +8,9 @@ import {
   UNCOMMENT_POST, 
   SHOW_COMMENT,UNSHOW_COMMENT,
 GET_USER_INFO,GET_USER_POST, GET_FEED,
-GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER,GET_CHAT, CLOSE_CHAT,ADD_CHAT, OPEN_CHAT,CHAT_WITH,S_ADD_CHAT
+GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER,GET_CHAT, 
+CLOSE_CHAT,ADD_CHAT, OPEN_CHAT,CHAT_WITH,S_ADD_CHAT,
+S_NEW_POST,S_DELETE_POST,UPDATE_POST_COMMENT
 } from './types'
 
 import { returnErrors} from './errorActions'
@@ -347,6 +349,31 @@ export const getItems = () => dispatch => {
     })
 };
 
+export const updatePostComment = (id, comments) =>dispatch =>{
+  dispatch({
+    type:UPDATE_POST_COMMENT,
+    id:id,
+    comments:comments
+  })
+
+}
+
+
+export const s_newPostByOtherUser = (data) => dispatch => {
+  dispatch({
+    type:S_NEW_POST,
+    payload:data
+  })
+};
+
+
+export const s_delPostByOtherUser = (id) => dispatch => {
+  dispatch({
+    type:S_DELETE_POST,
+    payload:id
+  })
+};
+
 
   export const chatWith = (id) => dispatch =>{
     dispatch({
@@ -354,6 +381,8 @@ export const getItems = () => dispatch => {
       payload:id
     })
   }
+
+ 
 
 
   export const setOpenChat = () => dispatch =>{

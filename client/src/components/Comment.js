@@ -2,7 +2,7 @@ import React from 'react'
 import Moment from 'react-moment';
 import {uncommentPost} from '../flux/actions/postActions'
 import {connect} from 'react-redux'
-import { makeStyles, Grid, Paper,Typography,ButtonBase } from '@material-ui/core';
+import { makeStyles, Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
       margin: 'auto',
       maxWidth:'100%',
-      maxHeight: 50
+      maxHeight: 50,
+      marginBottom: '15px'
     },
     image: {
       width: 50,
@@ -56,7 +57,7 @@ export function Comment({comment, postId, uncommentPost,auth}) {
                     </Typography>
                 </Grid>
                 <Typography variant="body2"  style={{ cursor: 'pointer' }}>
-                  Remove
+                  {belongToCurrentUser ? <Button onClick={()=>uncommentPost(postId, comment._id)}>Remove</Button> :null}
                 </Typography>
               </Grid>
             </Grid>
