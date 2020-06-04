@@ -147,11 +147,16 @@ export const updateFollower = (followers) => (dispatch) => {
 }
 
 // Logout User
-export const logout = () => {
-  return {
-    type: LOGOUT_SUCCESS
-  };
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('token');
+  delete axios.defaults.headers.common['Authorization'];
+  dispatch({ type: LOGOUT_SUCCESS });
+  history.push('/')
+  
 };
+
+
+
 
 const setAuthorizationHeader = (tokenPassed) => {
     const token = `Bearer ${tokenPassed}`;

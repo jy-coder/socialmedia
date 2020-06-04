@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Post from './Post'
 import './Wall.css'
 import {connect} from 'react-redux'
-import {getMyPost} from '../flux/actions/postActions'
+import {getMyPost,updatePostComment} from '../flux/actions/postActions'
 import {updateFollower} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import FollowModal from './FollowModal'
@@ -39,8 +39,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Wall({auth,getMyPost, posts_data,updateFollower}) {
-
+function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
+  const socket = openSocket('http://localhost:1337');
+    const {posts} = posts_data
     const classes = useStyles();
     let listOfFollowing = []
     let listOfFollowers = []
@@ -61,7 +62,6 @@ function Wall({auth,getMyPost, posts_data,updateFollower}) {
 
 useEffect(() => {
         getMyPost()
-        const socket = openSocket('http://localhost:1337');
         socket.on(`${auth.user._id}`, data => {
           if(data.action === "updatefollower")
             // console.log(data.user.followers)
@@ -72,7 +72,17 @@ useEffect(() => {
         }, [getMyPost])
 
 
-        const {posts} = posts_data
+    useEffect(() => {
+      posts.forEach(async (post) => {   
+            socket.on(post._id,data =>{
+                if(data.action === "updatepostcomment")
+                    updatePostComment(post._id,data.posts.comments)
+        })
+      })
+    },[])
+
+
+       
     
 
 
@@ -122,4 +132,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getMyPost,updateFollower})(Wall)
+export default connect(mapStateToProps, {getMyPost,updateFollower,updatePostComment})(Wall)

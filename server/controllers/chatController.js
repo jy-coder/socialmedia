@@ -21,11 +21,13 @@ exports.createChat = catchAsync(async (req,res,next) =>{
 
     //get chat you have chated with _id used in addToChat
     exports.getAllChats= catchAsync(async (req,res,next) =>{
-        const chat = await Chat.find({ user: { $in: [req.user._id] } })
+        const chat = await Chat.find({ user: { $in: [req.user._id] } }).populate('user','name photo')
         
         if(!chat)
             return next(new AppError('YOU HAVE NO CHAT YET WITH THE USER PLEASE INITIALIZE', 404));
+    
         
+            // chat = {...chat, user: chat.user.filter(user._id !== req.user._id )}
         res.status(200).json(chat);
 
 
@@ -33,7 +35,7 @@ exports.createChat = catchAsync(async (req,res,next) =>{
 
 
     exports.addToChat = catchAsync(async (req,res,next)=> {
-        const chat =await Chat.findByIdAndUpdate(req.body.chatId, {$push: {chat: req.body.chat}},{ new: true }).populate('chat.postedBy','name')
+        const chat =await Chat.findByIdAndUpdate(req.body.chatId, {$push: {message: req.body.message}},{ new: true }).populate('chat.postedBy','name')
         if(!chat)
             return next(new AppError('No document found with that ID', 404));
 

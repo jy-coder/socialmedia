@@ -308,39 +308,6 @@ export const getItems = () => dispatch => {
       };
       
 
-      export const getChat = (userId) => dispatch => {
-        axios
-          .post(`http://127.0.0.1:1337/api/chat/create-chat`,{user: userId})
-          .then((res) =>{
-            dispatch({
-              type: GET_CHAT,
-              payload: res.data.chat,
-              payloadchatId: res.data._id
-            })
-          }).catch(err =>{
-            if(err.response){
-            dispatch(returnErrors(err.response.data, err.response.status))
-            }
-      })
-    };
-
-
-
-    export const addChat = (chatId,authId,text) => dispatch => {
-      axios
-        .put(`http://127.0.0.1:1337/api/chat/add-chat`,{chatId: chatId, chat:{text:text, postedBy: authId}})
-        .then((res) =>{
-          dispatch({
-            type: ADD_CHAT,
-          })
-        }).catch(err =>{
-          if(err.response){
-          dispatch(returnErrors(err.response.data, err.response.status))
-          }
-    })
-  };
-
-
 
   export const socket_addChat = (data) => dispatch => {
     dispatch({

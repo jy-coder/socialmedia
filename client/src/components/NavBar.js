@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles, AppBar,Toolbar, Typography, Button, IconButton} from '@material-ui/core';
 import {Message} from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import {logout} from './../flux/actions/authActions'
 
 import { connect } from 'react-redux';
 
@@ -19,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   
 
 
-function NavBar({auth}) {
+function NavBar({auth,logout}) {
 
     const classes = useStyles();
     return (
@@ -39,9 +40,10 @@ function NavBar({auth}) {
               </>
               : 
               <>
-              <Message/>
+              <IconButton component={Link} to="/chat"><Message/></IconButton>
               <Button color="inherit" component={Link} to="/wall" >My Wall</Button>
               <Button color="inherit" component={Link} to="/profile">Other settings</Button>
+              <Button color="inherit" onClick={() => logout()}  >Logout</Button>
               </>
               
               
@@ -60,4 +62,4 @@ const mapStateToProps = (state) =>({
   
   })
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps,{logout})(NavBar);
