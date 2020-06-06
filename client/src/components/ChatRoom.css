@@ -1,0 +1,45 @@
+#input-box{
+    display:flex;
+    align-self: flex-end;
+    bottom: 0;
+    width: 100%
+}
+
+.chat-section{
+    /* height: 95%; */
+    height: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: auto
+    
+}
+
+.input-section{
+    /* height: 10%
+     */
+     height: 100px;
+}
+
+
+.chat-input-wrapper{
+    height: 100%
+}
+/* input{
+    min-width: 100%;
+} */
+
+
+.chatroom-form{
+   width: 100%
+}
+
+.chatroom-form > div{
+    width: 90%;
+    padding: 5px;
+    margin: 5px
+}
+
+.test{
+    border: black 2px solid;
+    height: 10px
+}

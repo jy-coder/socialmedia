@@ -1,8 +1,8 @@
-import { ADD_CHAT_MSG,GET_MY_CHAT,GET_A_CHAT,NEW_CHAT,SET_CHAT_WITH } from '../actions/types';
+import { ADD_CHAT_MSG,GET_MY_CHAT,GET_A_CHAT,NEW_CHAT,SET_CHAT_WITH,NEW_MSG_OTHER_USER } from '../actions/types';
 
 
 const initialState = {
-  userChat: [],
+  allChats: [],
   chatWith: null,
   singleChat:null
 }
@@ -11,7 +11,7 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case GET_MY_CHAT:
       return {
-        userChat: action.payload
+        allChats: action.payload
         // {...chat, user: chat.filter(user._id !== action.authId )}
       };
     case SET_CHAT_WITH:
@@ -27,11 +27,23 @@ export default function(state = initialState, action) {
       }
 
   
+    case NEW_MSG_OTHER_USER:
+      return {
+        ...state,
+        allChats: state.allChats.map(c =>
+        c._id === action.chatId
+            ? { ...c, message: action.message}
+            : c
+        )
+    }
 
     case  ADD_CHAT_MSG:
       return {
-        userChat: action.payload
+        ...state
+        // singleChat: action.payload
       };
+
+    
 
     default:
       return state;

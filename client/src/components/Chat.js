@@ -1,11 +1,12 @@
 import React,{useEffect,useState} from 'react'
 import {connect} from 'react-redux'
-import {getMyChat, setChatWith} from './../flux/actions/chatAction'
+import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/actions/chatAction'
 import ChatRoom from './ChatRoom'
 import './Chat.css'
 import Moment from 'react-moment';
 import openSocket from 'socket.io-client'
 import {makeStyles,Button, Box, Input, Avatar, Grid, Paper} from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
     chatbox: {
@@ -25,16 +26,29 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Chat({auth, chat,getMyChat,setChatWith}) {
+function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
     const classes = useStyles();
-   var chats = chat.userChat    
+   const chats = chat.allChats    
+   const socket = openSocket('http://localhost:1337');
 
-  
+//  console.log(chat.allChats)
 
     useEffect(() => {    
         getMyChat()
             }, [getMyChat])
-    
+
+
+    useEffect(() => {
+        chats.forEach(async (chat) => { 
+            // console.log(chat)
+                socket.on(chat._id,data =>{
+                    if(data.action === "newmessage")
+                        newMessageOtherUser(chat._id,data.chat.message)
+            })
+        })
+        },[chat.allChats])
+
+        
 
 
     return (
@@ -44,9 +58,10 @@ function Chat({auth, chat,getMyChat,setChatWith}) {
         
            {chats.map((chat, i) => {
               
-         
+              let lastMsg
                let user = chat.user.filter(c => c._id !== auth.user._id)
-               let lastMsg = chat.message[chat.message.length -1]
+               if(chat.message)
+                 lastMsg = chat.message[chat.message.length -1]
             
 
 
@@ -57,7 +72,7 @@ function Chat({auth, chat,getMyChat,setChatWith}) {
                         <Grid item><Avatar style={{marginLeft:'10px'}}src = {'/' + user[0].photo}/></Grid>
                         <Grid item xs={8} container className={classes.chatbox} onClick={()=>setChatWith(user[0])}>
                             <Grid item xs={12}>{user[0].name}</Grid>
-                            <Grid item xs={12}>{lastMsg.text}</Grid>
+                            <Grid item xs={12}>{lastMsg ? lastMsg.text: null}</Grid>
                         </Grid>
 
                     </Grid>
@@ -70,8 +85,8 @@ function Chat({auth, chat,getMyChat,setChatWith}) {
         
     </Grid>
     </Paper>
-    <Paper className={classes.paper}>
-    <Grid className={classes.chatroom} >   
+    <Paper className={classes.paper} >
+    <Grid className={classes.chatroom}  >   
         <ChatRoom/>
     </Grid>
     </Paper>
@@ -91,7 +106,7 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getMyChat,setChatWith})(Chat)
+export default connect(mapStateToProps, {getMyChat,setChatWith,addMessage,newMessageOtherUser })(Chat)
 
 
 

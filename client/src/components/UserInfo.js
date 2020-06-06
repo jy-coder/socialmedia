@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react'
 import {getuserPost,getotheruserInfo, followUser, unfollowUser} from '../flux/actions/postActions'
 import {removeMyFollowing,addMyFollowing} from '../flux/actions/authActions'
+import {getAChat} from './../flux/actions/chatAction'
 import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
@@ -33,8 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing}) {
+export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing,getAChat}) {
   // console.log(posts_data.userInfo)
+  const {posts} = posts_data
+
   const classes = useStyles();
   let listOfFollowing;
   let listOfFollowers;
@@ -63,8 +66,6 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
    }
    
   }
-
-  const {posts} = posts_data
 
 
   if(posts_data.userPost){
@@ -113,6 +114,7 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
               <Grid item xs={12}>
                 <Typography gutterBottom variant="h4">
                 {username} <Button onClick={() => {followed ? handleunFollow(userId,auth.user):handleFollow(userId, auth.user,posts_data.userInfo)}}>{followed ? "UNFOLLOW": "FOLLOW"}</Button>
+                <Button onClick={() => getAChat(userId)}>CHAT</Button>
                 </Typography>
               </Grid>
               <Grid item xs={12} sm container direction="row"  >
@@ -142,4 +144,4 @@ const mapStateToProps = (state) =>({
   
   })
   
-  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser,removeMyFollowing,addMyFollowing})(UserInfo)
+  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser,removeMyFollowing,addMyFollowing,getAChat})(UserInfo)

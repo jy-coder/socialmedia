@@ -40,7 +40,7 @@ exports.createChat = catchAsync(async (req,res,next) =>{
             return next(new AppError('No document found with that ID', 404));
 
         
-            io.getIO().emit('chat',{action:'add', chat:chat})
+    io.getIO().emit(req.body.chatId,{action:'newmessage', chat:chat})
   
       
         res.status(200).json(chat);

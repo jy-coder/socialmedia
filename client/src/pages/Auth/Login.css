@@ -1,7 +1,11 @@
-html, body, #root, .App {
+#root, .App {
     height: 100%;
+ 
+   
   }
 
+
+  /* html, body,  */
 .auth-form{
     margin:auto;
     height: 100%

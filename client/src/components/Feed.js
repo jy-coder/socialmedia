@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react'
 import Post from './Post'
-import Chat from './Chat'
-import {useSelector, useDispatch} from 'react-redux'
 import {getItems,addItem,getFeed, s_newPostByOtherUser,s_delPostByOtherUser,updatePostComment} from '../flux/actions/postActions'
 import {updateMe} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
