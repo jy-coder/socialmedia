@@ -1,7 +1,7 @@
 import React,{useEffect,useState,useRef} from 'react'
 import {connect} from 'react-redux'
 import {getAChat,addMessage, setChatWith} from './../flux/actions/chatAction'
-import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography} from '@material-ui/core';
+import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography,Divider} from '@material-ui/core';
 import Moment from 'react-moment';
 import './ChatRoom.css'
 import dayjs from 'dayjs';
@@ -12,7 +12,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
+
 function ChatRoom({getAChat,chat,auth,addMessage}) {
+    console.log(chat.chatWith)
     let messages
     let chatId
     let authId
@@ -54,7 +56,23 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
             
                 }, [chat.chatWith,chat.allChats])
 
-           
+    
+    const renderMessages= () =>{
+        let msg;
+    if(messages)
+      msg = messages.map((message, i) => (
+              <Box display="flex"  key={message._id}  justifyContent = {message.postedBy === authId?"flex-end": "flex-start"}>
+                  <Box p={2} mt={3} style={{'backgroundColor' : message.postedBy === auth.user._id?"green": "white"}} className="message">
+                      <Typography variant="h5">{message.text}</Typography>
+                    <Typography variant="subtitle1">{dayjs(message.createdAt).format('HH:mm:ss')}</Typography>
+                </Box>
+            </Box>
+  
+        ))
+        return msg
+    }
+
+    
          
 
 
@@ -68,42 +86,47 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
         addMessage(chatId,authId,chatInput)
     }
 
-    return (
-        
-        <Box display="flex" flexDirection="column" className="chat-input-wrapper">
-        
-        <Box className="chat-section" >
-       
-          {messages ? messages.map((message, i) => (
-            //   console.log(message),
-              <Box display="flex"  key={message._id} 
-              justifyContent = {message.postedBy === authId?"flex-start": "flex-end"}>
-                  <Box p={2} mt={3} style={{'backgroundColor' : message.postedBy === auth.user._id?"green": "white"}} className="message"><Typography variant="h5">{message.text}</Typography>
-                <Typography variant="subtitle1">{dayjs(message.createdAt).format('HH:mm:ss')}</Typography>
-             
-        
-                </Box>
-                
-              
-           
+    const renderMessagesDiv = () =>{
+        if(chat.chatWith)
+            return(<Grid container  style={{position:'relative',width:'100%', height:'100vh'}} >
+            <Box className="chat-section" style={{border:'2px green solid', position:'relative'}} >
+                <Grid container item xs={12} style={{padding:'10px'}}>
+                    <Grid xs={2}><Avatar/></Grid>
+                    <Grid xs={10}><Typography variant="h6">{chat.chatWith.name}</Typography></Grid>
+                </Grid>
+                <Divider/>
+                <Grid container item xs={12} direction="column" >
+                    {renderMessages()}
+                </Grid>
             
-            <div ref={myRef}/>
-            </Box>
-              
+            
+        
 
-              
-          )):"Click to see message"}
+                <div ref={myRef}/>
+            
+            </Box>
+            
+            
+            <Grid  className="input-section" style={{position:'relative',width:'100%', border:'2px purple solid',display:'flex'}}>
+                <Box id="input-box" mt={5}>
+                    <form className= "chatroom-form" onSubmit={(e) => handleClick(e)}>
+                        <Input placeholder="Enter text" onChange={inputChangeHandler}  style = {{fontSize: 20}}/>
+                    </form>
+                    </Box> 
+            </Grid>
+            
+            </Grid>)
+            
+        else
+            return <Box display="flex" style={{position:'relative', height:'100%'}} alignContent="center" justifyContent="center">Click user to see message</Box>
         
-   
-        </Box>
-        
-        
-        <div className="input-section">
-            {chat.chatWith? <Box id="input-box" mt={5}><form className= "chatroom-form" onSubmit={(e) => handleClick(e)}><Input onChange={inputChangeHandler}  style = {{fontSize: 20}}/><Button type="submit">Enter</Button></form></Box> :null}
-        </div>
-        
-        </Box>
-        
+    }
+
+
+
+    return (
+       
+        renderMessagesDiv()
        
     )
 }

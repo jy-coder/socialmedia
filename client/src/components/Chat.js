@@ -4,31 +4,98 @@ import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/
 import ChatRoom from './ChatRoom'
 import './Chat.css'
 import socket from './../utils/socket'
-import {makeStyles,Button, Box, Input, Avatar, Grid, Paper} from '@material-ui/core';
-
-
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {Drawer,CssBaseline,AppBar,Toolbar,List,Typography, Divider, Grid, Paper,Avatar} from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { ImportantDevices } from '@material-ui/icons'
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-    chatbox: {
-      cursor: "pointer"
-    },
-    paper: {
-      width:'50%',
-      height:'100%'
-
-    },
-    chatroom: {
-        width:'100%',
-        height:'100%'
-  
-      }
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+      display:'flex',
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
 }));
 
 
 
 function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
+
     const classes = useStyles();
-   const chats = chat.allChats
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(true);
+    const chats = chat.allChats
+  
+    const handleDrawerOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleDrawerClose = () => {
+      setOpen(false);
+    };
+   
    
    
 
@@ -36,7 +103,7 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
     useEffect(() => {    
         getMyChat()
-            }, [getMyChat])
+            }, [])
 
 
     useEffect(() => {
@@ -49,49 +116,94 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
         })
         },[chat.allChats])
 
+
+    const renderChatUsers = () =>{
+        
+        let displayChats = (chats.map((chat, i) => {
+        let lastMsg
+        let user = chat.user.filter(c => c._id !== auth.user._id)
+        if(chat.message)
+            lastMsg = chat.message[chat.message.length -1]
+
+            console.log(lastMsg)
+
+        return(
+            <ListItem button key={chat._id}>
+                <Grid  container direction="row" onClick={()=>setChatWith(user[0])}>
+                    <Grid container item xs={3} style={{border:'pink 2px solid', alignItems:'center',display:'flex'}}>
+                        <Grid item xs={12} ><Avatar style={{marginRight:'10px'}}/></Grid>
+                    </Grid>
+
+                    <Grid container item xs={5} style={{border:'pink 2px solid'}} direction="column">
+                        <Grid item xs={12} fontWeight="fontWeightBold"><ListItemText  primary={<Typography >{user[0].name}</Typography>} /></Grid>
+                        <Grid container item xs={12}><ListItemText primary={<Typography variant="subtitle2" ><b>{lastMsg.text}</b></Typography>} /></Grid>
+                    </Grid>
+                    <Grid container item xs={4} style={{border:'pink 2px solid'}} direction="column">
+                        <Grid item xs={12}><ListItemText primary={<Typography variant="caption" >{dayjs(lastMsg.created).format('DD/MM/YYYY')}</Typography>} /></Grid>
+                    </Grid>
+                    
+                </Grid>
+            </ListItem>
+        )}))
+
+        return displayChats
+
+    }
+
         
 
 
     return (
-    <Grid container direction="row" style={{height:'100%'}}>
-    <Paper className={classes.paper}>
-    <Grid>
-        
-           {chats.map((chat, i) => {
-              
-              let lastMsg
-               let user = chat.user.filter(c => c._id !== auth.user._id)
-               if(chat.message)
-                 lastMsg = chat.message[chat.message.length -1]
-            
+        <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+ 
+            {renderChatUsers()}
+          </List> 
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <ChatRoom/>
+        </main>
+      </div>
 
 
-            return(
-           
-                <Grid key={chat._id} container item xs={12} style={{height:"1%"}}>
-                    <Grid container spacing={3}>
-                        <Grid item><Avatar style={{marginLeft:'10px'}}/></Grid>
-                        <Grid item xs={8} container className={classes.chatbox} onClick={()=>setChatWith(user[0])}>
-                            <Grid item xs={12}>{user[0].name}</Grid>
-                            <Grid item xs={12}>{lastMsg ? lastMsg.text: null}</Grid>
-                        </Grid>
-
-                    </Grid>
-            </Grid>
-     
-
-            )})}
-  
-
-        
-    </Grid>
-    </Paper>
-    <Paper className={classes.paper} >
-    <Grid className={classes.chatroom}  >   
-        <ChatRoom/>
-    </Grid>
-    </Paper>
-</Grid>
     )
 
 
@@ -110,5 +222,3 @@ const mapStateToProps = (state) =>({
 export default connect(mapStateToProps, {getMyChat,setChatWith,addMessage,newMessageOtherUser })(Chat)
 
 
-
-{/* <small className="text-muted">{chat.postedBy === auth.user ? "Me" : chat.postedBy.created}</small> */}

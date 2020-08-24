@@ -20,13 +20,6 @@ function Posts({posts_data,getItems,error_data,clearErrors,auth}) {
             }, [auth,getItems])
       
 
-
-
-
-       //get status and array of data
-        
-        // console.log(posts);
-
     return (
         <Grid className="feed">
         {auth.isAuthenticated? <CustomModal clearErrors={clearErrors} error_data={error_data} status={"add"}/>:null}
