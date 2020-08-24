@@ -85,10 +85,26 @@ export const login = ({ email, password }) => (dispatch) => {
         setAuthorizationHeader(res.data.token);
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data.user
       })
-      dispatch({ type: CLEAR_ERRORS });
-      
+      // dispatch({ type: CLEAR_ERRORS });
+      dispatch({ type: USER_LOADING });
+
+      axios
+        .get('http://127.0.0.1:1337/api/user/getUser')
+        .then(res =>
+          dispatch({
+            type: USER_LOADED,
+            payload: res.data
+          })
+        )
+        .catch(err => {
+          if(err.response){
+          dispatch(returnErrors(err.response.data, err.response.status));
+          dispatch({
+            type: AUTH_ERROR
+          });
+        }
+        });
       history.push('/')
       
 

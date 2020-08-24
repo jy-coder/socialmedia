@@ -3,9 +3,9 @@ import {connect} from 'react-redux'
 import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/actions/chatAction'
 import ChatRoom from './ChatRoom'
 import './Chat.css'
-import Moment from 'react-moment';
-import openSocket from 'socket.io-client'
+import socket from './../utils/socket'
 import {makeStyles,Button, Box, Input, Avatar, Grid, Paper} from '@material-ui/core';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,8 +28,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
     const classes = useStyles();
-   const chats = chat.allChats    
-   const socket = openSocket('http://localhost:1337');
+   const chats = chat.allChats
+   
+   
 
 //  console.log(chat.allChats)
 
@@ -69,7 +70,7 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
            
                 <Grid key={chat._id} container item xs={12} style={{height:"1%"}}>
                     <Grid container spacing={3}>
-                        <Grid item><Avatar style={{marginLeft:'10px'}}src = {'/' + user[0].photo}/></Grid>
+                        <Grid item><Avatar style={{marginLeft:'10px'}}/></Grid>
                         <Grid item xs={8} container className={classes.chatbox} onClick={()=>setChatWith(user[0])}>
                             <Grid item xs={12}>{user[0].name}</Grid>
                             <Grid item xs={12}>{lastMsg ? lastMsg.text: null}</Grid>

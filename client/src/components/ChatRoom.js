@@ -4,6 +4,8 @@ import {getAChat,addMessage, setChatWith} from './../flux/actions/chatAction'
 import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography} from '@material-ui/core';
 import Moment from 'react-moment';
 import './ChatRoom.css'
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
@@ -26,7 +28,7 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
     const scrollToRef = (ref) => {
         if(ref.current){
            ref.current.scrollIntoView({ behavior: 'smooth' })
-            console.log(ref.current.offsetTop)
+            // console.log(ref.current.offsetTop)
         }
     }    
     const executeScroll = () => {
@@ -77,7 +79,7 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
               <Box display="flex"  key={message._id} 
               justifyContent = {message.postedBy === authId?"flex-start": "flex-end"}>
                   <Box p={2} mt={3} style={{'backgroundColor' : message.postedBy === auth.user._id?"green": "white"}} className="message"><Typography variant="h5">{message.text}</Typography>
-                <Typography variant="subtitle1"><Moment format="HH:mm">{message.created}</Moment></Typography>
+                <Typography variant="subtitle1">{dayjs(message.createdAt).format('HH:mm:ss')}</Typography>
              
         
                 </Box>

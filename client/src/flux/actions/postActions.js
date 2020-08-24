@@ -64,9 +64,9 @@ export const getItems = () => dispatch => {
   })
 };
 
-  export const addItem = (item) => dispatch => {
+  export const addItem = (content) => dispatch => {
     axios
-      .post('http://127.0.0.1:1337/api/post/create-post', item)
+      .post('http://127.0.0.1:1337/api/post/create-post', {content})
       .then(res =>{
         dispatch({
           type: ADD_ITEM,

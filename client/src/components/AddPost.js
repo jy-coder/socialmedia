@@ -30,22 +30,16 @@ export function AddPost({handleClose}) {
 
 
   // console.log(posts_data)
-  const [image, setImage] = useState("")
   const [content, setContent]= useState("")
-  const [preview, setPreview] = useState("")
+
 
 
 
 
   const submitHandler = (e) =>{
     e.preventDefault();
-    // console.log(content,image)
-    const form = new FormData();
-
-    form.append('content', content);
-    form.append('photo', image)
     
-    dispatch(addItem(form));
+    dispatch(addItem(content));
 
     handleClose();
 
@@ -54,16 +48,6 @@ export function AddPost({handleClose}) {
 
 
 
-  const imageHandler = e =>{
-    if(e.target.files[0]){
-    let file = e.target.files[0]
-    setImage(file);
-  
-    URL.revokeObjectURL(preview);
-    let url = URL.createObjectURL(file);
-    setPreview(url)
-    }
-}
 
 const inputChangeHandler  = e  => {
     setContent(e.target.value);
@@ -76,14 +60,6 @@ const inputChangeHandler  = e  => {
       <section>
       <form onSubmit={(e) => submitHandler(e)} className={classes.root} >
       <DialogContent>
-      <Box flexDirection="column" p={1}>
-        <Box>
-          <input type="file" accept='photo/*' name="photo" onChange={imageHandler}/>
-        </Box>
-      <Box>
-        <img src={preview} id="create-post-image" alt="" style={{width: "100px"}}/>
-      </Box>
-      <Box>
       <TextField 
           id="content"
           label="Enter Content"
@@ -93,12 +69,11 @@ const inputChangeHandler  = e  => {
           fullWidth
           onChange={inputChangeHandler}
         />
-      </Box>
-      </Box>
+    
       </DialogContent>
       <DialogActions>
           <Button autoFocus type="submit" color="primary" >
-            Save changes
+            Add
           </Button>
         </DialogActions>
       </form>

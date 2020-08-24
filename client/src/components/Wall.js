@@ -6,8 +6,10 @@ import {getMyPost,updatePostComment} from '../flux/actions/postActions'
 import {updateFollower} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
 import FollowModal from './FollowModal'
-import {makeStyles,Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
-import openSocket from 'socket.io-client'
+import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
+import socket from './../utils/socket'
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
-  const socket = openSocket('http://localhost:1337');
+  console.log(auth)
     const {posts} = posts_data
     const classes = useStyles();
     let listOfFollowing = []
@@ -50,7 +52,7 @@ function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
     let noOfPosts
     let username
     let userphoto;
-   
+   if(auth.user){
       noOfFollowers = auth.user.followers.length
       noOfFollowing  = auth.user.following.length
       noOfPosts = posts_data.posts.length
@@ -58,28 +60,30 @@ function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
       userphoto = auth.user.photo
       listOfFollowing = auth.user.following
       listOfFollowers = auth.user.followers
+   }
     
 
 useEffect(() => {
         getMyPost()
-        socket.on(`${auth.user._id}`, data => {
-          if(data.action === "updatefollower")
-            // console.log(data.user.followers)
-            updateFollower(data.user.followers)
+},[auth.user])
+    //     socket.on(`${auth.user._id}`, data => {
+    //       if(data.action === "updatefollower")
+    //         // console.log(data.user.followers)
+    //         updateFollower(data.user.followers)
 
            
-     })          
-        }, [getMyPost])
+    //  })          
+    //     }, [getMyPost])
 
 
-    useEffect(() => {
-      posts.forEach(async (post) => {   
-            socket.on(post._id,data =>{
-                if(data.action === "updatepostcomment")
-                    updatePostComment(post._id,data.posts.comments)
-        })
-      })
-    },[])
+    // useEffect(() => {
+    //   posts.forEach(async (post) => {   
+    //         socket.on(post._id,data =>{
+    //             if(data.action === "updatepostcomment")
+    //                 updatePostComment(post._id,data.posts.comments)
+    //     })
+    //   })
+    // },[])
 
 
        
@@ -95,7 +99,7 @@ useEffect(() => {
         <Grid container spacing={2}>
           <Grid item xs={4} sm={4} md={4} lg={4}>
             <ButtonBase>
-              <img  alt="complex" src={'/' + userphoto} className="profile-img" />
+              <Avatar  variant="square" style={{height:"200px", width:"200px"}}/>
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>

@@ -12,6 +12,8 @@ import clsx from 'clsx';
 import { makeStyles, Card,CardHeader, CardMedia,CardContent,CardActions, 
   Collapse, Avatar, IconButton, Typography, FormControl, Input, Button,Box} from '@material-ui/core';
 import {Favorite, Share,ExpandMore, MoreVert} from '@material-ui/icons';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 import openSocket from 'socket.io-client'
 
@@ -96,16 +98,11 @@ function Post(props) {
             }
             action={
               <IconButton aria-label="settings">
-                <MoreVert />
+                <MoreVert />  
               </IconButton>
             }
             title={<a href={!belongToCurrentUser ? `/user/${props.creator._id}`:null}>{props.creator.name}</a>}
-            subheader={<Moment format="DD/MM/YYYY HH:mm">{props.createdAt}</Moment>}
-          />
-          <CardMedia
-            className={classes.media}
-            image={'/' +props.photo}
-
+            subheader={dayjs(props.createdAt).format('MM/DD HH:mm:ss')}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
@@ -146,7 +143,7 @@ function Post(props) {
               </Typography>
            
               <Box flexDirection="row" className={classes.comment} > 
-              <Box width="75%"><Input  placeholder="Enter comment"  onChange={inputChangeHandler} fullWidth/></Box>
+              <Box width="75%"><Input  placeholder="Comment on the post"  onChange={inputChangeHandler} fullWidth/></Box>
               <Box ><Button variant="contained" color="primary" onClick={()=>props.commentPost(props._id,comment)}  >Comment</Button></Box>
               </Box>
    

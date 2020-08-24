@@ -6,17 +6,15 @@
 }
 
 .chat-section{
-    /* height: 95%; */
-    height: 1080px;
+    position:relative;
     width: 100%;
     margin: 0 auto;
-    overflow: auto
+
     
 }
 
 .input-section{
-    /* height: 10%
-     */
+
      height: 100px;
 }
 
@@ -24,9 +22,6 @@
 .chat-input-wrapper{
     height: 100%
 }
-/* input{
-    min-width: 100%;
-} */
 
 
 .chatroom-form{

@@ -13,9 +13,7 @@ router.route('/feed').get(postController.getFeed)
 router.route('/mypost').get(postController.myPost)
 
 router.route('/create-post').post
-(postController.uploadPostPhoto, 
-postController.resizePostPhoto,
-postController.createPost)
+(postController.createPost)
 
 router.route('/delete-post/:id').delete(postController.deletePost)
 router.route('/like').put(postController.likePost)
@@ -23,8 +21,7 @@ router.route('/unlike').put(postController.unlikePost)
 router.route('/comment').put(postController.commentPost)
 router.route('/uncomment').put(postController.uncommentPost)
 router.route('/user-post/:id').get(postController.otherUserPost)
-router.route('/update-post/:id').put(postController.uploadPostPhoto, 
-postController.resizePostPhoto,postController.updatePost)
+router.route('/update-post/:id').put(postController.updatePost)
 router.route('/:id')
 .get(postController.getAPost)
 

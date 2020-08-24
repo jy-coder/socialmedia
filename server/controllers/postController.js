@@ -46,14 +46,10 @@ exports.createPost = catchAsync(async (req,res,next) =>{
 let error;
 
 req.body.creator = req.user._id
-if(req.file)
-  req.body.photo = req.file.filename
 
 if(!req.body.content)
   error = "Content must not be empty"
 
-
-  
 
 if(error)
   return res.status(400).json({
@@ -62,25 +58,23 @@ if(error)
 
 const posts = await Post.create({
     content: req.body.content,
-    photo : req.body.photo,
     creator : req.body.creator
-    
     });  
 
     if(!posts)
         return next(new AppError('No document found with that ID', 404));
   
   let followersList = req.user.followers
-  let followerPosts
+
         
-  //add to followers' feed & user own wall
-  followersList.forEach(async (follower) => {
-      followerPosts = await Post.find({creator: follower.following })
-      if(followerPosts)
-      io.getIO().emit(`${follower._id}`,{action:`add`, posts:followerPosts}) //listen in client
-  });
+
+  await Promise.all(followersList.map(async(follower) => {
+    const oneUser = await Post.find({creator: follower.following }) //post is populated, find in creator following user list 
+    await io.getIO().emit(`${follower._id}`,{action:`add`, posts:oneUser})
+
+  }))
+
         
-  
   res.status(200).json(posts); //the req.user who published
 })
 
@@ -97,8 +91,6 @@ exports.getAPost = catchAsync(async (req,res,next) =>{
 
 exports.updatePost = catchAsync(async (req,res,next) =>{
 let error;
-if(req.file)
-  req.body.photo = req.file.filename
 
 if(!req.body.content)
   error = "Content must not be empty"
@@ -207,7 +199,7 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
   exports.myPost = catchAsync(async (req,res,next)=> {
     // console.log(req.user)
-    const posts = await Post.find({creator: req.user._id})
+    const posts = await Post.find({creator: req.user._id}).sort({createdAt:-1})
 
      if(!posts)
          return next(new AppError('No document found with that ID', 404));
@@ -241,9 +233,8 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.getFeed = catchAsync(async (req,res,next)=> {
-    console.log(req.user.followers)
 
-    const posts = await Post.find({creator: req.user.following})
+    const posts = await Post.find({creator: req.user.following}).sort({createdAt:-1})
    
 
     if(!posts)

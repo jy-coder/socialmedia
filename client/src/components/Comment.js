@@ -1,9 +1,9 @@
 import React from 'react'
-import Moment from 'react-moment';
 import {uncommentPost} from '../flux/actions/postActions'
 import {connect} from 'react-redux'
-import { makeStyles, Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
-
+import { makeStyles, Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -42,7 +42,7 @@ export function Comment({comment, postId, uncommentPost,auth}) {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <ButtonBase className={classes.image}>
-              <img className={classes.img} alt="complex" src={'/' +comment.postedBy.photo} />
+              <Avatar/>
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>
@@ -50,7 +50,7 @@ export function Comment({comment, postId, uncommentPost,auth}) {
               <Grid item xs container direction="row">
                 <Grid item xs>
                     <Typography variant="body2"  gutterBottom>
-                    {comment.postedBy.name} <Moment format="DD/MM/YYYY HH:mm">{comment.created}</Moment> 
+                    {comment.postedBy.name} {dayjs(comment.created).format('MM/DD HH:mm:ss')} 
                     </Typography>
                     <Typography variant="body2"  color="textSecondary">
                     {comment.text}

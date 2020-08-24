@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
 import FollowModal from './FollowModal'
-import {makeStyles,Grid, Paper,Typography,ButtonBase, Button } from '@material-ui/core';
+import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,7 +106,7 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
         <Grid container spacing={2}>
           <Grid item xs={4} sm={4} md={4} lg={4}>
             <ButtonBase>
-              <img  alt="complex" src={'/' + userphoto} className="profile-img" />
+              <Avatar  variant="square" style={{height:"200px", width:"200px"}}/>
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>

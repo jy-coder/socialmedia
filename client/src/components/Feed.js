@@ -7,6 +7,7 @@ import {CustomModal } from './CustomModal'
 import {makeStyles,Grid } from '@material-ui/core';
 import openSocket from 'socket.io-client'
 import {connect} from 'react-redux'
+import socket from './../utils/socket'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe,updatePostComment}) {
   const {posts} = posts_data
-  const socket = openSocket('http://localhost:1337');
   // let posts_data = useSelector(state => state.posts_data)
   // let auth= useSelector(state => state.auth)
   // let dispatch = useDispatch()
@@ -27,16 +27,15 @@ function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe,updatePos
      const classes = useStyles();
       useEffect(() => {
           getFeed()
-
-        socket.on(`${auth.user._id}`, data => {
-          if(data.action === "add")
-           s_newPostByOtherUser(data.posts)
-          if(data.action === "delete")
-            s_delPostByOtherUser(data.postId)
-        
-           
-     })         
-        }, [auth.isAuthenticated,getFeed,updateMe])
+        if(auth.user){
+          socket.on(`${auth.user._id}`, data => {
+            if(data.action === "add")
+              s_newPostByOtherUser(data.posts)
+            if(data.action === "delete")
+              s_delPostByOtherUser(data.postId)
+              
+        })}}   
+        , [auth.isAuthenticated,getFeed,updateMe])
       
         useEffect(() => {
           posts.forEach(async (post) => {   

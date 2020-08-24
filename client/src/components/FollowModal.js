@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import './FollowModal.css'
 import { connect } from 'react-redux';
 import {makeStyles,Box, Button, IconButton,Typography, Avatar,Dialog,DialogTitle,DialogContent,DialogActions} from '@material-ui/core';
@@ -34,7 +34,7 @@ function FollowModal({status, list,len,title,auth}) {
       <DialogTitle>{title.toUpperCase()}</DialogTitle>
       <DialogContent dividers>
 
-      {list ? list.map((follower, i)=> <Box  display="flex" flexDirection="row"  key={i}> <Avatar src = {'/' + follower.photo}/><a href ={`/user/${follower._id}`} > {follower.name} </a></Box> ) : null}
+      {list ? list.map((follower, i)=> <Box  display="flex" flexDirection="row"  key={i}> <Avatar style={{marginRight:'5px',marginBottom:'5px'}}/><a href ={`/user/${follower._id}`} > {follower.name} </a></Box> ) : null}
       </DialogContent>
       </Dialog>
     </>

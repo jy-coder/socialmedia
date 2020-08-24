@@ -81,6 +81,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
+
 });
 
 exports.logout = (req, res) => {
@@ -141,7 +142,7 @@ exports.auth = catchAsync(async (req, res, next) => {
 
 
 exports.getUser = catchAsync(async (req,res,next) =>{
-  const user = req.user;
+  const user = await req.user.populate('followers following','name');
   if(!user)
     return next(
       new AppError('Please login.', 401)

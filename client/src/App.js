@@ -19,15 +19,16 @@ import axios from 'axios';
 
 
 
-function App({auth}) {
+
+function App({auth,loadUser,noUser}) {
   
   useEffect(() => {
   if(auth.token){
     axios.defaults.headers.common['Authorization'] = auth.token;
-    store.dispatch(loadUser());
+    loadUser()
   }
   else
-    store.dispatch(noUser())
+    noUser()
   }, []);
 
   // console.log(!auth.isAuthenticated)
@@ -40,7 +41,6 @@ function App({auth}) {
     <>
       <Route exact path="/"  render={props => (<Feed/>)}/>
       <Route exact path="/user/:id"  render={props => (<UserInfo {...props}/>)}/>
-      <Route exact path="/profile"  render={props => (<Profile/>)}/>
       <Route exact path="/wall"  render={props => (<Wall/>)}/>
       <Route exact path="/chat"  render={props => (<Chat/>)}/>
       </>
@@ -62,4 +62,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps,{loadUser,noUser})(App);
