@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function NavBar({auth,logout}) {
-  console.log(auth)
+  // console.log(auth)
 
 let routes;
 if(!auth.isAuthenticated){

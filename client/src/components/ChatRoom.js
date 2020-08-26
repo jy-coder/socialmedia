@@ -1,6 +1,6 @@
 import React,{useEffect,useState,useRef} from 'react'
 import {connect} from 'react-redux'
-import {getAChat,addMessage, setChatWith} from './../flux/actions/chatAction'
+import {addMessage, setChatWith,getMyChat} from './../flux/actions/chatAction'
 import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography,Divider} from '@material-ui/core';
 import Moment from 'react-moment';
 import './ChatRoom.css'
@@ -13,8 +13,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
-function ChatRoom({getAChat,chat,auth,addMessage}) {
-    console.log(chat.chatWith)
+function ChatRoom({chat,auth,addMessage,getMyChat}) {
+    console.log(chat.singleChat)
     let messages
     let chatId
     let authId
@@ -40,12 +40,12 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
 
     useEffect(() => {  
     if(chat.chatWith) {
-      getAChat(chat.chatWith._id)
+      getMyChat(chat.chatWith._id)
      
       
  
     }
-            }, [chat.chatWith,chat.allChats])
+            }, [])
 
 
     useEffect(() => {  
@@ -54,7 +54,7 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
           }, 100);
           return () => clearTimeout(timer);
             
-                }, [chat.chatWith,chat.allChats])
+                }, [])
 
     
     const renderMessages= () =>{
@@ -91,8 +91,8 @@ function ChatRoom({getAChat,chat,auth,addMessage}) {
             return(<Grid container  style={{position:'relative',width:'100%', height:'100vh'}} >
             <Box className="chat-section" style={{border:'2px green solid', position:'relative'}} >
                 <Grid container item xs={12} style={{padding:'10px'}}>
-                    <Grid xs={2}><Avatar/></Grid>
-                    <Grid xs={10}><Typography variant="h6">{chat.chatWith.name}</Typography></Grid>
+                    <Grid item xs={2}><Avatar/></Grid>
+                    <Grid item xs={10}><Typography variant="h6">{chat.chatWith.name}</Typography></Grid>
                 </Grid>
                 <Divider/>
                 <Grid container item xs={12} direction="column" >
@@ -139,4 +139,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getAChat,addMessage})(ChatRoom)
+export default connect(mapStateToProps, {addMessage,getMyChat})(ChatRoom)

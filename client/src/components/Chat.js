@@ -103,7 +103,7 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
     useEffect(() => {    
         getMyChat()
-            }, [])
+            }, [getMyChat])
 
 
     useEffect(() => {
@@ -121,24 +121,25 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
         
         let displayChats = (chats.map((chat, i) => {
         let lastMsg
+        console.log(chat)
         let user = chat.user.filter(c => c._id !== auth.user._id)
         if(chat.message)
             lastMsg = chat.message[chat.message.length -1]
 
-            console.log(lastMsg)
+            // console.log(lastMsg)
 
         return(
             <ListItem button key={chat._id}>
                 <Grid  container direction="row" onClick={()=>setChatWith(user[0])}>
-                    <Grid container item xs={3} style={{border:'pink 2px solid', alignItems:'center',display:'flex'}}>
+                    <Grid container item xs={3} style={{alignItems:'center',display:'flex'}}>
                         <Grid item xs={12} ><Avatar style={{marginRight:'10px'}}/></Grid>
                     </Grid>
 
-                    <Grid container item xs={5} style={{border:'pink 2px solid'}} direction="column">
+                    <Grid container item xs={5}  direction="column">
                         <Grid item xs={12} fontWeight="fontWeightBold"><ListItemText  primary={<Typography >{user[0].name}</Typography>} /></Grid>
                         <Grid container item xs={12}><ListItemText primary={<Typography variant="subtitle2" ><b>{lastMsg.text}</b></Typography>} /></Grid>
                     </Grid>
-                    <Grid container item xs={4} style={{border:'pink 2px solid'}} direction="column">
+                    <Grid container item xs={4}  direction="column">
                         <Grid item xs={12}><ListItemText primary={<Typography variant="caption" >{dayjs(lastMsg.created).format('DD/MM/YYYY')}</Typography>} /></Grid>
                     </Grid>
                     

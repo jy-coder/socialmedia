@@ -1,7 +1,7 @@
 import React from 'react'
 import {uncommentPost} from '../flux/actions/postActions'
 import {connect} from 'react-redux'
-import { makeStyles, Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
+import { makeStyles, Grid, Paper,Typography,ButtonBase, Button,Avatar} from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export function Comment({comment, postId, uncommentPost,auth}) {
+  dayjs.extend(relativeTime)
     let belongToCurrentUser;
 
     if(auth.user){
@@ -40,17 +41,17 @@ export function Comment({comment, postId, uncommentPost,auth}) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <ButtonBase className={classes.image}>
               <Avatar/>
             </ButtonBase>
           </Grid>
-          <Grid item xs={8} sm container>
+          <Grid item xs={8}  container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs container direction="row">
                 <Grid item xs>
                     <Typography variant="body2"  gutterBottom>
-                    {comment.postedBy.name} {dayjs(comment.created).format('MM/DD HH:mm:ss')} 
+                    {comment.postedBy.name} &nbsp; <Typography variant="caption"> {dayjs().fromNow()} </Typography>
                     </Typography>
                     <Typography variant="body2"  color="textSecondary">
                     {comment.text}

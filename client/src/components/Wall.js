@@ -35,14 +35,24 @@ const useStyles = makeStyles((theme) => ({
         // width: '50%',
         margin: '0 auto',
       
+      },
+      hide: {
+        padding: theme.spacing(1),
+        [theme.breakpoints.down('sm')]: {
+          display:'none'
+        },
+        [theme.breakpoints.up('sm')]: {
+          display:'block'
+        }
       }
+      
   }));
 
 
 
 
 function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
-  console.log(auth)
+
     const {posts} = posts_data
     const classes = useStyles();
     let listOfFollowing = []
@@ -98,8 +108,8 @@ useEffect(() => {
       <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
           <Grid item xs={4} sm={4} md={4} lg={4}>
-            <ButtonBase>
-              <Avatar  variant="square" style={{height:"200px", width:"200px"}}/>
+            <ButtonBase className={classes.hide} >
+              <Avatar variant="square" style={{height:"200px", width:"200px"}}/>
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>
