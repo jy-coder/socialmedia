@@ -1,12 +1,13 @@
 import React,{useEffect} from 'react'
 import {getuserPost,getotheruserInfo, followUser, unfollowUser} from '../flux/actions/postActions'
 import {removeMyFollowing,addMyFollowing} from '../flux/actions/authActions'
-import {getAChat} from './../flux/actions/chatAction'
+import {getAChat,createChat} from './../flux/actions/chatAction'
 import {connect} from 'react-redux'
 import Post from './Post'
 import './UserInfo.css'
 import FollowModal from './FollowModal'
 import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
+import history from './../utils/history'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,29 +29,31 @@ const useStyles = makeStyles((theme) => ({
     paper: {
       padding: theme.spacing(2),
       margin: '0 auto',
+      marginTop: '15px'
     
-    }
+    },
+      hide: {
+        padding: theme.spacing(1),
+        [theme.breakpoints.down('sm')]: {
+          height:"50px", 
+          width:"50px"
+        },
+        [theme.breakpoints.up('sm')]: {
+          height:"150px", 
+          width:"150px"
+        }
+      }
 }));
 
 
 
-export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing,getAChat}) {
+export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing,createChat}) {
   // console.log(posts_data.userInfo)
+ 
   const {posts} = posts_data
 
   const classes = useStyles();
-  let listOfFollowing;
-  let listOfFollowers;
-  let noOfFollowers;
-  let noOfFollowing;
-  let noOfPosts;
-  let username;
-  let userphoto;
-  let followed;
-  let userId;
-  
-
-
+  let listOfFollowing,listOfFollowers,noOfFollowers,noOfFollowing, noOfPosts, username, userphoto, followed, userId, belongToUser
 
   if(posts_data.userInfo){
    noOfFollowers=posts_data.userInfo.followers.length
@@ -60,10 +63,14 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
    listOfFollowing = posts_data.userInfo.following
    listOfFollowers = posts_data.userInfo.followers
    userId = posts_data.userInfo._id
+   if(auth.user){
    if(listOfFollowers.find(x => x._id === auth.user._id)){
     followed = true;
+    belongToUser = match.params.id === auth.user._id
 
    }
+   }
+   
    
   }
 
@@ -80,7 +87,7 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
 
     
        
-      }, [getuserPost,getotheruserInfo])
+      }, [getuserPost,getotheruserInfo,match.params.id])
 
 
       const handleunFollow = (userId,auth_user) =>{
@@ -94,8 +101,29 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
         addMyFollowing(user)
       }
 
+const renderOptions = () =>{
+if(!belongToUser && auth.isAuthenticated)
+return(
+<Typography gutterBottom variant="h4">
+  {username} <Button onClick={() => {followed ? handleunFollow(userId,auth.user):handleFollow(userId, auth.user,posts_data.userInfo)}}>{followed ? "UNFOLLOW": "FOLLOW"}</Button>
+  <Button onClick={handleClick}>CHAT</Button>
+  </Typography>
+  )
+else
+  return (
+  <Typography gutterBottom variant="h4">{username}</Typography>
+  )
+  
+}
 
 
+const handleClick = () => {
+  createChat(userId)
+  setTimeout(() => {
+    history.push('/chat')
+  }, 5000);
+  
+}
 
       
     return (
@@ -104,23 +132,20 @@ export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,fo
 <div className={classes.root2}>
       <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
-          <Grid item xs={4} sm={4} md={4} lg={4}>
+          <Grid item xs={4} >
             <ButtonBase>
-              <Avatar  variant="square" style={{height:"200px", width:"200px"}}/>
+              <Avatar  variant="square" className={classes.hide}/>
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>
             <Grid item xs container  spacing={2}>
               <Grid item xs={12}>
-                <Typography gutterBottom variant="h4">
-                {username} <Button onClick={() => {followed ? handleunFollow(userId,auth.user):handleFollow(userId, auth.user,posts_data.userInfo)}}>{followed ? "UNFOLLOW": "FOLLOW"}</Button>
-                <Button onClick={() => getAChat(userId)}>CHAT</Button>
-                </Typography>
+                {renderOptions()}
               </Grid>
               <Grid item xs={12} sm container direction="row"  >
-                <Grid item xs={12} sm={4} md={4} lg={4} ><Button disabled>{noOfPosts} posts</Button></Grid>
-                <Grid item xs={12} sm= {4} md={4} lg={4} > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
-                <Grid item xs={12}  sm={4} md={4} lg={4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
+                <Grid item xs={12}  sm= {4}><Button disabled>{noOfPosts} posts</Button></Grid>
+                <Grid item xs={12} sm= {4}> <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
+                <Grid item xs={12}  sm= {4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
                
            
               </Grid>
@@ -144,4 +169,4 @@ const mapStateToProps = (state) =>({
   
   })
   
-  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser,removeMyFollowing,addMyFollowing,getAChat})(UserInfo)
+  export default connect(mapStateToProps,{getuserPost,getotheruserInfo,followUser, unfollowUser,removeMyFollowing,addMyFollowing,createChat})(UserInfo)

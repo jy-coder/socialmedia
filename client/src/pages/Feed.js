@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react'
-import Post from './Post'
+import Post from './../components/Post'
 import {getItems,addItem,getFeed, s_newPostByOtherUser,s_delPostByOtherUser,updatePostComment} from '../flux/actions/postActions'
 import {updateMe} from '../flux/actions/authActions'
 import {clearErrors} from '../flux/actions/errorActions'
-import {CustomModal } from './CustomModal'
+import {CustomModal } from './../components/CustomModal'
 import {makeStyles,Grid } from '@material-ui/core';
-import openSocket from 'socket.io-client'
 import {connect} from 'react-redux'
 import socket from './../utils/socket'
 
@@ -14,17 +13,18 @@ const useStyles = makeStyles((theme) => ({
     content:{
       marginTop:'5px',
       width: '100%'
+    },
+    main:{
+      position:'relative',
+      width: '80%',
+      margin: 'auto',
+      marginTop: '20px'
     }
   }));
 
-function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe,updatePostComment}) {
+function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
   const {posts} = posts_data
-  // let posts_data = useSelector(state => state.posts_data)
-  // let auth= useSelector(state => state.auth)
-  // let dispatch = useDispatch()
-  // console.log(auth)
-     //post is object containing posts obj -> contains status and array of data and loading
-     const classes = useStyles();
+  const classes = useStyles()
       useEffect(() => {
           getFeed()
         if(auth.user){
@@ -48,12 +48,12 @@ function Feed({posts_data,error_data,clearErrors,auth,getFeed,updateMe,updatePos
          
 
     return (
-        <>
-        <Grid className="feed" >
-        {auth.isAuthenticated? <CustomModal status={"add"}/>:null}
-            {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
-        </Grid>
-        </>
+        <div>
+          <Grid className={classes.main}>
+          {auth.isAuthenticated? <CustomModal status={"add"}/>:null}
+              {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
+          </Grid>
+        </div>
     )
 }
 

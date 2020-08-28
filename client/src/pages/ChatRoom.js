@@ -1,6 +1,6 @@
 import React,{useEffect,useState,useRef} from 'react'
 import {connect} from 'react-redux'
-import {addMessage, setChatWith,getMyChat} from './../flux/actions/chatAction'
+import {addMessage, setChatWith,getMyChat,getAChat} from './../flux/actions/chatAction'
 import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography,Divider} from '@material-ui/core';
 import Moment from 'react-moment';
 import './ChatRoom.css'
@@ -13,8 +13,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
-function ChatRoom({chat,auth,addMessage,getMyChat}) {
-    console.log(chat.singleChat)
+function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
+    // console.log(chat.singleChat)
+
     let messages
     let chatId
     let authId
@@ -25,10 +26,12 @@ function ChatRoom({chat,auth,addMessage,getMyChat}) {
         messages = chat.singleChat.message
         chatId = chat.singleChat._id
         authId = auth.user._id
+        // console.log(messages)
     }
 
     const scrollToRef = (ref) => {
         if(ref.current){
+            console.log(ref.current)
            ref.current.scrollIntoView({ behavior: 'smooth' })
             // console.log(ref.current.offsetTop)
         }
@@ -40,12 +43,12 @@ function ChatRoom({chat,auth,addMessage,getMyChat}) {
 
     useEffect(() => {  
     if(chat.chatWith) {
-      getMyChat(chat.chatWith._id)
+      getAChat(chat.chatWith._id)
      
       
  
     }
-            }, [])
+            }, [getAChat,chat.chatWith,chat.allChats])
 
 
     useEffect(() => {  
@@ -54,21 +57,43 @@ function ChatRoom({chat,auth,addMessage,getMyChat}) {
           }, 100);
           return () => clearTimeout(timer);
             
-                }, [])
+                }, [chat.chatWith])
+
+
+ 
 
     
     const renderMessages= () =>{
-        let msg;
+        let msg, date,display
+        let lst = []
+
     if(messages)
-      msg = messages.map((message, i) => (
-              <Box display="flex"  key={message._id}  justifyContent = {message.postedBy === authId?"flex-end": "flex-start"}>
-                  <Box p={2} mt={3} style={{'backgroundColor' : message.postedBy === auth.user._id?"green": "white"}} className="message">
-                      <Typography variant="h5">{message.text}</Typography>
-                    <Typography variant="subtitle1">{dayjs(message.createdAt).format('HH:mm:ss')}</Typography>
+      msg = messages.map((message, i) => {
+          let comp = ""
+        date = dayjs(message.created).format('DD/MM/YYYY')
+        if (!lst.includes(date)){
+            comp = <Box display="flex" justifyContent="center">{date}</Box>
+            lst.push(date)
+        }
+      
+        display = (
+            <div key={i}>
+                {comp ? comp : null }
+                <Box display="flex"  key={message._id}  justifyContent = {message.postedBy === authId?"flex-end": "flex-start"}>
+                    <Box p={2} mt={3} style={{'backgroundColor' : message.postedBy === auth.user._id?"green": "white"}} className="message">
+                        <Typography variant="h5">{message.text}</Typography>
+                        <Typography variant="subtitle1">{dayjs(message.created).format('HH:mm:ss')}</Typography>
+                    </Box>
                 </Box>
-            </Box>
+            </div>
+          )
+        
+          
+          return display
+         }
+        
   
-        ))
+        )
         return msg
     }
 
@@ -89,7 +114,7 @@ function ChatRoom({chat,auth,addMessage,getMyChat}) {
     const renderMessagesDiv = () =>{
         if(chat.chatWith)
             return(<Grid container  style={{position:'relative',width:'100%', height:'100vh'}} >
-            <Box className="chat-section" style={{border:'2px green solid', position:'relative'}} >
+            <Box className="chat-section" style={{position:'relative'}} >
                 <Grid container item xs={12} style={{padding:'10px'}}>
                     <Grid item xs={2}><Avatar/></Grid>
                     <Grid item xs={10}><Typography variant="h6">{chat.chatWith.name}</Typography></Grid>
@@ -107,7 +132,7 @@ function ChatRoom({chat,auth,addMessage,getMyChat}) {
             </Box>
             
             
-            <Grid  className="input-section" style={{position:'relative',width:'100%', border:'2px purple solid',display:'flex'}}>
+            <Grid  className="input-section" style={{position:'relative',width:'100%'}}>
                 <Box id="input-box" mt={5}>
                     <form className= "chatroom-form" onSubmit={(e) => handleClick(e)}>
                         <Input placeholder="Enter text" onChange={inputChangeHandler}  style = {{fontSize: 20}}/>
@@ -139,4 +164,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {addMessage,getMyChat})(ChatRoom)
+export default connect(mapStateToProps, {addMessage,getMyChat,getAChat})(ChatRoom)

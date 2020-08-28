@@ -21,6 +21,7 @@ import openSocket from 'socket.io-client'
 
 
 const useStyles = makeStyles((theme) => ({
+  
   root: {
     maxWidth: '100%',
     maxHeight: '50%',
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Post(props) {
-
+  dayjs.extend(relativeTime)
   const [comment,setComment]= useState('')
   let liked;
   let belongToCurrentUser;
@@ -75,7 +76,7 @@ function Post(props) {
     
 
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = React.useState(true);
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
@@ -92,7 +93,7 @@ function Post(props) {
         <Card className={classes.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe" className={classes.avatar}>
+              <Avatar className={classes.avatar}>
                 R
               </Avatar>
             }
@@ -102,7 +103,7 @@ function Post(props) {
               </IconButton>
             }
             title={<a href={!belongToCurrentUser ? `/user/${props.creator._id}`:null}>{props.creator.name}</a>}
-            subheader={dayjs(props.createdAt).format('MM/DD HH:mm:ss')}
+            subheader={dayjs(props.createdAt).fromNow()}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">

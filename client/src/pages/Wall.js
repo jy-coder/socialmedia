@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
-import Post from './Post'
+import Post from './../components/Post'
 import './Wall.css'
 import {connect} from 'react-redux'
 import {getMyPost,updatePostComment} from '../flux/actions/postActions'
 import {updateFollower} from '../flux/actions/authActions'
-import {clearErrors} from '../flux/actions/errorActions'
-import FollowModal from './FollowModal'
+import FollowModal from './../components/FollowModal'
 import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
 import socket from './../utils/socket'
 
@@ -32,17 +31,19 @@ const useStyles = makeStyles((theme) => ({
       },
       paper: {
         padding: theme.spacing(2),
-        // width: '50%',
-        margin: '0 auto',
+        marginTop: '10px',
+        margin: '0 auto'
       
       },
       hide: {
         padding: theme.spacing(1),
         [theme.breakpoints.down('sm')]: {
-          display:'none'
+          height:"50px", 
+          width:"50px"
         },
         [theme.breakpoints.up('sm')]: {
-          display:'block'
+          height:"125px", 
+          width:"125px"
         }
       }
       
@@ -75,25 +76,28 @@ function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
 
 useEffect(() => {
         getMyPost()
-},[auth.user])
-    //     socket.on(`${auth.user._id}`, data => {
-    //       if(data.action === "updatefollower")
-    //         // console.log(data.user.followers)
-    //         updateFollower(data.user.followers)
+},[auth.user,getMyPost])
+
+useEffect(() => {
+  if(auth.user){
+        socket.on(`${auth.user._id}`, data => {
+          if(data.action === "updatefollower")
+            // console.log(data.user.followers)
+            updateFollower(data.user.followers)
 
            
-    //  })          
-    //     }, [getMyPost])
+     })       }   
+        }, [])
 
 
-    // useEffect(() => {
-    //   posts.forEach(async (post) => {   
-    //         socket.on(post._id,data =>{
-    //             if(data.action === "updatepostcomment")
-    //                 updatePostComment(post._id,data.posts.comments)
-    //     })
-    //   })
-    // },[])
+    useEffect(() => {
+      posts.forEach(async (post) => {   
+            socket.on(post._id,data =>{
+                if(data.action === "updatepostcomment")
+                    updatePostComment(post._id,data.posts.comments)
+        })
+      })
+    },[])
 
 
        
@@ -107,9 +111,9 @@ useEffect(() => {
 <div className={classes.root2}>
       <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
-          <Grid item xs={4} sm={4} md={4} lg={4}>
-            <ButtonBase className={classes.hide} >
-              <Avatar variant="square" style={{height:"200px", width:"200px"}}/>
+          <Grid item  xs={4}>
+            <ButtonBase >
+              <Avatar variant="square" className={classes.hide} />
             </ButtonBase>
           </Grid>
           <Grid item xs={8} sm container>
@@ -120,9 +124,9 @@ useEffect(() => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm container direction="row"  >
-                <Grid item xs={12} sm={4} md={4} lg={4} ><Button disabled>{noOfPosts} posts</Button></Grid>
-                <Grid item xs={12} sm= {4} md={4} lg={4} > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
-                <Grid item xs={12}  sm={4} md={4} lg={4}><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
+                <Grid item xs={12} sm={4}  ><Button disabled>{noOfPosts} posts</Button></Grid>
+                <Grid item xs={12} sm= {4}  > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
+                <Grid item xs={12}  sm={4} ><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
                
            
               </Grid>

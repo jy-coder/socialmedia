@@ -1,35 +1,29 @@
-import axios from 'axios';
-import { returnErrors } from './errorActions';
+import axios from './../../utils/axios-handler'
 import history from './../../utils/history'
-
+import {setError} from './../actions/errorActions'
 
 import {
   USER_LOADED,
   USER_LOADING,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL,
   UPDATE_MY_PROFILE,
   NO_USER,
-  CLEAR_ERRORS,
   SET_SUCCESS_MSG,
-  CLEAR_SUCCESS_MSG,
   REMOVE_MY_FOLLOWING,
   ADD_MY_FOLLOWING,
-  UPDATE_FOLLOWER
+  UPDATE_FOLLOWER,
+  GET_ERRORS
 } from './types';
 
 
 // Check token & load user
 export const loadUser = () => (dispatch) => {
-  // User loading
-  dispatch({ type: USER_LOADING });
 
   axios
-    .get('http://127.0.0.1:1337/api/user/getUser')
+    .get('/user/getUser')
     .then(res =>
       dispatch({
         type: USER_LOADED,
@@ -37,22 +31,14 @@ export const loadUser = () => (dispatch) => {
       })
     )
     .catch(err => {
-      if(err.response){
-      dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({
-        type: AUTH_ERROR
-      });
-    }
+     console.log(err)
     });
 };
 
 // Register User
-export const register = ({ name, email, password, confirmPassword }) => (
-  dispatch
-) => {
-  // Request body
+export const register = ({ name, email, password, confirmPassword }) => (dispatch) => {
   axios
-    .post('http://127.0.0.1:1337/api/user/signup', { name, email, password, confirmPassword})
+    .post('/user/signup', { name, email, password, confirmPassword})
     .then(res =>
       dispatch({
         type: REGISTER_SUCCESS,
@@ -60,70 +46,34 @@ export const register = ({ name, email, password, confirmPassword }) => (
       })
     )
     .catch(err => {
-      if(err.response){
-      dispatch(
-        returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
-      );
-      dispatch({
-        type: REGISTER_FAIL
-      })};
-    });
+      console.log(err)
+    })
 };
 
 
-export const noUser = () =>(dispatch) =>{
-  dispatch({
-    type: NO_USER
-  })
-}
-
 // Login User
 export const login = ({ email, password }) => (dispatch) => {
+
+
     axios
-    .post('http://127.0.0.1:1337/api/user/login', { email, password })
+    .post('/user/login', { email, password })
     .then(res =>{
-        setAuthorizationHeader(res.data.token);
-      dispatch({
-        type: LOGIN_SUCCESS,
-      })
-      // dispatch({ type: CLEAR_ERRORS });
-      dispatch({ type: USER_LOADING });
-
-      axios
-        .get('http://127.0.0.1:1337/api/user/getUser')
-        .then(res =>
-          dispatch({
-            type: USER_LOADED,
-            payload: res.data
-          })
-        )
-        .catch(err => {
-          if(err.response){
-          dispatch(returnErrors(err.response.data, err.response.status));
-          dispatch({
-            type: AUTH_ERROR
-          });
-        }
-        });
-      history.push('/')
-      
-
+        setAuthorizationHeader(res.data.token);      
+        history.push('/')
     })
     .catch(err => {
-      if(err.response){
-      dispatch(
-        returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
-      );
+      // console.log(err.response.data.message)
       dispatch({
-        type: LOGIN_FAIL
-      });
-    }})
+        type: GET_ERRORS,
+        payload: err.response.data.message
+      })
+    })
 };
 
 
 export const updateMe = (form) => (dispatch) => {
   axios
-  ({method: 'patch',url:'http://127.0.0.1:1337/api/user/updateMe', data:form,headers: {'Content-Type': 'multipart/form-data' }})
+  ({method: 'patch',url:'/user/updateMe', data:form,headers: {'Content-Type': 'multipart/form-data' }})
   .then(res => {	
      dispatch({
       type:SET_SUCCESS_MSG,

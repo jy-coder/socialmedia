@@ -15,8 +15,8 @@ router.use(authController.auth);
 router.route('/unfollow').put(userController.unfollowUser,userController.removeFollowing);
 router.route('/follow').put(userController.followUser , userController.addFollowing);
 router.route('/getUser').get(authController.getUser)
-router.route('/updateMe').patch(userController.uploadPostPhoto, 
-userController.resizePostPhoto,authController.updateMe)
+router.route('/updateMe').patch(authController.updateMe)
+router.route('/getAllUsers').get(userController.getAllUsers)
 
 
 

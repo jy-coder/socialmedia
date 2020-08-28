@@ -4,17 +4,16 @@ const helmet = require('helmet');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
+const hpp = require('hpp');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean'); 
 const postRoute = require('./routes/postRoute')
 const userRoute = require('./routes/userRoute')
 const chatRoute = require('./routes/chatRoute')
-// const likeRoute = require('./routes/likeRoute')
 const globalErrorHandler = require('./controllers/errorController')
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
-
-
-global.__basedir = __dirname;
 
 
 process.on('uncaughtException', err => {
@@ -29,6 +28,14 @@ dotenv.config({ path: './config.env' });
 
 const app = express();
 
+
+app.use(morgan('dev'));
+app.use(helmet());
+app.use(cors({origin: '*'}))
+app.use(express.json({ limit: '10kb' }))
+app.use(mongoSanitize());
+app.use(xss());
+app.use(cookieParser());
 
 // SETTING UP DB
 const DB = process.env.DATABASE.replace(
@@ -56,7 +63,6 @@ mongoose
   })
   .catch(err => console.log(err));
 process.on('unhandledRejection', err => {
-  console.log(err);
   console.log('UNHANDLER REJECTION!@ SHUTTING DOWN...');
   server.close(() => {
     process.exit(1);
@@ -64,23 +70,21 @@ process.on('unhandledRejection', err => {
 })
 
 
-app.use(morgan('dev'));
-app.use(helmet());
-app.use(cors({
-    origin: true,
-    credentials: true,
-    withCredentials: true
 
-    
-}))
-
-app.use(express.json())
-app.use(cookieParser());
 app.use('/api/post', postRoute)
 app.use('/api/user', userRoute)
 app.use('/api/chat', chatRoute)
 
 
+
+if(process.env.NODE_ENV === 'production'){
+  //set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 
 //HANDLING ERROR

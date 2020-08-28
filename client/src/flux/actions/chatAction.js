@@ -1,28 +1,25 @@
-import axios from 'axios'
-import {GET_MY_CHAT, NEW_CHAT,ADD_CHAT_MSG,SET_CHAT_WITH,NEW_MSG_OTHER_USER } from './types';
-import { returnErrors} from './errorActions'
+import axios from './../../utils/axios-handler'
+import {GET_MY_CHAT, NEW_CHAT,ADD_CHAT_MSG,SET_CHAT_WITH,NEW_MSG_OTHER_USER,GET_A_CHAT } from './types';
 import history from './../../utils/history'
 
 // RETURN ERRORS
 export const getMyChat = () => dispatch => {
   axios
-    .get(`http://127.0.0.1:1337/api/chat/my-chat`)
+    .get(`/chat/my-chat`)
     .then((res) =>{
       dispatch({
         type: GET_MY_CHAT,
         payload: res.data,
       })
     }).catch(err =>{
-      if(err.response){
-      dispatch(returnErrors(err.response.data, err.response.status))
-      }
+      console.log(err)
 })
 };
 
 
-export const getAChat = (userId) => dispatch => {
+export const createChat = (userId) => dispatch => {
   axios
-    .post(`http://127.0.0.1:1337/api/chat/create-chat`,{user: userId})
+    .post(`/chat/create-chat/${userId}`)
     .then((res) =>{
       dispatch({
         type: NEW_CHAT,
@@ -30,9 +27,23 @@ export const getAChat = (userId) => dispatch => {
       })
       history.push('/chat')
     }).catch(err =>{
-      if(err.response){
-      dispatch(returnErrors(err.response.data, err.response.status))
-      }
+      console.log(err)
+})
+};
+
+
+
+export const getAChat = (userId) => dispatch => {
+  axios
+    .get(`/chat/get-chat/${userId}`)
+    .then((res) =>{
+      dispatch({
+        type: GET_A_CHAT,
+        payload: res.data
+      })
+     
+    }).catch(err =>{
+      console.log(err)
 })
 };
 
@@ -41,16 +52,14 @@ export const getAChat = (userId) => dispatch => {
 export const addMessage = (chatId,authId,text) => dispatch => {
  
 axios
-  .put(`http://127.0.0.1:1337/api/chat/add-chat`,{chatId: chatId, message:{text:text, postedBy: authId}})
+  .put(`/chat/add-chat`,{chatId: chatId, message:{text:text, postedBy: authId}})
   .then((res) =>{
     dispatch({
       type: ADD_CHAT_MSG,
       payload: res.data
     })
   }).catch(err =>{
-    if(err.response){
-    dispatch(returnErrors(err.response.data, err.response.status))
-    }
+    console.log(err)
 })
 };
 

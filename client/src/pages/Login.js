@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './Login.css'
-import {login} from '../../flux/actions/authActions'
+import {login} from '../flux/actions/authActions'
 import {connect} from 'react-redux'
-import {Button, Box, Input} from '@material-ui/core';
+import {Button, Box, TextField} from '@material-ui/core';
 
 
 const Login = ({login,error_data}) =>{
@@ -19,7 +19,6 @@ const Login = ({login,error_data}) =>{
   
   
     const submitHandler = (e) =>{
-      console.log(state)
       e.preventDefault();
       login(state)
 
@@ -27,23 +26,25 @@ const Login = ({login,error_data}) =>{
     }
   
     return (
-    <section className="auth-form">
-    {error_data.msg? <div className="error-msg"><small>{error_data.msg.message}</small></div> : null}
+    <div style={{position:'relative' , width: '50%', margin:'auto', top:'40px'}}>
+    {error_data.msg? <div className="error-msg"><small>{error_data.msg}</small></div> : null}
     <form onSubmit ={(e) => submitHandler(e)}>
     <Box flexDirection="column" height="100%" width="50%" p={1} id="formInput" >
     <Box height="25%">
-      <Input type="email" style = {{fontSize: 20}}  id="email" placeholder="Enter email" h={300} onChange={inputChangeHandler} />
+      < TextField type="email"   id="email" placeholder="Enter email"onChange={ inputChangeHandler} fullWidth required/>
     </Box>
 
   <Box height="25%">
-    <Input type="password" id="password" style = {{fontSize: 20}} placeholder="Password" onChange={inputChangeHandler} />
+    < TextField type="password" id="password"  placeholder="Password" onChange={inputChangeHandler} fullWidth required/>
   </Box>
-  <Button type="submit">
-    Submit
-  </Button>
+  <Box display="flex" justifyContent="center" style={{marginTop: '10px'}}>
+    <Button type="submit" variant="outlined">
+      Submit
+    </Button>
+  </Box>
   </Box>
 </form>
-    </section>
+    </div>
       
     );
   }

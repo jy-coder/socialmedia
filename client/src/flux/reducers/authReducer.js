@@ -3,10 +3,8 @@ import{
     USER_LOADING,
     AUTH_ERROR,
     LOGIN_SUCCESS,
-    LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL,
     UPDATE_MY_PROFILE,
     NO_USER,REMOVE_MY_FOLLOWING,
     ADD_MY_FOLLOWING,UPDATE_FOLLOWER
@@ -58,9 +56,7 @@ export default function(state = initialState,action){
                   }
             case NO_USER:
             case AUTH_ERROR:
-            case LOGIN_FAIL:
             case LOGOUT_SUCCESS:
-            case REGISTER_FAIL:
             return{
                 ...state,
                 token:null,

@@ -20,6 +20,8 @@ export default function(state = initialState, action) {
         chatWith: action.payload
       }
 
+
+    case GET_A_CHAT:
     case NEW_CHAT:
       return {
         ...state,
@@ -38,10 +40,15 @@ export default function(state = initialState, action) {
     }
 
     case  ADD_CHAT_MSG:
+      console.log(action.payload)
       return {
         ...state
         // singleChat: action.payload
       };
+
+    
+     
+
 
     
 

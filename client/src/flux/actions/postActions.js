@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './../../utils/axios-handler'
 import { 
   GET_ITEMS,GET_ONE_ITEM,ADD_ITEM,
   DELETE_ITEM,UPDATE_ITEM,
@@ -12,38 +12,34 @@ GET_MY_POST,FOLLOW_USER,UNFOLLOW_USER,
 S_NEW_POST,S_DELETE_POST,UPDATE_POST_COMMENT
 } from './types'
 
-import { returnErrors} from './errorActions'
-
 
 
 export const getItems = () => dispatch => {
     dispatch(setItemsLoading());
     axios
-      .get('http://127.0.0.1:1337/api/post')
+      .get('/post')
       .then((res) =>{
         dispatch({
           type: GET_ITEMS,
           payload: res.data
         })
       }).catch(err =>{
-        if(err.response)
-          dispatch(returnErrors(err.response.data, err.response.status))
+        console.log(err)
       })
-  };
+    }
 
 
   export const getFeed = () => dispatch => {
     dispatch(setItemsLoading());
     axios
-      .get('http://127.0.0.1:1337/api/post/feed')
+      .get('/post/feed')
       .then((res) =>{
         dispatch({
           type: GET_FEED,
           payload: res.data
         })
       }).catch(err =>{
-        if(err.response)
-          dispatch(returnErrors(err.response.data, err.response.status))
+        console.log(err)
       })
   };
 
@@ -51,22 +47,20 @@ export const getItems = () => dispatch => {
 
   export const getOneItem = (id) => dispatch => {
     axios
-      .get(`http://127.0.0.1:1337/api/post/${id}`)
+      .get(`/post/${id}`)
       .then((res) =>{
         dispatch({
           type: GET_ONE_ITEM,
           payload: id
         })
       }).catch(err =>{
-        if(err.response){
-        dispatch(returnErrors(err.response.data, err.response.status))
-        }
-  })
-};
+        console.log(err)
+      })
+    }
 
   export const addItem = (content) => dispatch => {
     axios
-      .post('http://127.0.0.1:1337/api/post/create-post', {content})
+      .post('/post/create-post', {content})
       .then(res =>{
         dispatch({
           type: ADD_ITEM,
@@ -74,16 +68,14 @@ export const getItems = () => dispatch => {
         })
 
       }).catch((err)=>{
-        if(err.response){
-          dispatch(returnErrors(err.response.data, err.response.status))
-        }
+        console.log(err)
       })
     };
 
 
   export const deleteItem = (id) => dispatch => {
     axios
-      .delete(`http://127.0.0.1:1337/api/post/delete-post/${id}`)
+      .delete(`/post/delete-post/${id}`)
       .then(res =>{
         // if(res.status === 200)
         //   history.go(0)
@@ -94,17 +86,15 @@ export const getItems = () => dispatch => {
         })
      
       }).catch((err)=>{
-        if(err.response){
-          dispatch(returnErrors(err.response.data, err.response.status))
-        }
+        console.log(err)
       })
     };
 
 
 
-      export const updateItem = (id,item) => dispatch => {
+      export const updateItem = (id,content) => dispatch => {
         axios
-          .put(`http://127.0.0.1:1337/api/post/update-post/${id}`,item)
+          .put(`/post/update-post/${id}`,{content})
           .then(res =>{
             console.log(res);
             dispatch({
@@ -113,7 +103,7 @@ export const getItems = () => dispatch => {
               payloadres: res.data
             })
           }).catch(err =>
-              dispatch(returnErrors(err.response.data, err.response.status))
+            console.log(err)
               
   )}
       
@@ -123,14 +113,14 @@ export const getItems = () => dispatch => {
       export const getMyFeed = () => dispatch => {
   
         axios
-          .get('http://127.0.0.1:1337/api/post/user-post')
+          .get('/post/user-post')
           .then((res) =>{
             dispatch({
               type: GET_ITEMS,
               payload: res.data
             })
           }).catch(err =>
-            dispatch(returnErrors(err.response.data, err.response.status)),
+            console.log(err)
             
           )
       };
@@ -139,7 +129,7 @@ export const getItems = () => dispatch => {
 
       export const likePost = (postId) => dispatch => {
         axios
-          .put('http://127.0.0.1:1337/api/post/like',{postId})
+          .put('/post/like',{postId})
           .then(res =>{
             dispatch({
               type: LIKE_POST,
@@ -147,9 +137,7 @@ export const getItems = () => dispatch => {
               payloadid: postId
             })
           }).catch((err)=>{
-            if(err.response){
-              dispatch(returnErrors(err.response.data, err.response.status))
-            }
+            console.log(err)
           })
         };
 
@@ -157,7 +145,7 @@ export const getItems = () => dispatch => {
         
       export const unlikePost = (postId) => dispatch => {
         axios
-          .put('http://127.0.0.1:1337/api/post/unlike',{postId})
+          .put('/post/unlike',{postId})
           .then(res =>{
             dispatch({
               type: UNLIKE_POST,
@@ -165,9 +153,7 @@ export const getItems = () => dispatch => {
               payloadid: postId
             })
           }).catch((err)=>{
-            if(err.response){
-              dispatch(returnErrors(err.response.data, err.response.status))
-            }
+            console.log(err)
           })
         };
 
@@ -175,7 +161,7 @@ export const getItems = () => dispatch => {
 
         export const commentPost = (postId,text) => dispatch => {
           axios
-            .put('http://127.0.0.1:1337/api/post/comment',{ postId: postId, comment: {text:text} })
+            .put('/post/comment',{ postId: postId, comment: {text:text} })
             .then(res =>{
               dispatch({
                 type: COMMENT_POST,
@@ -183,16 +169,14 @@ export const getItems = () => dispatch => {
                 payloadid: postId
               })
             }).catch((err)=>{
-              if(err.response){
-                dispatch(returnErrors(err.response.data, err.response.status))
-              }
+              console.log(err)
             })
           };
 
 
           export const uncommentPost = (postId, commentId) => dispatch => {
             axios
-              .put('http://127.0.0.1:1337/api/post/uncomment',{ postId: postId, comment: {_id : commentId} })
+              .put('/post/uncomment',{ postId: postId, comment: {_id : commentId} })
               .then(res =>{
                 dispatch({
                   type: UNCOMMENT_POST,
@@ -200,9 +184,7 @@ export const getItems = () => dispatch => {
                   payloadid: postId
                 })
               }).catch((err)=>{
-                if(err.response){
-                  dispatch(returnErrors(err.response.data, err.response.status))
-                }
+                console.log(err)
               })
             };
   
@@ -225,7 +207,7 @@ export const getItems = () => dispatch => {
 
             export const followUser = (userId, authUser)=> dispatch => {
               axios
-              .put('http://127.0.0.1:1337/api/user/follow',{userId})
+              .put('/user/follow',{userId})
               .then(res =>{
                 dispatch({
                   type: FOLLOW_USER,
@@ -233,9 +215,7 @@ export const getItems = () => dispatch => {
     
                 })
               }).catch((err)=>{
-                if(err.response){
-                  dispatch(returnErrors(err.response.data, err.response.status))
-                }
+                console.log(err)
               })
             };
 
@@ -243,7 +223,7 @@ export const getItems = () => dispatch => {
 
             export const unfollowUser = (userId, authUser)=> dispatch => {
               axios
-              .put('http://127.0.0.1:1337/api/user/unfollow',{userId})
+              .put('/user/unfollow',{userId})
               .then(res =>{
                 dispatch({
                   type: UNFOLLOW_USER,
@@ -251,41 +231,35 @@ export const getItems = () => dispatch => {
     
                 })
               }).catch((err)=>{
-                if(err.response){
-                  dispatch(returnErrors(err.response.data, err.response.status))
-                }
+                console.log(err)
               })
             };
 
 
             export const getuserPost = (userId) => dispatch => {
               axios
-                .get(`http://127.0.0.1:1337/api/post/user-post/${userId}`)
+                .get(`/post/user-post/${userId}`)
                 .then((res) =>{
                   dispatch({
                     type: GET_USER_POST,
                     payload: res.data
                   })
                 }).catch(err =>{
-                  if(err.response){
-                  dispatch(returnErrors(err.response.data, err.response.status))
-                  }
+                  console.log(err)
             })
           };
 
 
           export const getotheruserInfo = (userId) => dispatch => {
             axios
-              .get(`http://127.0.0.1:1337/api/user/otheruser/${userId}`)
+              .get(`/user/otheruser/${userId}`)
               .then((res) =>{
                 dispatch({
                   type: GET_USER_INFO,
                   payload: res.data[0]
                 })
               }).catch(err =>{
-                if(err.response){
-                dispatch(returnErrors(err.response.data, err.response.status))
-                }
+                console.log(err)
           })
         };
 
@@ -293,16 +267,14 @@ export const getItems = () => dispatch => {
 
         export const getMyPost = () => dispatch => {
           axios
-            .get(`http://127.0.0.1:1337/api/post/mypost/`)
+            .get(`/post/mypost/`)
             .then((res) =>{
               dispatch({
                 type: GET_MY_POST,
                 payload: res.data
               })
             }).catch(err =>{
-              if(err.response){
-              dispatch(returnErrors(err.response.data, err.response.status))
-              }
+              console.log(err)
         })
       };
       

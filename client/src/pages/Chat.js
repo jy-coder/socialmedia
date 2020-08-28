@@ -19,6 +19,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ImportantDevices } from '@material-ui/icons'
+import NavBar from './../components/NavBar'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -121,7 +122,7 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
         
         let displayChats = (chats.map((chat, i) => {
         let lastMsg
-        console.log(chat)
+        // console.log(chat)
         let user = chat.user.filter(c => c._id !== auth.user._id)
         if(chat.message)
             lastMsg = chat.message[chat.message.length -1]
@@ -137,10 +138,10 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
                     <Grid container item xs={5}  direction="column">
                         <Grid item xs={12} fontWeight="fontWeightBold"><ListItemText  primary={<Typography >{user[0].name}</Typography>} /></Grid>
-                        <Grid container item xs={12}><ListItemText primary={<Typography variant="subtitle2" ><b>{lastMsg.text}</b></Typography>} /></Grid>
+                        {lastMsg ? <Grid container item xs={12}><ListItemText primary={<Typography variant="subtitle2" ><b>{lastMsg.text}</b></Typography>} /></Grid> : null}
                     </Grid>
                     <Grid container item xs={4}  direction="column">
-                        <Grid item xs={12}><ListItemText primary={<Typography variant="caption" >{dayjs(lastMsg.created).format('DD/MM/YYYY')}</Typography>} /></Grid>
+                    {lastMsg ?<Grid item xs={12}><ListItemText primary={<Typography variant="caption" >{dayjs(lastMsg.created).format('DD/MM/YYYY')}</Typography>} /></Grid>:null}
                     </Grid>
                     
                 </Grid>
@@ -151,30 +152,24 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
     }
 
+
+    const iconBtn = (
+      <IconButton
+      color="inherit"
+      aria-label="open drawer"
+      onClick={handleDrawerOpen}
+      edge="start"
+      className={clsx(classes.menuButton, open && classes.hide)}
+    >
+      <MenuIcon />
+    </IconButton>
+    )
         
 
 
     return (
         <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
         <Drawer
           className={classes.drawer}
           variant="persistent"

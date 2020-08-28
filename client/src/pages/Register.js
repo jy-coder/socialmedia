@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Login.css'
-import {register} from '../../flux/actions/authActions'
+import {register} from '../flux/actions/authActions'
 import {connect} from 'react-redux'
 import {Button, Box} from '@material-ui/core';
 

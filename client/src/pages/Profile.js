@@ -1,8 +1,7 @@
 import React, {useEffect,useState} from 'react'
-import {updateMe} from '../../flux/actions/authActions'
+import {updateMe} from '../flux/actions/authActions'
 import { connect } from 'react-redux';
-import history from './../../utils/history'
-import { withRouter } from 'react-router-dom';
+
 
 export function Profile({auth,error_data,updateMe}) {
 

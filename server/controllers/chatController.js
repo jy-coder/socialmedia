@@ -8,46 +8,64 @@ const io = require('../socket')
 exports.createChat = catchAsync(async (req,res,next) =>{
         let chat;
         chat = await Chat.findOne(
-        { user: { $all: [req.user._id, req.body.user] }}).populate('chat.postedBy','name') 
+        { user: { $all: [req.user._id, req.params.userId] }})
     
         if(!chat)
             chat = await Chat.create({
-                user: [req.user._id,req.body.user]
+                user: [req.user._id,req.params.userId]
         }); 
+            
+    
+        res.status(200).json();
+    })
+
+    exports.getAChat = catchAsync(async (req,res,next) =>{
+        // console.log(req.params.userId)
+        let chat;
+        chat = await Chat.findOne(
+        { user: { $all: [req.user._id, req.params.userId] }}).populate('chat.postedBy','name') 
+
             
     
         res.status(200).json(chat);
     })
-
     //get chat you have chated with _id used in addToChat
     exports.getAllChats= catchAsync(async (req,res,next) =>{
         const chat = await Chat.find({ user: { $in: [req.user._id] } }).populate('user','name')
-    //    const chat = await Chat.aggregate([
-    //         {$match:{ user: { $in: [req.user._id] } } },
-    //         { $unwind : "$message"} ,
-    //         {$project: {
-    //            "message.date": {'$dateToString': {format: '%Y-%m-%d', date: '$message.created'}},
-    //            "message.text":  "$message.text",
-    //            "message.postedBy": "$message.postedBy",
-    //            "user": "$user",
-    //            "message.created": "$message.created",
-    //            "_id" : "$_id"
-    //         }
-    //     }, 
-    //         {$group : 
-    //         { 
-    //             _id: "$_id",
-    //             user: {"$first": "$user"},
-    //             text:{"$first" : "$message.text"},
-    //             postedBy:{"$first" : "$message.postedBy"},
-    //             created: {"$first" : "$message.created"},
-    //             date: {"$first" : "$message.date"}
-               
-    //         }}
-    //     ])
 
+        if(!chat)
+            return next(new AppError('YOU HAVE NO CHAT YET WITH THE USER PLEASE INITIALIZE', 404));
+    
         
-        // const chat = await Chat.populate(result,{path: "user",  select:  {_id: 1, name: 1}});
+            // chat = {...chat, user: chat.user.filter(user._id !== req.user._id )}
+        res.status(200).json(chat);
+
+
+    })
+
+
+    exports.test= catchAsync(async (req,res,next) =>{
+
+        const chat = await Chat.aggregate([
+            {$match:{ user: { $in: [req.user._id] } } },
+            // {$group:{_id:"$user"} },
+            { $unwind : "$message"},
+            {$project:{
+                "message.date": {'$dateToString': {format: '%Y-%m-%d', date: '$message.created'}},
+                "message.text":  "$message.text",
+                "user": "$user",
+                "message.created": "$message.created"
+                
+            }},
+            //  {$group: {_id:"$user",date: {"$addToSet" : {date:"$message.date"}}}}
+            // {$group: {_id:"$user",date: {"$first" : "$message.date"} }}
+            {$group: {_id:"$user", message:{"$push" : {text : "$message.text", date:"$message.date"}}}},
+            {$sort: {"message.date":1}},
+            {$group: {_id: "$message.date"}}
+            
+
+        ])
+     
 
 
         if(!chat)
@@ -59,6 +77,7 @@ exports.createChat = catchAsync(async (req,res,next) =>{
 
 
     })
+    
 
 
     exports.addToChat = catchAsync(async (req,res,next)=> {

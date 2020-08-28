@@ -51,14 +51,14 @@ export function Comment({comment, postId, uncommentPost,auth}) {
               <Grid item xs container direction="row">
                 <Grid item xs>
                     <Typography variant="body2"  gutterBottom>
-                    {comment.postedBy.name} &nbsp; <Typography variant="caption"> {dayjs().fromNow()} </Typography>
+                    <a href={`/user/${comment.postedBy._id}`}>{comment.postedBy.name}</a> &nbsp; <Typography variant="caption"> {dayjs(comment.created).fromNow()} </Typography>
                     </Typography>
                     <Typography variant="body2"  color="textSecondary">
                     {comment.text}
                     </Typography>
                 </Grid>
                 <Typography variant="body2"  style={{ cursor: 'pointer' }}>
-                  {belongToCurrentUser ? <Button onClick={()=>uncommentPost(postId, comment._id)}>Remove</Button> :null}
+                  {belongToCurrentUser ? <Button variant="outlined" onClick={()=>uncommentPost(postId, comment._id)}>Remove</Button> :null}
                 </Typography>
               </Grid>
             </Grid>

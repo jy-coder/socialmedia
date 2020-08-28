@@ -23,18 +23,12 @@ export default function(state=initialState,action){
         case GET_FEED:
         case GET_ITEMS:
         case GET_MY_POST:
-            // console.log(action.payload)
+        
             return{
                 ...state,
                 posts: action.payload,
                 loading:false
             };
-        // case GET_ONE_ITEM:
-        //     return{
-        //         ...state,
-        //         post: state.posts.filter((post) => post._id === action.payload)
-                
-        //     };
 
         
         case ADD_ITEM:
