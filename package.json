@@ -9,6 +9,7 @@
     "start:dev": "NODE_ENV=development nodemon app.js",
     "start:prod": "NODE_ENV=production nodemon app.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+	"client": "npm start --prefix client",
     "lint": "eslint src/"
   },
   "keywords": [],
