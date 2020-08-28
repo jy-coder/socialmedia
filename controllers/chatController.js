@@ -1,4 +1,4 @@
-const Chat = require('../models/Chat')
+const Chat = require('../models/chat')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/AppError')
 const io = require('../socket')
