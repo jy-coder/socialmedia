@@ -43,7 +43,6 @@ const useStyles = makeStyles({
 
 
 function ChatRoom({chat,auth,addMessage,getAChat}) {
-    // console.log(chat.singleChat)
     const classes = useStyles();
     let messages
     let chatId
@@ -55,14 +54,11 @@ function ChatRoom({chat,auth,addMessage,getAChat}) {
         messages = chat.singleChat.message
         chatId = chat.singleChat._id
         authId = auth.user._id
-        // console.log(messages)
     }
 
     const scrollToRef = (ref) => {
         if(ref.current){
-            // console.log(ref.current)
            ref.current.scrollIntoView({ behavior: 'smooth' })
-            // console.log(ref.current.offsetTop)
         }
     }    
     const executeScroll = () => {

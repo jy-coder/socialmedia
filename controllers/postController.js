@@ -1,15 +1,7 @@
 const Post = require('../models/post')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/AppError')
-const multer = require('multer');
-const sharp = require('sharp');
-const path = require('path');
 const io = require('../socket')
-
-
-
-
-
 
 
 exports.createPost = catchAsync(async (req,res,next) =>{
@@ -168,7 +160,6 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
 
 
   exports.myPost = catchAsync(async (req,res,next)=> {
-    // console.log(req.user)
     const posts = await Post.find({creator: req.user._id}).sort({createdAt:-1})
 
      if(!posts)

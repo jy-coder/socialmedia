@@ -6,15 +6,12 @@ import './Chat.css'
 import socket from './../utils/socket'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {Drawer,CssBaseline,List,Typography, Divider, Grid, Avatar} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import {Drawer,CssBaseline,List,Typography, Divider, Grid, Avatar,IconButton,ListItem,ListItemText} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+
 
 const drawerWidth = 240;
 
@@ -54,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
   },
@@ -95,9 +91,6 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
    
    
    
-
-//  console.log(chat.allChats)
-
     useEffect(() => {    
         getMyChat()
             }, [getMyChat])
@@ -105,7 +98,6 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
     useEffect(() => {
         chats.forEach(async (chat) => { 
-            // console.log(chat)
                 socket.on(chat._id,data =>{
                     if(data.action === "newmessage")
                         newMessageOtherUser(chat._id,data.chat.message)
@@ -118,13 +110,11 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
         
         let displayChats = (chats.map((chat, i) => {
         let lastMsg
-        // console.log(chat)
         let user = chat.user.filter(c => c._id !== auth.user._id)
         if(chat.message)
             lastMsg = chat.message[chat.message.length -1]
 
-            // console.log(lastMsg)
-
+  
         return(
             <ListItem button key={chat._id}>
                 <Grid  container direction="row" onClick={()=>setChatWith(user[0])}>

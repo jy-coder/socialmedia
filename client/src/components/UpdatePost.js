@@ -1,7 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import {getOneItem, updateItem} from '../flux/actions/postActions'
 import { connect } from 'react-redux';
-import {makeStyles, TextField,DialogContent,DialogActions, Button, Box} from '@material-ui/core';
+import {makeStyles, DialogContent, Box} from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClose}) {
+function UpdatePost({getOneItem,updateItem,posts_data,_id, handleClose}) {
     const classes = useStyles();
     const [content, setContent]= useState("")
 
@@ -32,8 +32,8 @@ function UpdatePost({getOneItem,updateItem,posts_data,_id,error_data, handleClos
      
     }, [getOneItem])
 
-    let postName
-    let postPhoto
+    let postName, postPhoto
+
 
     if(posts_data.post[0]){
       postName = posts_data.post[0].name

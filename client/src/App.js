@@ -37,8 +37,6 @@ if (token) {
 
 
 axios.interceptors.request.use(req => {
-  // const errorCode = store.getState().error.code
-  // console.log(errorCode)
   store.dispatch({ type: CLEAR_ERRORS });
     
   return req;

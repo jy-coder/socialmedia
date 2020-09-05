@@ -12,7 +12,6 @@ import socket from './../utils/socket'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        // margin: theme.spacing(1),
 
         margin: '0 auto',
      
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
     root2: {
         flexGrow: 1,
-        // minWidth: '768px'
       },
       paper: {
         padding: theme.spacing(2),
@@ -78,7 +76,6 @@ useEffect(() => {
   if(auth.user){
         socket.on(`${auth.user._id}`, data => {
           if(data.action === "updatefollower")
-            // console.log(data.user.followers)
             updateFollower(data.user.followers)
 
            

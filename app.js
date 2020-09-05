@@ -93,7 +93,4 @@ app.use(globalErrorHandler)
 
 
 
-// app.listen(port, 'localhost',() =>{
-//     console.log(`App running on port ${port}`);
 
-// })
