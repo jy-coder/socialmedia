@@ -47,10 +47,6 @@ const DB = process.env.DATABASE.replace(
 
 const port = process.env.PORT || 1337;
 
-const socket = io({
-  transports: ['websocket']
-});
-
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
@@ -59,10 +55,11 @@ mongoose
     useUnifiedTopology: true
   })
   .then(()=> {
-    
     const server = app.listen(port);
     const io = require('./socket').init(server);
-    io.on('connection', socket)
+    io.on('connection', socket => {
+      console.log('Client connected');
+    });
   })
   .catch(err => console.log(err));
 process.on('unhandledRejection', err => {
