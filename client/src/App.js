@@ -8,8 +8,6 @@ import Chat from './pages/Chat'
 import UserInfo from './components/UserInfo'
 import { Route, Switch} from 'react-router-dom';
 import Login from './pages/Login'
-import Profile from './pages/Profile'
-import Register from './pages/Register'
 import Users from './pages/Users'
 import { connect } from 'react-redux';
 import { loadUser,logout} from './flux/actions/authActions';
@@ -66,19 +64,16 @@ function App({auth}) {
   return (
     <div className="App">
     <NavBar/>
-    <Switch>
-    
- 
-      
-      <Route exact path="/user/:id"  render={props => (<UserInfo {...props}/>)}/>
-      <Route exact path="/wall"  render={props => (<Wall/>)}/>
-      <Route exact path="/chat"  render={props => (<Chat/>)}/>
-      <Route exact path="/users"  render={props => (<Users/>)}/>
+      <Switch>
+        <Route exact path="/user/:id"  render={props => (<UserInfo {...props}/>)}/>
+        <Route exact path="/wall"  render={props => (<Wall/>)}/>
+        <Route exact path="/chat"  render={props => (<Chat/>)}/>
+        <Route exact path="/users"  render={props => (<Users/>)}/>
 
-      {!auth.isAuthenticated? <Route exact path="/"  render={props => (<Posts/>)}/>: <Route exact path="/"  render={props => (<Feed/>)}/>}
-      <Route exact path="/login"  render={props => (<Login/>)}/>
+        {!auth.isAuthenticated? <Route exact path="/"  render={props => (<Posts/>)}/>: <Route exact path="/"  render={props => (<Feed/>)}/>}
+        <Route exact path="/login"  render={props => (<Login/>)}/>
 
-    </Switch>
+      </Switch>
   
     </div>
   );  

@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import './AddPost.css'
 import { addItem } from '../flux/actions/postActions';
-import {makeStyles, TextField,DialogContent,DialogActions, Button, Box} from '@material-ui/core';
+import {makeStyles, TextField,DialogContent,DialogActions, Button} from '@material-ui/core';
 import {useDispatch} from 'react-redux'
 
 

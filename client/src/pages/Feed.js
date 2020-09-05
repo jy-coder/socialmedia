@@ -35,7 +35,7 @@ function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
               s_delPostByOtherUser(data.postId)
               
         })}}   
-        , [auth.isAuthenticated,getFeed,updateMe])
+        , [auth.isAuthenticated,getFeed,updateMe,auth.user])
       
         useEffect(() => {
           posts.forEach(async (post) => {   

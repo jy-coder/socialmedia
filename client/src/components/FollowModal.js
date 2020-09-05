@@ -1,16 +1,15 @@
-import React,{useState,useEffect} from 'react'
+import React from 'react'
 import './FollowModal.css'
 import { connect } from 'react-redux';
-import {makeStyles,Box, Button, IconButton,Typography, Avatar,Dialog,DialogTitle,DialogContent,DialogActions} from '@material-ui/core';
- import MuiDialogTitle from '@material-ui/core/DialogTitle';
- import {Close, Delete,Edit} from '@material-ui/icons';
+import {Box, Button, Avatar,Dialog,DialogTitle,DialogContent} from '@material-ui/core';
 
 
 
 
 
 
-function FollowModal({status, list,len,title,auth}) {
+
+function FollowModal({list,len,title}) {
 
   const [open, setOpen] = React.useState(false);
 
@@ -19,8 +18,7 @@ function FollowModal({status, list,len,title,auth}) {
   };
   const handleClose = () => {
     setOpen(false);
-    // if(error_data)
-    //         clearErrors()
+
   };
 
 

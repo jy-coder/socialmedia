@@ -1,16 +1,11 @@
 import axios from './../../utils/axios-handler'
 import history from './../../utils/history'
-import {setError} from './../actions/errorActions'
 
 import {
   USER_LOADED,
-  USER_LOADING,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
+  LOGIN_SUCCESS,
   REGISTER_SUCCESS,
-  UPDATE_MY_PROFILE,
-  NO_USER,
   SET_SUCCESS_MSG,
   REMOVE_MY_FOLLOWING,
   ADD_MY_FOLLOWING,
@@ -58,11 +53,13 @@ export const login = ({ email, password }) => (dispatch) => {
     axios
     .post('/user/login', { email, password })
     .then(res =>{
+      dispatch({type: LOGIN_SUCCESS, payload: res.data})
         setAuthorizationHeader(res.data.token);      
         history.push('/')
+        
     })
     .catch(err => {
-      // console.log(err.response.data.message)
+      if(err.response)
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data.message

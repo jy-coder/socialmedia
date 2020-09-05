@@ -2,12 +2,23 @@ import React, {useState} from 'react';
 import './Login.css'
 import {login} from '../flux/actions/authActions'
 import {connect} from 'react-redux'
-import {Button, Box, TextField} from '@material-ui/core';
+import {Button, Box, TextField, makeStyles} from '@material-ui/core';
 
+const useStyles = makeStyles({
+  root: {
+    position:'relative' , 
+    width: '50%', 
+    margin:'auto', 
+    top:'100px'
+  },
+  flex:{
+    marginTop: '10px'
+  }
+});
 
 const Login = ({login,error_data}) =>{
     const [state, setState]= useState({email:'',password:''})
-
+    const classes = useStyles();
   
     const inputChangeHandler  = e  => {
       setState({
@@ -26,7 +37,7 @@ const Login = ({login,error_data}) =>{
     }
   
     return (
-    <div style={{position:'relative' , width: '50%', margin:'auto', top:'40px'}}>
+    <div className={classes.root}>
     {error_data.msg? <div className="error-msg"><small>{error_data.msg}</small></div> : null}
     <form onSubmit ={(e) => submitHandler(e)}>
     <Box flexDirection="column" height="100%" width="50%" p={1} id="formInput" >
@@ -37,7 +48,7 @@ const Login = ({login,error_data}) =>{
   <Box height="25%">
     < TextField type="password" id="password"  placeholder="Password" onChange={inputChangeHandler} fullWidth required/>
   </Box>
-  <Box display="flex" justifyContent="center" style={{marginTop: '10px'}}>
+  <Box display="flex" justifyContent="center" className={classes.flex}>
     <Button type="submit" variant="outlined">
       Submit
     </Button>

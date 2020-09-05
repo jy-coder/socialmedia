@@ -26,7 +26,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log(req.body)
+
   const { email,name, password, confirmPassword} = req.body;
   let errors=[]
   if(validator.isEmpty(email))

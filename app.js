@@ -14,7 +14,7 @@ const globalErrorHandler = require('./controllers/errorController')
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-
+// dotenv.config({ path: './config.env' });
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
@@ -24,7 +24,7 @@ process.on('uncaughtException', err => {
 
 
 
-// dotenv.config({ path: './config.env' });
+
 
 const app = express();
 

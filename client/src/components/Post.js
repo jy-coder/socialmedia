@@ -1,21 +1,16 @@
-import React, {useState,useEffect} from 'react'
-
-// import './Post.css'
+import React, {useState,} from 'react'
 import {connect} from 'react-redux'
-import Moment from 'react-moment';
 import { CustomModal}  from './CustomModal'
 import {likePost,unlikePost,commentPost, showComment,unshowComment,updatePostComment } from '../flux/actions/postActions'
 import Comment  from './Comment'
-
 import { red } from '@material-ui/core/colors';
 import clsx from 'clsx';
-import { makeStyles, Card,CardHeader, CardMedia,CardContent,CardActions, 
-  Collapse, Avatar, IconButton, Typography, FormControl, Input, Button,Box} from '@material-ui/core';
+import { makeStyles, Card,CardHeader,CardContent,CardActions, 
+  Collapse, Avatar, IconButton, Typography,  Input, Button,Box} from '@material-ui/core';
 import {Favorite, Share,ExpandMore, MoreVert} from '@material-ui/icons';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Link } from 'react-router-dom';
-import openSocket from 'socket.io-client'
+
 
 
 

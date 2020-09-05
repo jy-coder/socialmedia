@@ -63,7 +63,7 @@ else if(auth.isAuthenticated){
     return (
         <div className={classes.root}>
           <ThemeProvider theme={theme}>
-          <AppBar position="static">
+          <AppBar position="fixed">
             <Toolbar>
               <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
              

@@ -1,11 +1,40 @@
 import React,{useEffect,useState,useRef} from 'react'
 import {connect} from 'react-redux'
-import {addMessage, setChatWith,getMyChat,getAChat} from './../flux/actions/chatAction'
-import {makeStyles,Button, Box, Input, Avatar, Grid, Paper,Typography,Divider} from '@material-ui/core';
-import Moment from 'react-moment';
+import {addMessage,getMyChat,getAChat} from './../flux/actions/chatAction'
+import {Box, Input, Avatar, Grid, Typography,Divider,makeStyles} from '@material-ui/core';
 import './ChatRoom.css'
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+
+
+const useStyles = makeStyles({
+    root:{
+        position:'relative',
+        width:'100%', 
+        height:'100vh'
+    },
+    chatSection: {
+        position:'relative',
+        width: '100%',
+        margin: '0 auto',
+        top: '50px'
+    },
+    pad:{
+        padding: '10px'
+    },
+    font:{
+        fontSize: '20px'
+    },
+    noContent:{
+        position:'relative',
+        height: '100%',
+        top: '300px'
+    },
+    inputSection:{
+        position:'relative',
+        width: '100%',
+        height:'100px'
+    }
+  });
 
 
 
@@ -13,9 +42,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 
 
-function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
+function ChatRoom({chat,auth,addMessage,getAChat}) {
     // console.log(chat.singleChat)
-
+    const classes = useStyles();
     let messages
     let chatId
     let authId
@@ -31,7 +60,7 @@ function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
 
     const scrollToRef = (ref) => {
         if(ref.current){
-            console.log(ref.current)
+            // console.log(ref.current)
            ref.current.scrollIntoView({ behavior: 'smooth' })
             // console.log(ref.current.offsetTop)
         }
@@ -57,7 +86,7 @@ function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
           }, 100);
           return () => clearTimeout(timer);
             
-                }, [chat.chatWith])
+                }, [chat.chatWith,executeScroll])
 
 
  
@@ -113,9 +142,10 @@ function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
 
     const renderMessagesDiv = () =>{
         if(chat.chatWith)
-            return(<Grid container  style={{position:'relative',width:'100%', height:'100vh'}} >
-            <Box className="chat-section" style={{position:'relative'}} >
-                <Grid container item xs={12} style={{padding:'10px'}}>
+            return(
+            <Grid container  className={classes.root} >
+            <Box className={classes.chatSection} >
+                <Grid container item xs={12} className={classes.pad}>
                     <Grid item xs={2}><Avatar/></Grid>
                     <Grid item xs={10}><Typography variant="h6">{chat.chatWith.name}</Typography></Grid>
                 </Grid>
@@ -132,10 +162,10 @@ function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
             </Box>
             
             
-            <Grid  className="input-section" style={{position:'relative',width:'100%'}}>
+            <Grid  className={classes.inputSection} >
                 <Box id="input-box" mt={5}>
                     <form className= "chatroom-form" onSubmit={(e) => handleClick(e)}>
-                        <Input placeholder="Enter text" onChange={inputChangeHandler}  style = {{fontSize: 20}}/>
+                        <Input placeholder="Enter text" onChange={inputChangeHandler}  className={classes.font}/>
                     </form>
                     </Box> 
             </Grid>
@@ -143,7 +173,7 @@ function ChatRoom({chat,auth,addMessage,getMyChat,getAChat}) {
             </Grid>)
             
         else
-            return <Box display="flex" style={{position:'relative', height:'100%'}} alignContent="center" justifyContent="center">Click user to see message</Box>
+            return <Box display="flex" className={classes.noContent} alignContent="center" justifyContent="center">Click user to see message</Box>
         
     }
 

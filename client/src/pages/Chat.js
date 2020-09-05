@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect} from 'react'
 import {connect} from 'react-redux'
 import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/actions/chatAction'
 import ChatRoom from './ChatRoom'
@@ -6,20 +6,16 @@ import './Chat.css'
 import socket from './../utils/socket'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {Drawer,CssBaseline,AppBar,Toolbar,List,Typography, Divider, Grid, Paper,Avatar} from '@material-ui/core';
+import {Drawer,CssBaseline,List,Typography, Divider, Grid, Avatar} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ImportantDevices } from '@material-ui/icons'
-import NavBar from './../components/NavBar'
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({

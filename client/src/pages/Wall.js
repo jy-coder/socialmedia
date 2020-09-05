@@ -12,8 +12,8 @@ import socket from './../utils/socket'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: theme.spacing(1),
-        // width: '50%',
+        // margin: theme.spacing(1),
+
         margin: '0 auto',
      
       
@@ -58,11 +58,7 @@ function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
     const classes = useStyles();
     let listOfFollowing = []
     let listOfFollowers = []
-    let noOfFollowers
-    let noOfFollowing
-    let noOfPosts
-    let username
-    let userphoto;
+    let noOfFollowers,noOfFollowing,noOfPosts,username,userphoto
    if(auth.user){
       noOfFollowers = auth.user.followers.length
       noOfFollowing  = auth.user.following.length
@@ -106,7 +102,7 @@ useEffect(() => {
 
 
     return (
-        <div className="feed">
+<div className="feed">
 
 <div className={classes.root2}>
       <Paper className={classes.paper} elevation={0}>

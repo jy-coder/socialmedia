@@ -1,11 +1,10 @@
-import React,{useState, useEffect} from 'react'
+import React from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import {Button, IconButton,Typography, Dialog} from '@material-ui/core';
  import MuiDialogTitle from '@material-ui/core/DialogTitle';
  import {Close, Delete,Edit} from '@material-ui/icons';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import { clearErrors } from '../flux/actions/errorActions'
 import AddPost from './AddPost'
 import UpdatePost from './UpdatePost'
 import DeletePost from './DeletePost'
@@ -51,7 +50,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export  function CustomModal({clearErrors, error_data, status,_id}){
+export  function CustomModal({status,_id}){
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -59,8 +58,7 @@ export  function CustomModal({clearErrors, error_data, status,_id}){
   };
   const handleClose = () => {
     setOpen(false);
-    // if(error_data)
-    //         clearErrors()
+
   };
 
 
