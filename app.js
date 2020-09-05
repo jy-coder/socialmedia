@@ -24,7 +24,7 @@ process.on('uncaughtException', err => {
 
 
 
-dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './config.env' });
 
 const app = express();
 
@@ -71,7 +71,7 @@ mongoose
   .catch(err => console.log(err));
 
 
-  
+
 process.on('unhandledRejection', err => {
   console.log('UNHANDLER REJECTION!@ SHUTTING DOWN...');
   server.close(() => {
