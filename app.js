@@ -47,6 +47,14 @@ const DB = process.env.DATABASE.replace(
 
 const port = process.env.PORT || 1337;
 const server = http.Server(app);
+if(process.env.NODE_ENV === 'production'){
+  //set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 server.listen(port, () =>{
   console.log('chat server is running')
@@ -87,14 +95,7 @@ app.use('/api/chat', chatRoute)
 
 
 
-if(process.env.NODE_ENV === 'production'){
-  //set static folder
-  app.use(express.static('client/build'));
 
-  app.get('*',(req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
 
 
 //HANDLING ERROR
