@@ -4,6 +4,6 @@ import openSocket from 'socket.io-client'
 
 
 
-const socket = openSocket('https://sm-social-media.herokuapp.com/');
+const socket = openSocket('https://sm-social-media.herokuapp.com:80');
 
 export default socket
