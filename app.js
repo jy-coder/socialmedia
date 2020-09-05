@@ -13,7 +13,7 @@ const chatRoute = require('./routes/chatRoute')
 const globalErrorHandler = require('./controllers/errorController')
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const http = require('http')
+
 
 
 process.on('uncaughtException', err => {
@@ -46,22 +46,10 @@ const DB = process.env.DATABASE.replace(
 
 
 const port = process.env.PORT || 1337;
-const server = http.Server(app);
-if(process.env.NODE_ENV === 'production'){
-  //set static folder
-  app.use(express.static('client/build'));
 
-  app.get('*',(req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
-
-server.listen(port, () =>{
-  console.log('chat server is running')
-})
-
-
-const io = require('./socket').init(server);
+const socket = io({
+  transports: ['websocket']
+});
 
 mongoose
   .connect(DB, {
@@ -71,15 +59,12 @@ mongoose
     useUnifiedTopology: true
   })
   .then(()=> {
-
-    io.on('connection', socket => {
-      console.log('Client connected');
-    });
+    
+    const server = app.listen(port);
+    const io = require('./socket').init(server);
+    io.on('connection', socket)
   })
   .catch(err => console.log(err));
-
-
-
 process.on('unhandledRejection', err => {
   console.log('UNHANDLER REJECTION!@ SHUTTING DOWN...');
   server.close(() => {
@@ -95,7 +80,14 @@ app.use('/api/chat', chatRoute)
 
 
 
+if(process.env.NODE_ENV === 'production'){
+  //set static folder
+  app.use(express.static('client/build'));
 
+  app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 
 //HANDLING ERROR

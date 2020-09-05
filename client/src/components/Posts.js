@@ -8,7 +8,6 @@ import { Grid } from '@material-ui/core';
 
 
 function Posts({posts_data,getItems,error_data,clearErrors,auth}) {
-     //post is object containing posts obj -> contains status and array of data and loading
      const {posts} = posts_data
 
 
