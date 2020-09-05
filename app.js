@@ -57,6 +57,8 @@ mongoose
   .then(()=> {
     const server = app.listen(port);
     const io = require('./socket').init(server);
+    io.set('origins', '*:*');
+    io.set('match origin protocol', true);
     io.on('connection', socket => {
       console.log('Client connected');
     });
