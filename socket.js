@@ -1,19 +1,15 @@
 let io;
-let socket;
 
 module.exports = {
   init: httpServer => {
     io = require('socket.io')(httpServer);
-     socket = io({
-      transports: ['websocket']
-    });
-
-    return socket;
+    io.set('transports', ['websocket']);
+    return io;
   },
   getIO: () => {
-    if (!socket) {
+    if (!io) {
       throw new Error('Socket.io not initialized!');
     }
-    return socket;
+    return io;
   }
 };
