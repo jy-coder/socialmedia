@@ -57,12 +57,11 @@ mongoose
   .then(()=> {
     const server = app.listen(port);
     const io = require('./socket').init(server);
-    io.on('connection', () => {
+    io.on('connection', (socket) => {
       console.log('Client connected');
+      socket.on('disconnect', () => console.log('Client disconnected'));
     });
-    io.on('reconnection', () => {
-      console.log('Client reconnect');
-    });
+  
   })
   .catch(err => console.log(err));
 process.on('unhandledRejection', err => {
