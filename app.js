@@ -24,7 +24,7 @@ process.on('uncaughtException', err => {
 
 
 
-// dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './config.env' });  
 
 const app = express();
 
