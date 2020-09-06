@@ -9,7 +9,7 @@
     "start:dev": "NODE_ENV=development nodemon app.js",
     "start:prod": "NODE_ENV=production nodemon app.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-	"client": "npm start --prefix client",
+    "client": "npm start --prefix client",
     "lint": "eslint src/"
   },
   "keywords": [],
@@ -28,6 +28,7 @@
     "helmet": "^3.21.3",
     "hpp": "^0.2.3",
     "http": "0.0.1-security",
+    "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.5",
     "morgan": "^1.9.1",
