@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/actions/chatAction'
 import ChatRoom from './ChatRoom'
 import './Chat.css'
-import socket from './../utils/socket'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Drawer,CssBaseline,List,Typography, Divider, Grid, Avatar,IconButton,ListItem,ListItemText} from '@material-ui/core';
@@ -96,18 +95,18 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
 
     useEffect(() => {
-      const socket = require('./../utils/socket').init();
-      console.log(socket)
-        chats.forEach(async (chat) => { 
-                socket.on(chat._id,data =>{
-                    if(data.action === "newmessage")
-                        newMessageOtherUser(chat._id,data.chat.message)
-            })
+      // const socket = require('./../utils/socket').init();
+      // console.log(socket)
+      //   chats.forEach(async (chat) => { 
+      //           socket.on(chat._id,data =>{
+      //               if(data.action === "newmessage")
+      //                   newMessageOtherUser(chat._id,data.chat.message)
+      //       })
             
-        })
-        return () => {
-          socket.disconnect()
-       }
+      //   })
+      //   return () => {
+      //     socket.disconnect()
+      //  }
         
         },[chat.allChats])
 
