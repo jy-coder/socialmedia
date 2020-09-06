@@ -3,8 +3,8 @@ let io;
 module.exports = {
   init: httpServer => {
     io = require('socket.io')(httpServer);
-    io.set('transports', ["xhr-polling"]);
-    io.set("polling duration", 10); 
+    // io.set('transports', ["xhr-polling"]);
+    // io.set("polling duration", 10); 
     return io;
   },
   getIO: () => {
