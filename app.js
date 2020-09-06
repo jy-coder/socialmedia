@@ -32,7 +32,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors({origin: '*'}))
-app.use(express.json({ limit: '10kb' }))
+app.use(express.json())
 app.use(mongoSanitize());
 app.use(xss());
 app.use(cookieParser());
@@ -43,7 +43,14 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
+if(process.env.NODE_ENV === 'production'){
+  //set static folder
+  app.use(express.static('client/build'));
 
+  app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const port = process.env.PORT || 1337;
 
@@ -78,14 +85,7 @@ app.use('/api/chat', chatRoute)
 
 
 
-if(process.env.NODE_ENV === 'production'){
-  //set static folder
-  app.use(express.static('client/build'));
 
-  app.get('*',(req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
 
 
 //HANDLING ERROR
