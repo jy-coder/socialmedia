@@ -1,0 +1,50 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start:dev": "NODE_ENV=development nodemon app.js",
+    "start:prod": "NODE_ENV=production nodemon app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "client": "npm start --prefix client",
+    "lint": "eslint src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dayjs": "^1.8.24",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.0.0",
+    "fs": "0.0.1-security",
+    "helmet": "^3.21.3",
+    "hpp": "^0.2.3",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.5",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.2",
+    "promisify": "0.0.3",
+    "sharp": "^0.25.2",
+    "socket.io": "^2.3.0",
+    "validator": "^13.0.0",
+    "xss": "^1.0.8",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.2"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
