@@ -38,12 +38,12 @@ function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
         , [auth.isAuthenticated,getFeed,updateMe,auth.user])
       
         useEffect(() => {
-          posts.forEach(async (post) => {   
-                socket.on(post._id,data =>{
-                    if(data.action === "updatepostcomment")
-                       updatePostComment(post._id,data.posts.comments)
-            })
-          })
+          // posts.forEach(async (post) => {   
+          //       socket.on(post._id,data =>{
+          //           if(data.action === "updatepostcomment")
+          //              updatePostComment(post._id,data.posts.comments)
+          //   })
+          // })
         },[])
          
 

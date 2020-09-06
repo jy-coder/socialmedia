@@ -60,6 +60,7 @@ mongoose
     io.on('connection', () => {
       console.log('Client connected');
     });
+
   })
   .catch(err => console.log(err));
 process.on('unhandledRejection', err => {

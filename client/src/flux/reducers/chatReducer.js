@@ -40,7 +40,6 @@ export default function(state = initialState, action) {
     }
 
     case  ADD_CHAT_MSG:
-      console.log(action.payload)
       return {
         ...state
         // singleChat: action.payload
