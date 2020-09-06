@@ -4,7 +4,7 @@ module.exports = {
   init: httpServer => {
     io = require('socket.io')(httpServer);
     io.set('transports', ["websocket","polling"]);
-    // io.set("polling duration", 10); 
+    io.set("polling duration", 20); 
     return io;
   },
   getIO: () => {
