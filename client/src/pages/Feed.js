@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
+
   const {posts} = posts_data
   const classes = useStyles()
       useEffect(() => {
