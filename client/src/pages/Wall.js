@@ -6,7 +6,7 @@ import {getMyPost,updatePostComment} from '../flux/actions/postActions'
 import {updateFollower} from '../flux/actions/authActions'
 import FollowModal from './../components/FollowModal'
 import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
-import socket from './../utils/socket'
+// import socket from './../utils/socket'
 
 
 
@@ -74,22 +74,23 @@ useEffect(() => {
 
 useEffect(() => {
   if(auth.user){
-        socket.on(`${auth.user._id}`, data => {
-          if(data.action === "updatefollower")
-            updateFollower(data.user.followers)
+    //     socket.on(`${auth.user._id}`, data => {
+    //       if(data.action === "updatefollower")
+    //         updateFollower(data.user.followers)
 
            
-     })       }   
+    //  })      
+   }   
         }, [])
 
 
     useEffect(() => {
-      posts.forEach(async (post) => {   
-            socket.on(post._id,data =>{
-                if(data.action === "updatepostcomment")
-                    updatePostComment(post._id,data.posts.comments)
-        })
-      })
+      // posts.forEach(async (post) => {   
+      //       socket.on(post._id,data =>{
+      //           if(data.action === "updatepostcomment")
+      //               updatePostComment(post._id,data.posts.comments)
+      //   })
+      // })
     },[])
 
 

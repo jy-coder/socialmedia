@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
-
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
@@ -97,13 +96,24 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
 
     useEffect(() => {
+      const socket = require('./../utils/socket').init();
+      console.log(socket)
         chats.forEach(async (chat) => { 
                 socket.on(chat._id,data =>{
                     if(data.action === "newmessage")
                         newMessageOtherUser(chat._id,data.chat.message)
             })
+            
         })
+        return () => {
+          socket.disconnect()
+       }
+        
         },[chat.allChats])
+
+
+        // useEffect(() => {    
+        // ,[])
 
 
     const renderChatUsers = () =>{

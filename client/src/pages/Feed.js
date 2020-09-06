@@ -28,14 +28,17 @@ function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
   const classes = useStyles()
       useEffect(() => {
           getFeed()
-        if(auth.user){
-          socket.on(`${auth.user._id}`, data => {
-            if(data.action === "add")
-              s_newPostByOtherUser(data.posts)
-            if(data.action === "delete")
-              s_delPostByOtherUser(data.postId)
+        // if(auth.user){
+        //   socket.on(`${auth.user._id}`, data => {
+        //     if(data.action === "add")
+        //       s_newPostByOtherUser(data.posts)
+        //     if(data.action === "delete")
+        //       s_delPostByOtherUser(data.postId)
               
-        })}}   
+        // })}
+      
+      
+      }   
         , [auth.isAuthenticated,getFeed,updateMe,auth.user])
       
         useEffect(() => {

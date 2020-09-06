@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './components/globalError.css'
 import NavBar from './components/NavBar'
 import Posts from './components/Posts'
