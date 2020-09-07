@@ -5,16 +5,17 @@
 Run the Express server only
 >cd server<br/>
 npm install<br/>
-npm run start<br/>
-
-
-Run the Express server only
->cd client<br/>
-npm install<br/>
 npm run start:prod<br/>
 
 
+Run the client only
+>cd client<br/>
+npm install<br/>
+npm run start<br/>
 
+
+###Heroku deployment
+>(https://sm-social-media.herokuapp.com/)
 
 Server runs on http://localhost:1337 and client on http://localhost:3000
 
