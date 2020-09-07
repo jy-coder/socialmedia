@@ -24,7 +24,7 @@ export const getItems = () => dispatch => {
           payload: res.data
         })
       }).catch(err =>{
-        console.log(err)
+        // console.log(err)
       })
     }
 
@@ -39,7 +39,7 @@ export const getItems = () => dispatch => {
           payload: res.data
         })
       }).catch(err =>{
-        console.log(err)
+        // console.log(err)
       })
   };
 
@@ -54,7 +54,7 @@ export const getItems = () => dispatch => {
           payload: id
         })
       }).catch(err =>{
-        console.log(err)
+        // console.log(err)
       })
     }
 
@@ -68,7 +68,7 @@ export const getItems = () => dispatch => {
         })
 
       }).catch((err)=>{
-        console.log(err)
+        // console.log(err)
       })
     };
 
@@ -77,8 +77,6 @@ export const getItems = () => dispatch => {
     axios
       .delete(`/post/delete-post/${id}`)
       .then(res =>{
-        // if(res.status === 200)
-        //   history.go(0)
     
         dispatch({
           type: DELETE_ITEM,
@@ -86,7 +84,7 @@ export const getItems = () => dispatch => {
         })
      
       }).catch((err)=>{
-        console.log(err)
+        // console.log(err)
       })
     };
 
@@ -102,10 +100,10 @@ export const getItems = () => dispatch => {
               payloadid: id,
               payloadres: res.data
             })
-          }).catch(err =>
-            console.log(err)
-              
-  )}
+          }).catch(err =>{
+            // console.log(err)
+          })}
+       
       
 
 
@@ -119,11 +117,9 @@ export const getItems = () => dispatch => {
               type: GET_ITEMS,
               payload: res.data
             })
-          }).catch(err =>
-            console.log(err)
-            
-          )
-      };
+          }).catch(err =>{
+            // console.log(err)
+          })}
 
 
 
@@ -137,7 +133,7 @@ export const getItems = () => dispatch => {
               payloadid: postId
             })
           }).catch((err)=>{
-            console.log(err)
+            // console.log(err)
           })
         };
 
@@ -153,7 +149,7 @@ export const getItems = () => dispatch => {
               payloadid: postId
             })
           }).catch((err)=>{
-            console.log(err)
+            // console.log(err)
           })
         };
 
@@ -169,7 +165,7 @@ export const getItems = () => dispatch => {
                 payloadid: postId
               })
             }).catch((err)=>{
-              console.log(err)
+              // console.log(err)
             })
           };
 
@@ -184,7 +180,7 @@ export const getItems = () => dispatch => {
                   payloadid: postId
                 })
               }).catch((err)=>{
-                console.log(err)
+                // console.log(err)
               })
             };
   
@@ -215,7 +211,7 @@ export const getItems = () => dispatch => {
     
                 })
               }).catch((err)=>{
-                console.log(err)
+                // console.log(err)
               })
             };
 
@@ -231,7 +227,7 @@ export const getItems = () => dispatch => {
     
                 })
               }).catch((err)=>{
-                console.log(err)
+                // console.log(err)
               })
             };
 
@@ -245,7 +241,7 @@ export const getItems = () => dispatch => {
                     payload: res.data
                   })
                 }).catch(err =>{
-                  console.log(err)
+                  // console.log(err)
             })
           };
 
@@ -259,7 +255,7 @@ export const getItems = () => dispatch => {
                   payload: res.data[0]
                 })
               }).catch(err =>{
-                console.log(err)
+                // console.log(err)
           })
         };
 
@@ -274,7 +270,7 @@ export const getItems = () => dispatch => {
                 payload: res.data
               })
             }).catch(err =>{
-              console.log(err)
+              // console.log(err)
         })
       };
       

@@ -28,8 +28,6 @@ export function AddPost({handleClose}) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-
-  // console.log(posts_data)
   const [content, setContent]= useState("")
 
 

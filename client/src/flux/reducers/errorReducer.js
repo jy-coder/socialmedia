@@ -1,4 +1,4 @@
-import { GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import { SET_ERRORS, CLEAR_ERRORS } from '../actions/types';
 
 const initialState = {
   msg: "",
@@ -7,7 +7,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_ERRORS:
+    case SET_ERRORS:
       return {
         msg: action.payload,
         status: action.status

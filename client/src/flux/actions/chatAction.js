@@ -2,7 +2,6 @@ import axios from './../../utils/axios-handler'
 import {GET_MY_CHAT, NEW_CHAT,ADD_CHAT_MSG,SET_CHAT_WITH,NEW_MSG_OTHER_USER,GET_A_CHAT } from './types';
 import history from './../../utils/history'
 
-// RETURN ERRORS
 export const getMyChat = () => dispatch => {
   axios
     .get(`/chat/my-chat`)
@@ -12,7 +11,7 @@ export const getMyChat = () => dispatch => {
         payload: res.data,
       })
     }).catch(err =>{
-      console.log(err)
+      // console.log(err)
 })
 };
 
@@ -27,7 +26,7 @@ export const createChat = (userId) => dispatch => {
       })
       history.push('/chat')
     }).catch(err =>{
-      console.log(err)
+      // console.log(err)
 })
 };
 
@@ -43,7 +42,7 @@ export const getAChat = (userId) => dispatch => {
       })
      
     }).catch(err =>{
-      console.log(err)
+      // console.log(err)
 })
 };
 
@@ -59,7 +58,7 @@ axios
       payload: res.data
     })
   }).catch(err =>{
-    console.log(err)
+    // console.log(err)
 })
 };
 

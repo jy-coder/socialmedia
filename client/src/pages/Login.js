@@ -40,7 +40,7 @@ const Login = ({login,error_data}) =>{
     <div className={classes.root}>
     {error_data.msg? <div className="error-msg"><small>{error_data.msg}</small></div> : null}
     <form onSubmit ={(e) => submitHandler(e)}>
-    <Box flexDirection="column" height="100%" width="50%" p={1} id="formInput" >
+    <Box flexDirection="column" height="100%" width="100%" p={1} id="formInput" >
     <Box height="25%">
       < TextField type="email"   id="email" placeholder="Enter email"onChange={ inputChangeHandler} fullWidth required/>
     </Box>

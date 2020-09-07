@@ -106,7 +106,6 @@ export default function(state=initialState,action){
             };
 
         case GET_USER_INFO:
-            // console.log(action.payload)
             return{
                 ...state,
                 userInfo: action.payload

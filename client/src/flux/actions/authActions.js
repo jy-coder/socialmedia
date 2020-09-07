@@ -10,7 +10,7 @@ import {
   REMOVE_MY_FOLLOWING,
   ADD_MY_FOLLOWING,
   UPDATE_FOLLOWER,
-  GET_ERRORS
+  SET_ERRORS
 } from './types';
 
 
@@ -26,7 +26,7 @@ export const loadUser = () => (dispatch) => {
       })
     )
     .catch(err => {
-     console.log(err)
+    //  console.log(err)
     });
 };
 
@@ -41,7 +41,7 @@ export const register = ({ name, email, password, confirmPassword }) => (dispatc
       })
     )
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 };
 
@@ -56,14 +56,11 @@ export const login = ({ email, password }) => (dispatch) => {
       dispatch({type: LOGIN_SUCCESS, payload: res.data})
         setAuthorizationHeader(res.data.token);      
         history.push('/')
+      return res
         
     })
     .catch(err => {
-      if(err.response)
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data.message
-      })
+      // console.log(err)
     })
 };
 
@@ -80,8 +77,8 @@ export const updateMe = (form) => (dispatch) => {
   })
 
   .catch((err) => {
-    if(err.response)
-      console.log(err)
+  
+      // console.log(err)
   
   })
 }

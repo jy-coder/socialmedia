@@ -64,7 +64,6 @@ exports.otherUser= catchAsync(async (req,res,next)=> {
 
 
 exports.getAllUsers= catchAsync(async (req,res,next)=> {
-  // console.log(req.user._id)
   let user = await User.find({ _id: { "$ne": req.user._id } },{_id:1,name:1})
   if(!user)
     return next(new AppError('No document found with that ID', 404));

@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { loadUser,logout} from './flux/actions/authActions';
 import store from './flux/store'
 import jwtDecode from 'jwt-decode';
-import {CLEAR_ERRORS, NO_USER,GET_ERRORS } from './flux/actions/types'
+import {CLEAR_ERRORS, NO_USER,SET_ERRORS } from './flux/actions/types'
 import { setError } from './flux/actions/errorActions';
 import axios from './utils/axios-handler'
 
@@ -44,9 +44,11 @@ axios.interceptors.request.use(req => {
 axios.interceptors.response.use(res => res, error => {
   if(error.response){
     if(error.response.status === 401){
-      store.dispatch({ type: GET_ERRORS, payload: error.response.message});
       window.location.href = '/login';
       store.dispatch(logout())
+    }
+    else if (error.response.status === 403){
+      store.dispatch({ type: SET_ERRORS, payload: error.response.data.message});
     }
    
   }

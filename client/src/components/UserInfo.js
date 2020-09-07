@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export function UserInfo({getuserPost, posts_data,match,auth,getotheruserInfo,followUser,unfollowUser,removeMyFollowing,addMyFollowing,createChat}) {
-  // console.log(posts_data.userInfo)
  
   const {posts} = posts_data
 
