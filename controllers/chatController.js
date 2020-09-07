@@ -1,7 +1,7 @@
 const Chat = require('../models/chat')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/AppError')
-const io = require('../socket')
+const io = require('../utils/socket')
 
 
 //when clicked on user
