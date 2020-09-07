@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function NavBar({auth,logout,item}) {
-  // console.log(auth)
+
 
 let routes;
 if(!auth.isAuthenticated){
@@ -53,7 +53,7 @@ else if(auth.isAuthenticated){
         
          <IconButton component={Link} to="/chat"><Message/></IconButton>
          <Button color="inherit" component={Link} to="/users" >Users</Button>
-        <Button color="inherit" component={Link} to="/wall" >My Wall</Button>
+        <Button color="inherit" component={Link} to="/wall" >Wall</Button>
         <Button color="inherit" onClick={() => logout()}  >Logout</Button>
     </>
   )
