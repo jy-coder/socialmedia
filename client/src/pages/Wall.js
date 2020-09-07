@@ -2,18 +2,18 @@ import React, { useEffect } from 'react'
 import Post from './../components/Post'
 import './Wall.css'
 import {connect} from 'react-redux'
-import {getMyPost,updatePostComment} from '../flux/actions/postActions'
+import {getMyPost,updatePostComment,s_newPostByOtherUser,s_delPostByOtherUser} from '../flux/actions/postActions'
 import {updateFollower} from '../flux/actions/authActions'
 import FollowModal from './../components/FollowModal'
-import {makeStyles,Grid, Paper,Typography,ButtonBase, Button,Avatar } from '@material-ui/core';
-// import socket from './../utils/socket'
+import {makeStyles,Grid, Paper,Typography, Button} from '@material-ui/core';
 
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-
+        position:'relative',
         margin: '0 auto',
+    
      
       
     },
@@ -32,17 +32,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '10px',
         margin: '0 auto'
       
-      },
-      hide: {
-        padding: theme.spacing(1),
-        [theme.breakpoints.down('sm')]: {
-          height:"50px", 
-          width:"50px"
-        },
-        [theme.breakpoints.up('sm')]: {
-          height:"125px", 
-          width:"125px"
-        }
       }
       
   }));
@@ -50,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment}) {
+function Wall({auth,getMyPost, posts_data,updateFollower,updatePostComment,s_newPostByOtherUser,s_delPostByOtherUser}) {
 
     const {posts} = posts_data
     const classes = useStyles();
@@ -72,26 +61,40 @@ useEffect(() => {
         getMyPost()
 },[auth.user,getMyPost])
 
-useEffect(() => {
-  if(auth.user){
-    //     socket.on(`${auth.user._id}`, data => {
-    //       if(data.action === "updatefollower")
-    //         updateFollower(data.user.followers)
 
-           
-    //  })      
-   }   
-        }, [])
 
 
     useEffect(() => {
-      // posts.forEach(async (post) => {   
-      //       socket.on(post._id,data =>{
-      //           if(data.action === "updatepostcomment")
-      //               updatePostComment(post._id,data.posts.comments)
-      //   })
-      // })
-    },[])
+      const socket = require( './../utils/socket').init()
+
+      if(auth.user){
+            socket.on(`${auth.user._id}`, data => {
+              if(data.action === "updatefollower")
+                updateFollower(data.user.followers)
+    
+               
+         }) 
+         socket.on(`${auth.user._id}`, data => {
+          if(data.action === "add")
+            s_newPostByOtherUser(data.posts)
+          if(data.action === "delete")
+            s_delPostByOtherUser(data.postId)
+            
+      })     
+       }   
+  
+      posts.forEach(async (post) => {   
+            socket.on(post._id,data =>{
+                if(data.action === "updatepostcomment")
+                    updatePostComment(post._id,data.posts.comments)
+        })
+      })
+
+
+      return () =>{
+        socket.disconnect()
+      }
+    },[posts,auth.user])
 
 
        
@@ -105,12 +108,7 @@ useEffect(() => {
 <div className={classes.root2}>
       <Paper className={classes.paper} elevation={0}>
         <Grid container spacing={2}>
-          <Grid item  xs={4}>
-            <ButtonBase >
-              <Avatar variant="square" className={classes.hide} />
-            </ButtonBase>
-          </Grid>
-          <Grid item xs={8} sm container>
+          <Grid item xs={12} sm container>
             <Grid item xs container  spacing={2}>
               <Grid item xs={12}>
                 <Typography gutterBottom variant="h4">
@@ -118,8 +116,8 @@ useEffect(() => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm container direction="row"  >
-                <Grid item xs={12} sm={4}  ><Button disabled>{noOfPosts} posts</Button></Grid>
-                <Grid item xs={12} sm= {4}  > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
+                <Grid item xs={12} sm={3}  ><Button disabled>{noOfPosts} posts</Button></Grid>
+                <Grid item xs={12} sm= {5}  > <FollowModal status={"followers"} len = {noOfFollowers} list={listOfFollowers} title="follower(s)"/></Grid>
                 <Grid item xs={12}  sm={4} ><FollowModal status={"following"} len = {noOfFollowing} list={listOfFollowing} title="following"/></Grid>
                
            
@@ -144,4 +142,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getMyPost,updateFollower,updatePostComment})(Wall)
+export default connect(mapStateToProps, {getMyPost,updateFollower,updatePostComment,s_newPostByOtherUser,s_delPostByOtherUser})(Wall)

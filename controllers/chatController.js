@@ -20,7 +20,6 @@ exports.createChat = catchAsync(async (req,res,next) =>{
     })
 
     exports.getAChat = catchAsync(async (req,res,next) =>{
-        // console.log(req.params.userId)
         let chat;
         chat = await Chat.findOne(
         { user: { $all: [req.user._id, req.params.userId] }}).populate('chat.postedBy','name') 
@@ -29,6 +28,8 @@ exports.createChat = catchAsync(async (req,res,next) =>{
     
         res.status(200).json(chat);
     })
+
+
     //get chat you have chated with _id used in addToChat
     exports.getAllChats= catchAsync(async (req,res,next) =>{
         const chat = await Chat.find({ user: { $in: [req.user._id] } }).populate('user','name')
@@ -36,47 +37,13 @@ exports.createChat = catchAsync(async (req,res,next) =>{
         if(!chat)
             return next(new AppError('YOU HAVE NO CHAT YET WITH THE USER PLEASE INITIALIZE', 404));
     
-        
-            // chat = {...chat, user: chat.user.filter(user._id !== req.user._id )}
         res.status(200).json(chat);
 
 
     })
 
 
-    exports.test= catchAsync(async (req,res,next) =>{
 
-        const chat = await Chat.aggregate([
-            {$match:{ user: { $in: [req.user._id] } } },
-            // {$group:{_id:"$user"} },
-            { $unwind : "$message"},
-            {$project:{
-                "message.date": {'$dateToString': {format: '%Y-%m-%d', date: '$message.created'}},
-                "message.text":  "$message.text",
-                "user": "$user",
-                "message.created": "$message.created"
-                
-            }},
-            //  {$group: {_id:"$user",date: {"$addToSet" : {date:"$message.date"}}}}
-            // {$group: {_id:"$user",date: {"$first" : "$message.date"} }}
-            {$group: {_id:"$user", message:{"$push" : {text : "$message.text", date:"$message.date"}}}},
-            {$sort: {"message.date":1}},
-            {$group: {_id: "$message.date"}}
-            
-
-        ])
-     
-
-
-        if(!chat)
-            return next(new AppError('YOU HAVE NO CHAT YET WITH THE USER PLEASE INITIALIZE', 404));
-    
-        
-            // chat = {...chat, user: chat.user.filter(user._id !== req.user._id )}
-        res.status(200).json(chat);
-
-
-    })
     
 
 
@@ -92,3 +59,7 @@ exports.createChat = catchAsync(async (req,res,next) =>{
         res.status(200).json(chat);
   })
 
+  exports.test= catchAsync(async (req,res,next) =>{
+
+    //route for testing API
+  })

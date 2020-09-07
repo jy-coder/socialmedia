@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {getMyChat, setChatWith,addMessage,newMessageOtherUser } from './../flux/actions/chatAction'
 import ChatRoom from './ChatRoom'
 import './Chat.css'
-import socket from './../utils/socket'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Drawer,CssBaseline,List,Typography, Divider, Grid, Avatar,IconButton,ListItem,ListItemText} from '@material-ui/core';

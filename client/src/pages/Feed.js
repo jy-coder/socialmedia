@@ -6,7 +6,7 @@ import {clearErrors} from '../flux/actions/errorActions'
 import {CustomModal } from './../components/CustomModal'
 import {makeStyles,Grid } from '@material-ui/core';
 import {connect} from 'react-redux'
-import socket from './../utils/socket'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,37 +22,49 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function Feed({posts_data,auth,getFeed,updateMe,updatePostComment}) {
+function Feed({posts_data,auth,getFeed,updateMe,updatePostComment, s_newPostByOtherUser,s_delPostByOtherUser}) {
 
   const {posts} = posts_data
   const classes = useStyles()
       useEffect(() => {
           getFeed()
-        // if(auth.user){
-        //   socket.on(`${auth.user._id}`, data => {
-        //     if(data.action === "add")
-        //       s_newPostByOtherUser(data.posts)
-        //     if(data.action === "delete")
-        //       s_delPostByOtherUser(data.postId)
-              
-        // })}
+
       
       
       }   
-        , [auth.isAuthenticated,getFeed,updateMe,auth.user])
+        , [auth.isAuthenticated,getFeed])
       
         useEffect(() => {
-          // posts.forEach(async (post) => {   
-          //       socket.on(post._id,data =>{
-          //           if(data.action === "updatepostcomment")
-          //              updatePostComment(post._id,data.posts.comments)
-          //   })
-          // })
-        },[])
+          const socket = require('./../utils/socket').init()
+
+        if(auth.user){
+          socket.on(`${auth.user._id}`, data => {
+            if(data.action === "add")
+              s_newPostByOtherUser(data.posts)
+            if(data.action === "delete")
+              s_delPostByOtherUser(data.postId)
+              
+        })}
+          posts.forEach(async (post) => {   
+                socket.on(post._id,data =>{
+                    if(data.action === "updatepostcomment")
+                       updatePostComment(post._id,data.posts.comments)
+            })
+          })
+
+         
+          return () =>{
+              socket.disconnect()
+            }
+        
+        },[updateMe,auth.user])
+
+
+ 
          
 
     return (
-        <div>
+        <div className="feed">
           <Grid className={classes.main}>
           {auth.isAuthenticated? <CustomModal status={"add"}/>:null}
               {posts? posts.map((props, i)=>(<Post key={i} {...props}/>)) : null}
@@ -71,4 +83,4 @@ const mapStateToProps = (state) =>({
 
 })
 
-export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed,updateMe,updatePostComment})(Feed)
+export default connect(mapStateToProps, {getItems,clearErrors,addItem,getFeed,updateMe,updatePostComment, s_newPostByOtherUser,s_delPostByOtherUser})(Feed)

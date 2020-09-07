@@ -133,9 +133,6 @@ exports.auth = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
-  // req.user={_id: ObjectId('5ebbbd886954234550fe23f3')}
-  // req.user={_id: ObjectId('5ebbcea54203de447054ced3')}
-  // req.user={_id: ObjectId('5ebbd526fcf3204e50268835')}
   
   next();
 });

@@ -31,13 +31,13 @@ const posts = await Post.create({
         
 
   await Promise.all(followersList.map(async(follower) => {
-    const oneUser = await Post.find({creator: follower.following }) //post is populated, find in creator following user list 
+    const oneUser = await Post.find({creator: follower.following }).sort({createdAt:-1})
     await io.getIO().emit(`${follower._id}`,{action:`add`, posts:oneUser})
 
   }))
 
         
-  res.status(200).json(posts); //the req.user who published
+  res.status(200).json(posts); 
 })
 
 
@@ -192,21 +192,15 @@ exports.commentPost = catchAsync(async (req,res,next)=> {
       res.status(200).json(posts);
   })
 
-
+  //user with auth
   exports.getFeed = catchAsync(async (req,res,next)=> {
     const posts = await Post.find({creator: req.user.following}).sort({createdAt:-1})
-    // const posts = await Post.find({creator: req.user.following}).sort({createdAt:-1})
+    
    
 
     if(!posts)
       return next(new AppError('No document found with that ID', 404))
    
-
-
-  
-
-      // res.status(200).json(followerPosts);
-      // io.getIO().emit({action:'add', chat:chat})
     
       res.status(200).json(posts);
   })

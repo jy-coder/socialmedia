@@ -12,11 +12,20 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
       margin: 'auto',
       maxWidth:'100%',
-      maxHeight: 50,
+      maxHeight: 100,
       marginBottom: '15px'
     },
     image: {
-      width: 50,
+
+        padding: theme.spacing(1),
+        [theme.breakpoints.down('sm')]: {
+        display:"none"
+        },
+        [theme.breakpoints.up('sm')]: {
+          height:"50px", 
+          width:"50px"
+        }
+   
   
     },
     img: {
@@ -25,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
       maxHeight: '100%',
     },
+    comment:{
+      position:'relative',
+      minWidth: '180px'
+    }
   }));
 
 export function Comment({comment, postId, uncommentPost,auth}) {
@@ -49,8 +62,8 @@ export function Comment({comment, postId, uncommentPost,auth}) {
           <Grid item xs={8}  container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs container direction="row">
-                <Grid item xs>
-                    <Typography variant="body2"  gutterBottom>
+                <Grid item xs >
+                    <Typography variant="body2" gutterBottom className={classes.comment}>
                     <a href={`/user/${comment.postedBy._id}`}>{comment.postedBy.name}</a> &nbsp; <Typography variant="caption"> {dayjs(comment.created).fromNow()} </Typography>
                     </Typography>
                     <Typography variant="body2"  color="textSecondary">

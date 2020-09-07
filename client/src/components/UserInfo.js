@@ -11,8 +11,8 @@ import history from './../utils/history'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-      margin: theme.spacing(1),
-      margin: '0 auto',
+    
+      margin: '0 auto'
    
     
   },
