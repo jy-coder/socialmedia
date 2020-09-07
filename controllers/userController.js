@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/AppError')
-const io = require('../socket')
+const io = require('../utils/socket')
 
 
 
