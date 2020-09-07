@@ -96,7 +96,6 @@ function Chat({auth, chat,getMyChat,setChatWith,newMessageOtherUser }) {
 
     useEffect(() => {
       const socket = require('./../utils/socket').init();
-      console.log(socket)
         chats.forEach(async (chat) => { 
                 socket.on(chat._id,data =>{
                     if(data.action === "newmessage")
