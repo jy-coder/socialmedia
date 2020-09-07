@@ -24,7 +24,7 @@ process.on('uncaughtException', err => {
 
 
 
-// dotenv.config({ path: './config.env' });
+dotenv.config({ path: './config.env' });
 
 const app = express();
 
@@ -56,7 +56,7 @@ mongoose
   })
   .then(()=> {
     const server = app.listen(port);
-    const io = require('./socket').init(server);
+    const io = require('./utils/socket').init(server);
     io.on('connection', (socket) => {
       console.log('Client connected');
       socket.on('disconnect', () => console.log('Client disconnected'));
