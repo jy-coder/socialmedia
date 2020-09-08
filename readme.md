@@ -7,10 +7,10 @@
 >*There are multuple users for testing websockets. As stated below are the username and password for logging in:* <br/>
 > username: test <br/>
 > password:  test <br/>
-> username: test1 <br/>
-> password:  test1<br/>
 > username: test2 <br/>
-> password:  test2 
+> password:  test2<br/>
+> username: test3 <br/>
+> password:  test3 
 
 
 
