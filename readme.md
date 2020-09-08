@@ -4,7 +4,7 @@
 
 ## Heroku deployment
 >https://sm-social-media.herokuapp.com/ <br/>
->*There are multuple users for testing websockets. As stated below are the credentials:* <br/>
+>*There are multuple users for testing websockets. As stated below are the username and password for logging in:* <br/>
 > username: test <br/>
 > password:  test <br/>
 > username: test1 <br/>
